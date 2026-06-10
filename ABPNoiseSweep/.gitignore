@@ -1,0 +1,15 @@
+# Julia
+Manifest.toml
+*.ji
+.julia/
+
+# outputs
+logs/
+abp_noise_sweep_endpoint_conditioned/
+*.jld2
+*.csv
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
