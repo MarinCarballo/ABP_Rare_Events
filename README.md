@@ -30,7 +30,13 @@ Default:
 Example with 5% reflection moves:
 
 ```bash
-ABP_MOVE_WEIGHTS=0.05,0.05,0.50,0.40 julia --project=. scripts/run_noise_sweep.jl --smoke
+ABP_MOVE_WEIGHTS=run/move_weights.json julia --project=. scripts/run_noise_sweep.jl --smoke
+```
+
+The JSON file should contain the four weights as an array, for example:
+
+```json
+[0.05, 0.05, 0.50, 0.40]
 ```
 
 ## Iteration scaling with D

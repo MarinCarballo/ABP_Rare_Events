@@ -5,6 +5,20 @@ function abp_parse_float_vector(s::AbstractString)
     return Float64[parse(Float64, x) for x in vals]
 end
 
+function abp_parse_float_vector_jsonfile(path::AbstractString)
+    text = strip(read(path, String))
+    startswith(text, "[") && endswith(text, "]") || error("ABP move weights JSON file must contain a JSON array of numbers.")
+    body = strip(text[2:end-1])
+    isempty(body) && return Float64[]
+    return abp_parse_float_vector(body)
+end
+
+function abp_parse_move_weights(value::AbstractString)
+    path = strip(value)
+    isfile(path) && return abp_parse_float_vector_jsonfile(path)
+    return abp_parse_float_vector(path)
+end
+
 function abp_env_bool(name::AbstractString, default::Bool)
     s = lowercase(strip(get(ENV, name, string(default))))
     return s in ("1", "true", "yes", "y", "on")
@@ -12,7 +26,7 @@ end
 
 function abp_apply_env_overrides!(cfg::ABPNoiseSweepConfig)
     haskey(ENV, "ABP_D_VALUES") && (cfg.D_values = abp_parse_float_vector(ENV["ABP_D_VALUES"]))
-    haskey(ENV, "ABP_MOVE_WEIGHTS") && (cfg.move_weights = abp_parse_float_vector(ENV["ABP_MOVE_WEIGHTS"]))
+    haskey(ENV, "ABP_MOVE_WEIGHTS") && (cfg.move_weights = abp_parse_move_weights(ENV["ABP_MOVE_WEIGHTS"]))
     haskey(ENV, "ABP_OUTPUT_DIR") && (cfg.output_dir = ENV["ABP_OUTPUT_DIR"])
 
     haskey(ENV, "ABP_N_ITER") && (cfg.n_iter = parse(Int, ENV["ABP_N_ITER"]))

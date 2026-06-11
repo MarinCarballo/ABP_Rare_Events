@@ -21,7 +21,7 @@ mkdir -p logs
 : "${ABP_PRECOMPILE:=false}"
 
 : "${ABP_D_VALUES:=0.1,0.01,0.005}"
-: "${ABP_MOVE_WEIGHTS:=0.0,0.05,0.55,0.40}"#to jason, command line variables arguments(passing argument via command line), json parameter
+: "${ABP_MOVE_WEIGHTS:=run/move_weights.json}" # JSON file with the default move weights.
 : "${ABP_OUTPUT_DIR:=abp_noise_sweep_endpoint_conditioned}" #: "${ABP_OUTPUT_DIR:=/scratch/$USER/ABP_runs/run_001}"
 : "${ABP_SAVE_CSV:=true}"
 

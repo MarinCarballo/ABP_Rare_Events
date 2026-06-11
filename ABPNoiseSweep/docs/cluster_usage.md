@@ -36,14 +36,14 @@ This prints the effective MUCA iteration count for each value of `D`.
 ## Submit a configured job
 
 ```bash
-sbatch --export=ALL,ABP_D_VALUES=0.1,0.01,0.005,ABP_OUTPUT_DIR=meaningful_run_name,ABP_MOVE_WEIGHTS=0.0,0.05,0.55,0.40,ABP_N_ITER=90,ABP_N_ITER_STEPS_PER_ITER=120000000 run/run_abp_noise_sweep_data_only.sh
+sbatch --export=ALL,ABP_D_VALUES=0.1,0.01,0.005,ABP_OUTPUT_DIR=meaningful_run_name,ABP_MOVE_WEIGHTS=run/move_weights.json,ABP_N_ITER=90,ABP_N_ITER_STEPS_PER_ITER=120000000 run/run_abp_noise_sweep_data_only.sh
 ```
 
 The command above is one terminal command. You can also split it across lines with backslashes.
 
 ## Reflection moves
 
-Reflection is not a separate run dimension. Change only `ABP_MOVE_WEIGHTS`.
+Reflection is not a separate run dimension. Change only `ABP_MOVE_WEIGHTS`, which should point to a JSON file containing the four weights.
 
 Order:
 

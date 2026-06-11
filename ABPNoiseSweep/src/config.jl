@@ -4,7 +4,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     seed::Int = 42
 
     # Physical ABP trajectory integration time. 
-    trajectory_T::Float64 = 20.0
+    trajectory_T::Float64 = 40.0 #changed from 20.0 to 40.0 to allow more roundtrips at low D, which should help with convergence diagnostics and reduce noise in the results.
     dt::Float64 = 1e-2
     v::Float64 = 0.36
     x0_vec::Vector{Float64} = Float64[-1.0, 0.0]
@@ -59,10 +59,18 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     roundtrip_stride::Int = 10_000
 
     # Roundtrip convergence control.
-    # The MUCA learning loop stops early when the average number of completed
-    # roundtrips per chain reaches roundtrip_avg_target_fraction * n_chains for
-    # roundtrip_convergence_hits consecutive iterations.
-    roundtrip_target::Int = 100
+    # Early stopping uses ONLY:
+    #
+    #     average roundtrips per chain >= roundtrip_avg_target_fraction * n_chains
+    #
+    # Therefore, with roundtrip_avg_target_fraction = 0.5:
+    #
+    #     20 chains  -> target avg = 10 roundtrips/chain
+    #     100 chains -> target avg = 50 roundtrips/chain
+    #
+    # roundtrip_target is only used for diagnostics such as "steps per 100 RT";
+    # it does not control when MUCA stops.
+    roundtrip_target::Int = 50
     roundtrip_avg_target_fraction::Float64 = 0.5
     roundtrip_convergence_hits::Int = 3
 
@@ -75,7 +83,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     max_saved_paths_per_window::Int = 300
 
     # Histogram ranges for y and path heatmaps.
-    y_abs::Float64 = 6.0
+    y_abs::Float64 = 3.0
     n_y_bins::Int = 241
     n_y_int_bins::Int = 241
     path_x_min::Float64 = -1.5
