@@ -52,12 +52,12 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
     max_saved_paths_per_window_chain = max(1, ceil(Int, cfg.max_saved_paths_per_window / n_prod_chains))
 
     println()
-    println("Production case: D=", D,
+        println("Production case: D=", D,
             " | chains=", n_prod_chains,
             " | total samples=", cfg.n_prod_obs_total,
             " | proposal Δξ block=", round(muca.block_dxi; sigdigits=4),
             " | proposal Δξ local=", round(muca.local_dxi; sigdigits=4),
-            " | endpoint condition for whole-path data: x(T)>0")
+            " | endpoint condition for whole-path data: x(T)>0.5")
     println("Whole-path histogram time stride = ", cfg.path_time_stride,
             cfg.path_time_stride == 1 ? " (all integration points counted)" : " (subsampled time points)")
 
@@ -198,19 +198,23 @@ function abp_run_production_chain!(
             acc.n_rew_all[1]  += 1
         end
 
-        endpoint_positive = xT_now > 0.0
+        endpoint_positive = xT_now > 0.5
         if endpoint_positive
-            # Requested key point: condition on endpoint x(T)>0, then count the whole trajectory.
+            # Requested key point: condition on endpoint x(T)>0.5, then count the whole trajectory.
+            acc.n_path_traj_pos_biased[1] += 1
             abp_add_whole_path_conditioned_pos!(
                 acc, sys, edges_path_x, edges_path_y, 1.0;
                 path_time_stride=cfg.path_time_stride,
                 reweighted=false,
+                path_x_min=-0.3,
             )
             if w_path > 0.0
+                acc.n_path_traj_pos_unbiased[1] += 1
                 abp_add_whole_path_conditioned_pos!(
                     acc, sys, edges_path_x, edges_path_y, w_path;
                     path_time_stride=cfg.path_time_stride,
                     reweighted=true,
+                    path_x_min=-0.3,
                 )
             end
         end

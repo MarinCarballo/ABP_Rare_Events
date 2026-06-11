@@ -79,6 +79,7 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
     iter_total_mcmc_steps = Int[]
     iter_roundtrips_per_sampling_step = Float64[]
     iter_steps_per_target_roundtrips = Float64[]
+    iter_avg_roundtrips_per_chain = Float64[]
 
     n_sweeps_per_chain(i_iter) = max(
         1,
@@ -96,9 +97,14 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
             " | proposal Δξ local=", round(cfg.local_dxi; sigdigits=4),
             " | move weights=", cfg.move_weights)
     println("chains=", n_chains, " | bins=[", first(edges_bias), ", ", last(edges_bias), "] | dbias=", cfg.dbias)
+        target_avg_roundtrips_per_chain = cfg.roundtrip_avg_target_fraction * n_chains
+        println("early-stop target: average roundtrips per chain ≥ ", target_avg_roundtrips_per_chain,
+            " for ", cfg.roundtrip_convergence_hits, " straight iterations")
     println("============================================================")
 
-    prog = Progress(n_iter_effective; desc="MUCA D=$(D)...")
+        prog = Progress(n_iter_effective; desc="MUCA D=$(D)...")
+        stop_hits = 0
+        stop_iteration = 0
     t_muca = @elapsed for i_iter in 1:n_iter_effective
         n_sweeps_i = n_sweeps_per_chain(i_iter)
 
@@ -149,6 +155,7 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         sampling_steps_i = n_sweeps_i * n_chains # sampling steps across all chains in this iteration
         total_steps_i = sampling_steps_i + cfg.n_therm_muca * n_chains
         rt_i = iter_roundtrips[end] # roundtrips in this iteration across all chains
+        avg_roundtrips_i = rt_i / n_chains
         rate_i = sampling_steps_i > 0 ? rt_i / sampling_steps_i : NaN # normalized roundtrip rate per sampling step
         steps_target_i = (isfinite(rate_i) && rate_i > 0) ? cfg.roundtrip_target / rate_i : Inf
 
@@ -156,6 +163,24 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         push!(iter_total_mcmc_steps, total_steps_i)
         push!(iter_roundtrips_per_sampling_step, rate_i)
         push!(iter_steps_per_target_roundtrips, steps_target_i)
+        push!(iter_avg_roundtrips_per_chain, avg_roundtrips_i)
+
+        if isfinite(avg_roundtrips_i) && avg_roundtrips_i >= target_avg_roundtrips_per_chain
+            stop_hits += 1
+        else
+            stop_hits = 0
+        end
+        if stop_hits >= cfg.roundtrip_convergence_hits
+            stop_iteration = i_iter
+            println(
+                "Stopping MUCA early at iteration ", i_iter,
+                " | avg roundtrips/chain=", round(avg_roundtrips_i; digits=4),
+                " | target=", round(target_avg_roundtrips_per_chain; digits=4),
+                " | consecutive hits=", stop_hits,
+            )
+            next!(prog)
+            break
+        end
 
         distribute_logweight!(pmuca)
         next!(prog)
@@ -171,25 +196,37 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         end
     end
 
+    if stop_iteration == 0
+        stop_iteration = length(iter_avg_roundtrips_per_chain)
+    end
+
     alg_final = Ref{Any}()
     on_root(pmuca) do i
         alg_final[] = deepcopy(algorithm(pmuca, i))
     end
 
-    n_muca_total = sum(n_sweeps_per_chain(i) * n_chains + cfg.n_therm_muca * n_chains for i in 1:n_iter_effective)
+    n_muca_total = sum(n_sweeps_per_chain(i) * n_chains + cfg.n_therm_muca * n_chains for i in 1:stop_iteration)
     roundtrip_steps_summary = abp_roundtrip_steps_summary(
         iter_steps_per_target_roundtrips;
-        window=cfg.roundtrip_convergence_window,
-        rtol=cfg.roundtrip_convergence_rtol,
+        window=cfg.roundtrip_target,
+        rtol=0.0,
+    )
+    roundtrip_stop_summary = abp_roundtrip_average_stop_summary(
+        iter_avg_roundtrips_per_chain;
+        target_avg_roundtrips_per_chain=target_avg_roundtrips_per_chain,
+        hits_required=cfg.roundtrip_convergence_hits,
     )
 
     println("MUCA complete for D=", D,
             " | elapsed=", round(t_muca; digits=1), "s | total sweeps≈", round(Int, n_muca_total),
-            " | final roundtrips=", iter_roundtrips[end])
-    println("Roundtrip-normalized estimate for ", cfg.roundtrip_target, " roundtrips: ",
-            round(roundtrip_steps_summary.steps_estimate; sigdigits=5),
-            " sampling moves | converged=", roundtrip_steps_summary.converged,
-            " | rel_half_range=", round(roundtrip_steps_summary.rel_half_range; digits=3))
+            " | final roundtrips=", iter_roundtrips[end],
+            " | final avg roundtrips/chain=", round(iter_avg_roundtrips_per_chain[end]; digits=4))
+    if roundtrip_stop_summary.stopped_early
+        println("Early-stop condition met at iteration ", roundtrip_stop_summary.stop_iteration,
+                " after ", roundtrip_stop_summary.consecutive_hits, " consecutive hits.")
+    else
+        println("Early-stop condition was not reached.")
+    end
 
     return (
         alg = alg_final[],
@@ -210,7 +247,9 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         iter_total_mcmc_steps = iter_total_mcmc_steps,
         iter_roundtrips_per_sampling_step = iter_roundtrips_per_sampling_step,
         iter_steps_per_target_roundtrips = iter_steps_per_target_roundtrips,
+        iter_avg_roundtrips_per_chain = iter_avg_roundtrips_per_chain,
         roundtrip_steps_summary = roundtrip_steps_summary,
+        roundtrip_stop_summary = roundtrip_stop_summary,
         tail_temperature = tail_temperature,
         D_scaling_reference = cfg.D_scaling_reference,
         n_iter_factor = n_iter_factor,

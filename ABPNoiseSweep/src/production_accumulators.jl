@@ -14,12 +14,15 @@ function abp_make_prod_accumulator(edges_x_T, edges_y_T, edges_y_mean, edges_y_i
         counts_xy_T_biased   = [zeros(Float64, length(edges_x_T) - 1, length(edges_y_T) - 1) for _ in 1:n_windows],
         counts_xy_T_unbiased = [zeros(Float64, length(edges_x_T) - 1, length(edges_y_T) - 1) for _ in 1:n_windows],
 
-        # Whole-trajectory, endpoint-conditioned histograms for x(T)>0.
-        # The condition is x(T)>0; every time point of that trajectory is counted.
+        # Whole-trajectory, endpoint-conditioned histograms for x(T)>0.5.
+        # Points with x(t) <= -0.3 are excluded to suppress left-well rumbling.
         counts_path_y_pos_biased   = zeros(Float64, length(edges_path_y) - 1),
         counts_path_y_pos_unbiased = zeros(Float64, length(edges_path_y) - 1),
         counts_path_xy_pos_biased   = zeros(Float64, length(edges_path_x) - 1, length(edges_path_y) - 1),
         counts_path_xy_pos_unbiased = zeros(Float64, length(edges_path_x) - 1, length(edges_path_y) - 1),
+
+        n_path_traj_pos_biased   = [0],
+        n_path_traj_pos_unbiased = [0],
 
         sum_w_by_window   = zeros(Float64, n_windows),
         sum_w2_by_window  = zeros(Float64, n_windows),
@@ -69,6 +72,9 @@ function abp_merge_prod_accumulators!(a, b; max_saved_paths_per_window::Int)
     a.counts_path_xy_pos_biased   .+= b.counts_path_xy_pos_biased
     a.counts_path_xy_pos_unbiased .+= b.counts_path_xy_pos_unbiased
 
+    a.n_path_traj_pos_biased[1]   += b.n_path_traj_pos_biased[1]
+    a.n_path_traj_pos_unbiased[1] += b.n_path_traj_pos_unbiased[1]
+
     a.sum_w_by_window   .+= b.sum_w_by_window
     a.sum_w2_by_window  .+= b.sum_w2_by_window
     a.n_biased_by_window .+= b.n_biased_by_window
@@ -104,12 +110,13 @@ function abp_merge_prod_accumulators!(a, b; max_saved_paths_per_window::Int)
     return a
 end
 
-function abp_add_whole_path_conditioned_pos!(acc, sys, edges_path_x, edges_path_y, weight::Real; path_time_stride::Int=1, reweighted::Bool=true)
+function abp_add_whole_path_conditioned_pos!(acc, sys, edges_path_x, edges_path_y, weight::Real; path_time_stride::Int=1, reweighted::Bool=true, path_x_min::Real=-0.3)
     # Endpoint condition is handled before this function is called.
     # This function counts the whole trajectory, not only the endpoint.
     @inbounds for k in 1:path_time_stride:length(sys.xs)
         x = sys.xs[k][1]
         y = sys.xs[k][2]
+        x <= path_x_min && continue
         if reweighted
             ok_y  = abp_add_weighted_value!(acc.counts_path_y_pos_unbiased, edges_path_y, y, weight)
             ok_xy = abp_add_weighted_joint!(acc.counts_path_xy_pos_unbiased, edges_path_x, edges_path_y, x, y, weight)

@@ -57,3 +57,45 @@ function abp_roundtrip_steps_summary(
         note = converged ? "Tail-window estimate is stable within tolerance." : "Tail-window estimate has not reached the requested stability tolerance.",
     )
 end
+
+function abp_roundtrip_average_stop_summary(
+    iter_avg_roundtrips_per_chain::AbstractVector{<:Real};
+    target_avg_roundtrips_per_chain::Real,
+    hits_required::Int,
+)
+    finite_values = Float64[x for x in iter_avg_roundtrips_per_chain if isfinite(x)]
+    if isempty(finite_values)
+        return (
+            stop_iteration = 0,
+            stopped_early = false,
+            consecutive_hits = 0,
+            last_avg_roundtrips_per_chain = NaN,
+            target_avg_roundtrips_per_chain = Float64(target_avg_roundtrips_per_chain),
+            note = "No finite average roundtrip values were available.",
+        )
+    end
+
+    last_value = finite_values[end]
+    hits = 0
+    stop_iteration = 0
+    for (i, value) in pairs(iter_avg_roundtrips_per_chain)
+        if isfinite(value) && value >= target_avg_roundtrips_per_chain
+            hits += 1
+            if hits >= hits_required && stop_iteration == 0
+                stop_iteration = i
+            end
+        else
+            hits = 0
+        end
+    end
+
+    stopped_early = stop_iteration > 0
+    return (
+        stop_iteration = stop_iteration,
+        stopped_early = stopped_early,
+        consecutive_hits = min(hits, hits_required),
+        last_avg_roundtrips_per_chain = last_value,
+        target_avg_roundtrips_per_chain = Float64(target_avg_roundtrips_per_chain),
+        note = stopped_early ? "Average roundtrip target was met for the requested number of consecutive iterations." : "Average roundtrip target was not met for long enough to stop early.",
+    )
+end

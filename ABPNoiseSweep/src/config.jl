@@ -58,14 +58,13 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     prod_stride::Int = 10_000
     roundtrip_stride::Int = 10_000
 
-    # Roundtrip convergence diagnostic.
-    # The script estimates how many MCMC sampling moves are required to obtain
-    # roundtrip_target completed roundtrips. Since MUCA iteration i uses a
-    # different number of sampling sweeps, the diagnostic is normalized by the
-    # actual number of sampling moves in that iteration.
+    # Roundtrip convergence control.
+    # The MUCA learning loop stops early when the average number of completed
+    # roundtrips per chain reaches roundtrip_avg_target_fraction * n_chains for
+    # roundtrip_convergence_hits consecutive iterations.
     roundtrip_target::Int = 100
-    roundtrip_convergence_window::Int = 5
-    roundtrip_convergence_rtol::Float64 = 0.20
+    roundtrip_avg_target_fraction::Float64 = 0.5
+    roundtrip_convergence_hits::Int = 3
 
     # Whole-trajectory counting. path_time_stride=1 means every saved integration
     # point in the trajectory is counted when x(T)>0.

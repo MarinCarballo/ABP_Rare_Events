@@ -46,8 +46,8 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["metadata/n_therm_muca"] = cfg.n_therm_muca
         file["metadata/flatness_threshold"] = cfg.flatness_threshold
         file["metadata/roundtrip_target"] = cfg.roundtrip_target
-        file["metadata/roundtrip_convergence_window"] = cfg.roundtrip_convergence_window
-        file["metadata/roundtrip_convergence_rtol"] = cfg.roundtrip_convergence_rtol
+        file["metadata/roundtrip_avg_target_fraction"] = cfg.roundtrip_avg_target_fraction
+        file["metadata/roundtrip_convergence_hits"] = cfg.roundtrip_convergence_hits
         file["metadata/n_muca_chains"] = muca.n_chains
         file["metadata/n_muca_total_sweeps_approx"] = muca.n_muca_total
         file["metadata/t_muca_seconds"] = muca.t_muca
@@ -75,12 +75,18 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["muca/iter_total_mcmc_steps"] = muca.iter_total_mcmc_steps
         file["muca/iter_roundtrips_per_sampling_step"] = muca.iter_roundtrips_per_sampling_step
         file["muca/iter_steps_per_target_roundtrips"] = muca.iter_steps_per_target_roundtrips
+        file["muca/iter_avg_roundtrips_per_chain"] = muca.iter_avg_roundtrips_per_chain
         file["muca/roundtrip_target"] = cfg.roundtrip_target
         file["muca/roundtrip_steps_estimate"] = muca.roundtrip_steps_summary.steps_estimate
         file["muca/roundtrip_steps_converged"] = muca.roundtrip_steps_summary.converged
         file["muca/roundtrip_steps_rel_half_range"] = muca.roundtrip_steps_summary.rel_half_range
         file["muca/roundtrip_steps_window_n"] = muca.roundtrip_steps_summary.window_n
         file["muca/roundtrip_steps_note"] = muca.roundtrip_steps_summary.note
+        file["muca/roundtrip_stop_stop_iteration"] = muca.roundtrip_stop_summary.stop_iteration
+        file["muca/roundtrip_stop_stopped_early"] = muca.roundtrip_stop_summary.stopped_early
+        file["muca/roundtrip_stop_consecutive_hits"] = muca.roundtrip_stop_summary.consecutive_hits
+        file["muca/roundtrip_stop_target_avg_roundtrips_per_chain"] = muca.roundtrip_stop_summary.target_avg_roundtrips_per_chain
+        file["muca/roundtrip_stop_note"] = muca.roundtrip_stop_summary.note
         file["muca/logw_shift"] = prod.logw_shift
 
         # Histogram edges
@@ -96,11 +102,13 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["histograms/unbiased/x_T"] = acc.counts_x_T_unbiased
 
         # Requested whole-trajectory endpoint-positive branch.
-        file["endpoint_positive_condition/condition"] = "x(T) > 0"
+        file["endpoint_positive_condition/condition"] = "x(T) > 0.5, with path points filtered to x(t) > -0.3"
         file["endpoint_positive_condition/biased/path_y"] = acc.counts_path_y_pos_biased
         file["endpoint_positive_condition/unbiased/path_y"] = acc.counts_path_y_pos_unbiased
         file["endpoint_positive_condition/biased/path_x_y"] = acc.counts_path_xy_pos_biased
         file["endpoint_positive_condition/unbiased/path_x_y"] = acc.counts_path_xy_pos_unbiased
+        file["endpoint_positive_condition/diagnostics/n_biased"] = acc.n_path_traj_pos_biased[1]
+        file["endpoint_positive_condition/diagnostics/n_unbiased"] = acc.n_path_traj_pos_unbiased[1]
         file["endpoint_positive_condition/diagnostics/out_path_y_biased"] = acc.n_path_y_pos_out_biased[1]
         file["endpoint_positive_condition/diagnostics/out_path_y_unbiased"] = acc.n_path_y_pos_out_unbiased[1]
         file["endpoint_positive_condition/diagnostics/out_path_x_y_biased"] = acc.n_path_xy_pos_out_biased[1]
@@ -310,6 +318,8 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             "n_prod_obs_total" => file["metadata/n_prod_obs_total"],
             "n_prod_chains" => file["metadata/n_prod_chains"],
             "roundtrip_target" => file["metadata/roundtrip_target"],
+            "roundtrip_avg_target_fraction" => file["metadata/roundtrip_avg_target_fraction"],
+            "roundtrip_convergence_hits" => file["metadata/roundtrip_convergence_hits"],
             "D_scaling_reference" => file["metadata/D_scaling_reference"],
             "scale_n_iter_with_D" => file["metadata/scale_n_iter_with_D"],
             "n_iter_factor" => file["metadata/n_iter_factor"],
@@ -323,6 +333,12 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             "reweighting_sum_w2" => file["histograms/reweighting/sum_w2"],
             "reweighting_ess" => file["histograms/reweighting/ess"],
             "reweighting_n_samples" => file["histograms/reweighting/n_reweighted_samples"],
+            "muca_stop_iteration" => file["muca/roundtrip_stop_stop_iteration"],
+            "muca_stopped_early" => file["muca/roundtrip_stop_stopped_early"],
+            "muca_stop_consecutive_hits" => file["muca/roundtrip_stop_consecutive_hits"],
+            "muca_stop_target_avg_roundtrips_per_chain" => file["muca/roundtrip_stop_target_avg_roundtrips_per_chain"],
+            "endpoint_positive_path_n_biased" => file["endpoint_positive_condition/diagnostics/n_biased"],
+            "endpoint_positive_path_n_unbiased" => file["endpoint_positive_condition/diagnostics/n_unbiased"],
         ]
 
         for key in keys_order
