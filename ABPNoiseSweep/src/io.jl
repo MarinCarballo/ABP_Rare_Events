@@ -280,7 +280,7 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
         path_y_b_pdf = abp_safe_pdf_from_mass(path_y_b, path_y_edges)
         path_y_u_pdf = abp_safe_pdf_from_mass(path_y_u, path_y_edges)
         push!(outs, abp_write_csv(
-            joinpath(case_dir, "endpoint_positive_path_y.csv"),
+            joinpath(case_dir, "endpoint_x_gt_0p5_filtered_path_y.csv"),
             ["path_y_center", "biased_count", "unbiased_count", "biased_pdf", "unbiased_pdf"],
             zip(path_y_centers, path_y_b, path_y_u, path_y_b_pdf, path_y_u_pdf),
         ))
@@ -292,7 +292,7 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
         path_xy_b_pdf = abp_safe_pdf2_from_mass(path_xy_b, path_x_edges, path_y_edges)
         path_xy_u_pdf = abp_safe_pdf2_from_mass(path_xy_u, path_x_edges, path_y_edges)
         push!(outs, abp_write_csv(
-            joinpath(case_dir, "endpoint_positive_path_x_y_long.csv"),
+            joinpath(case_dir, "endpoint_x_gt_0p5_filtered_path_x_y_long.csv"),
             ["path_x_center", "path_y_center", "biased_count", "unbiased_count", "biased_pdf", "unbiased_pdf"],
             ((path_x_centers[ix], path_y_centers[iy], path_xy_b[ix, iy], path_xy_u[ix, iy], path_xy_b_pdf[ix, iy], path_xy_u_pdf[ix, iy])
              for ix in eachindex(path_x_centers) for iy in eachindex(path_y_centers)),
