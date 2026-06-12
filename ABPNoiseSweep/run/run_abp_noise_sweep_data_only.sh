@@ -1,9 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=abp_noise_sweep
-#SBATCH --output=logs/abp_noise_sweep_%j.out
-#SBATCH --error=logs/abp_noise_sweep_%j.err
-#SBATCH --time=24:00:00
-#SBATCH --nodes=1
+    #SBATCH --job-name=abp_noise_sweep_1
+    #SBATCH --partition=titan
+    #SBATCH --time=7-00:00:00
+    #SBATCH --nodes=1
+    #SBATCH --ntasks-per-node=32
+    #SBATCH --cpus-per-task=2
 
 set -euo pipefail
 
@@ -20,20 +21,20 @@ mkdir -p logs
 : "${ABP_INSTANTIATE:=false}"
 : "${ABP_PRECOMPILE:=false}"
 
-: "${ABP_D_VALUES:=0.1,0.01,0.005}"
+: "${ABP_D_VALUES:=0.1,0.01}"
 : "${ABP_MOVE_WEIGHTS:=run/move_weights.json}" # JSON file with the default move weights.
 : "${ABP_OUTPUT_DIR:=abp_noise_sweep_endpoint_conditioned}" #: "${ABP_OUTPUT_DIR:=/scratch/$USER/ABP_runs/run_001}"
 : "${ABP_SAVE_CSV:=true}"
 
-: "${ABP_N_ITER:=90}"
-: "${ABP_N_ITER_STEPS_PER_ITER:=120000000}"
+: "${ABP_N_ITER:=20}"
+: "${ABP_N_ITER_STEPS_PER_ITER:=10000000}"
 : "${ABP_N_THERM_MUCA:=100000}"
 : "${ABP_D_SCALING_REFERENCE:=0.01}"
 : "${ABP_SCALE_N_ITER_WITH_D:=true}"
 : "${ABP_BLOCK_DXI:=0.05}"
 : "${ABP_LOCAL_DXI:=0.8}"
 
-: "${ABP_N_PROD_OBS_TOTAL:=60000000}"
+: "${ABP_N_PROD_OBS_TOTAL:=6000000}"
 : "${ABP_N_PROD_CHAINS:=${JULIA_NUM_THREADS}}"
 : "${ABP_N_THERM_PROD:=100000}"
 : "${ABP_PROD_STRIDE:=10000}"

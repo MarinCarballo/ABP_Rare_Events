@@ -220,6 +220,92 @@ function abp_safe_pdf2_from_mass(counts::AbstractMatrix, x_edges::AbstractVector
     return abp_pdf2_from_mass(Float64.(counts), Float64.(x_edges), Float64.(y_edges))
 end
 
+function abp_average_endpoint_positive_trajectory_rows(saved_paths; dt::Real, saved_path_time_thin::Int, path_x_min::Real=-0.6)
+    biased_count = Int[]
+    biased_sum_x = Float64[]
+    biased_sum_y = Float64[]
+    biased_sum_x2 = Float64[]
+    biased_sum_y2 = Float64[]
+
+    weighted_sum = Float64[]
+    weighted_sum_x = Float64[]
+    weighted_sum_y = Float64[]
+    weighted_sum_x2 = Float64[]
+    weighted_sum_y2 = Float64[]
+
+    function ensure_len!(n::Int)
+        while length(biased_count) < n
+            push!(biased_count, 0)
+            push!(biased_sum_x, 0.0)
+            push!(biased_sum_y, 0.0)
+            push!(biased_sum_x2, 0.0)
+            push!(biased_sum_y2, 0.0)
+
+            push!(weighted_sum, 0.0)
+            push!(weighted_sum_x, 0.0)
+            push!(weighted_sum_y, 0.0)
+            push!(weighted_sum_x2, 0.0)
+            push!(weighted_sum_y2, 0.0)
+        end
+        return nothing
+    end
+
+    for path in saved_paths
+        xs = path.xs
+        weight = Float64(path.unbias_weight_shifted)
+        for (time_index, point) in enumerate(xs)
+            x = Float64(point[1])
+            y = Float64(point[2])
+            x <= path_x_min && continue
+
+            ensure_len!(time_index)
+            biased_count[time_index] += 1
+            biased_sum_x[time_index] += x
+            biased_sum_y[time_index] += y
+            biased_sum_x2[time_index] += x^2
+            biased_sum_y2[time_index] += y^2
+
+            weighted_sum[time_index] += weight
+            weighted_sum_x[time_index] += weight * x
+            weighted_sum_y[time_index] += weight * y
+            weighted_sum_x2[time_index] += weight * x^2
+            weighted_sum_y2[time_index] += weight * y^2
+        end
+    end
+
+    rows = NamedTuple[]
+    for time_index in eachindex(biased_count)
+        bcount = biased_count[time_index]
+        wsum = weighted_sum[time_index]
+        bmean_x = bcount > 0 ? biased_sum_x[time_index] / bcount : NaN
+        bmean_y = bcount > 0 ? biased_sum_y[time_index] / bcount : NaN
+        bstd_x = bcount > 1 ? sqrt(max(0.0, biased_sum_x2[time_index] / bcount - bmean_x^2)) : NaN
+        bstd_y = bcount > 1 ? sqrt(max(0.0, biased_sum_y2[time_index] / bcount - bmean_y^2)) : NaN
+
+        wmean_x = wsum > 0.0 ? weighted_sum_x[time_index] / wsum : NaN
+        wmean_y = wsum > 0.0 ? weighted_sum_y[time_index] / wsum : NaN
+        wstd_x = wsum > 0.0 ? sqrt(max(0.0, weighted_sum_x2[time_index] / wsum - wmean_x^2)) : NaN
+        wstd_y = wsum > 0.0 ? sqrt(max(0.0, weighted_sum_y2[time_index] / wsum - wmean_y^2)) : NaN
+
+        push!(rows, (
+            time_index = time_index,
+            time = (time_index - 1) * saved_path_time_thin * Float64(dt),
+            biased_count = bcount,
+            biased_mean_x = bmean_x,
+            biased_mean_y = bmean_y,
+            biased_std_x = bstd_x,
+            biased_std_y = bstd_y,
+            unbiased_weight_sum = wsum,
+            unbiased_mean_x = wmean_x,
+            unbiased_mean_y = wmean_y,
+            unbiased_std_x = wstd_x,
+            unbiased_std_y = wstd_y,
+        ))
+    end
+
+    return rows
+end
+
 function abp_export_case_data_csvs(file_path::AbstractString; output_dir::AbstractString=joinpath(dirname(file_path), "data"))
     abp_ensure_dir(output_dir)
     tag = replace(basename(file_path), ".jld2" => "")
@@ -297,6 +383,58 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             ((path_x_centers[ix], path_y_centers[iy], path_xy_b[ix, iy], path_xy_u[ix, iy], path_xy_b_pdf[ix, iy], path_xy_u_pdf[ix, iy])
              for ix in eachindex(path_x_centers) for iy in eachindex(path_y_centers)),
         ))
+
+        if haskey(file, "saved_trajectories/x_gt0/n_saved")
+            n_saved = Int(file["saved_trajectories/x_gt0/n_saved"])
+            if n_saved > 0
+                saved_paths = [(
+                    xs = file["saved_trajectories/x_gt0/$j/xs"],
+                    theta0 = file["saved_trajectories/x_gt0/$j/theta0"],
+                    endpoint_x = file["saved_trajectories/x_gt0/$j/endpoint_x"],
+                    endpoint_y = file["saved_trajectories/x_gt0/$j/endpoint_y"],
+                    y_mean = file["saved_trajectories/x_gt0/$j/y_mean"],
+                    y_int = file["saved_trajectories/x_gt0/$j/y_int"],
+                    bias_value = file["saved_trajectories/x_gt0/$j/bias_value"],
+                    unbias_weight_shifted = file["saved_trajectories/x_gt0/$j/unbias_weight_shifted"],
+                ) for j in 1:n_saved]
+
+                trajectory_rows = NamedTuple[]
+                for (trajectory_id, path) in enumerate(saved_paths)
+                    point_count = length(path.xs)
+                    kept_point_count = count(point -> point[1] > -0.3, path.xs)
+                    push!(trajectory_rows, (
+                        trajectory_id = trajectory_id,
+                        endpoint_x = path.endpoint_x,
+                        endpoint_y = path.endpoint_y,
+                        unbiased_weight = path.unbias_weight_shifted,
+                        point_count = point_count,
+                        kept_point_count = kept_point_count,
+                        y_mean = path.y_mean,
+                        y_int = path.y_int,
+                        bias_value = path.bias_value,
+                    ))
+                end
+                push!(outs, abp_write_csv(
+                    joinpath(case_dir, "endpoint_x_gt_0p5_trajectory_summary.csv"),
+                    ["trajectory_id", "endpoint_x", "endpoint_y", "unbiased_weight", "point_count", "kept_point_count", "y_mean", "y_int", "bias_value"],
+                    trajectory_rows,
+                ))
+
+                avg_rows = abp_average_endpoint_positive_trajectory_rows(
+                    saved_paths;
+                    dt=file["metadata/dt"],
+                    saved_path_time_thin=Int(file["metadata/saved_path_time_thin"]),
+                    path_x_min=-0.6,
+                )
+                if !isempty(avg_rows)
+                    push!(outs, abp_write_csv(
+                        joinpath(case_dir, "endpoint_x_gt_0p5_average_trajectory.csv"),
+                        ["time_index", "time", "biased_count", "biased_mean_x", "biased_mean_y", "biased_std_x", "biased_std_y", "unbiased_weight_sum", "unbiased_mean_x", "unbiased_mean_y", "unbiased_std_x", "unbiased_std_y"],
+                        avg_rows,
+                    ))
+                end
+            end
+        end
 
         keys_order = collect(file["conditional_windows/order"])
         y_edges = collect(file["histograms/bins_y_T"])
@@ -437,6 +575,10 @@ function abp_power_law_fit(invD::AbstractVector{<:Real}, steps::AbstractVector{<
     return (C = exp(β[1]), alpha = β[2], r2 = r2, n = length(x), valid = true)
 end
 
+function abp_power_law_fit(invD::AbstractVector, steps::AbstractVector)
+    return abp_power_law_fit(Float64.(invD), Float64.(steps))
+end
+
 function abp_write_roundtrip_scaling_csv(rows, fit, output_dir::AbstractString)
     rows_csv = joinpath(output_dir, "roundtrip_scaling_rows.csv")
     open(rows_csv, "w") do io
@@ -464,7 +606,7 @@ function abp_write_roundtrip_scaling_data(file_paths::Vector{String}; output_dir
     isempty(rows) && return String[]
 
     subset = [r for r in rows if isfinite(r.steps_estimate) && r.steps_estimate > 0]
-    fit = abp_power_law_fit([r.invD for r in subset], [r.steps_estimate for r in subset])
+    fit = abp_power_law_fit(Float64[r.invD for r in subset], Float64[r.steps_estimate for r in subset])
     rows_csv, fit_csv = abp_write_roundtrip_scaling_csv(rows, fit, output_dir)
 
     println("Roundtrip scaling data saved:")

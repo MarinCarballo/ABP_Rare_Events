@@ -111,9 +111,9 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
         println("    out of range yT/meanY/intY/xTyT = ",
                 acc.n_y_T_out[iw], "/", acc.n_y_mean_out[iw], "/", acc.n_y_int_out[iw], "/", acc.n_xy_T_out[iw])
     end
-    println("  whole-path condition x(T)>0.5, x(t)>-0.3: out of range y/xy biased = ",
+    println("  whole-path condition x(T)>0.5, x(t)>-0.6: out of range y/xy biased = ",
         acc.n_path_y_pos_out_biased[1], "/", acc.n_path_xy_pos_out_biased[1])
-    println("  whole-path condition x(T)>0.5, x(t)>-0.3: out of range y/xy unbiased = ",
+    println("  whole-path condition x(T)>0.5, x(t)>-0.6: out of range y/xy unbiased = ",
         acc.n_path_y_pos_out_unbiased[1], "/", acc.n_path_xy_pos_out_unbiased[1])
     return (
         acc = acc,
@@ -205,7 +205,7 @@ function abp_run_production_chain!(
                 acc, sys, edges_path_x, edges_path_y, 1.0;
                 path_time_stride=cfg.path_time_stride,
                 reweighted=false,
-                path_x_min=-0.3,
+                path_x_min=-0.6,
             )
             if w_path > 0.0
                 acc.n_path_traj_pos_unbiased[1] += 1
@@ -213,7 +213,7 @@ function abp_run_production_chain!(
                     acc, sys, edges_path_x, edges_path_y, w_path;
                     path_time_stride=cfg.path_time_stride,
                     reweighted=true,
-                    path_x_min=-0.3,
+                    path_x_min=-0.6,
                 )
             end
         end

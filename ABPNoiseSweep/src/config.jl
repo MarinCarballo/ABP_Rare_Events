@@ -83,7 +83,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     max_saved_paths_per_window::Int = 300
 
     # Histogram ranges for y and path heatmaps.
-    y_abs::Float64 = 3.0
+    y_abs::Float64 = 2.0
     n_y_bins::Int = 241
     n_y_int_bins::Int = 241
     path_x_min::Float64 = -1.5
