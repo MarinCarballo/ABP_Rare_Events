@@ -1,0 +1,187 @@
+============================================================
+ABP noise-array task, T=40, D-scaled production
+============================================================
+Project:                         /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep
+Array job ID:                    1510083
+Array task ID:                   4
+Noise D:                         0.05
+Trajectory T:                    40
+Julia executable:                /home/nst/amarin/.julia/juliaup/julia-1.12.6+0.x64.linux.gnu/bin/julia
+Julia threads:                   128
+Task output directory:           /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05
+Combined output directory:       /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/combined
+MUCA iterations:                 150
+MUCA steps per iteration:        800000000
+MUCA thermalization:             1000000
+MUCA D scaling reference:        0.05
+Scale MUCA iterations with D:    true
+Roundtrip target fraction:       0.8
+Roundtrip consecutive hits:      5
+Diagnostic roundtrip target:     50
+Scale production with D:         true
+Production scaling model A:      1.167e10
+Production scaling model B:      97.32
+Min production observations:     5000000000
+Max production observations:     20000000000
+Chosen production observations:  5000000000
+Production chains:               128
+Production stride:               10000
+Production roundtrip stride:     10000
+Path-observation stride:         1000
+Path-time stride:                1
+Path x(t) minimum:               -0.8
+============================================================
+julia version 1.12.6
+============================================================
+ABP noise sweep cluster script
+Started at: 2026-07-07 17:37:07
+Active project: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/Project.toml
+Julia threads: 128
+CPU threads visible to Julia: 128
+Hostname: nariman82
+============================================================
+Configuration:
+  D_values = [0.05]
+  move_weights [reflection, theta0, block, local] = [0.0, 0.05, 0.55, 0.4]
+  trajectory_T = 40.0 | dt = 0.01 | v = 0.39
+  potential_active = true
+  n_iter = 150
+  n_iter_steps_per_iter = 800000000 final-iteration sampling moves across chains
+  n_therm_muca = 1000000
+  D_scaling_reference = 0.05
+  scale_n_iter_with_D = true
+  block_dxi = 0.05
+  local_dxi = 0.8
+  n_prod_obs_total = 5000000000
+  n_prod_chains = 128
+  path_observation_stride = 1000
+  path_time_stride = 1
+  path_filter_x_min = -0.8
+  save_movie_paths = false
+  roundtrip_target = 50
+  roundtrip_avg_target_fraction = 0.8
+  roundtrip_convergence_hits = 5
+  output_dir = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05
+  save_csv = true
+  save_plots = false (ignored by data-only script)
+Derived MUCA iteration schedule:
+  Formula: n_iter_effective(D) = round(n_iter * sqrt(D_scaling_reference / D))
+  n_iter = 150
+  D_scaling_reference = 0.05
+  scale_n_iter_with_D = true
+  D=0.05 | factor=1.0 | effective n_iter=150 | final-iteration sampling moves≈800000000 | total sampling moves over MUCA ramp≈60400000000
+Running ABP noise sweep.
+trajectory_T = 40.0 (physical integration time)
+D values = [0.05]
+move weights [reflection, theta0, block, local] = [0.0, 0.05, 0.55, 0.4]
+Output dir = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05
+
+============================================================
+MUCA case: D=0.05 Dt=Dr
+trajectory_T=40.0 | tail_temperature=1.0 | slope=-1.0
+D scaling reference=0.05 | n_iter factor=1.0 | effective n_iter=150
+proposal Δξ block=0.05 | proposal Δξ local=0.8 | move weights=[0.0, 0.05, 0.55, 0.4]
+chains=128 | bins=[-1.8, 1.5] | dbias=0.025
+early-stop target: average roundtrips per chain ≥ 102.4 for 5 straight iterations
+============================================================
+Completed MUCA iteration 10/150 | accept=0.3141 | flatness max/mean=1.125 | roundtrips=42 | steps/50 RT≈6.349e7
+Completed MUCA iteration 20/150 | accept=0.3125 | flatness max/mean=1.212 | roundtrips=132 | steps/50 RT≈4.04e7
+Completed MUCA iteration 30/150 | accept=0.3122 | flatness max/mean=1.163 | roundtrips=213 | steps/50 RT≈3.756e7
+Completed MUCA iteration 40/150 | accept=0.3159 | flatness max/mean=1.117 | roundtrips=245 | steps/50 RT≈4.354e7
+Completed MUCA iteration 50/150 | accept=0.3155 | flatness max/mean=1.149 | roundtrips=270 | steps/50 RT≈4.938e7
+Completed MUCA iteration 60/150 | accept=0.3153 | flatness max/mean=1.089 | roundtrips=383 | steps/50 RT≈4.178e7
+Completed MUCA iteration 70/150 | accept=0.3126 | flatness max/mean=1.08 | roundtrips=509 | steps/50 RT≈3.667e7
+Completed MUCA iteration 80/150 | accept=0.3148 | flatness max/mean=1.145 | roundtrips=558 | steps/50 RT≈3.823e7
+Completed MUCA iteration 90/150 | accept=0.3128 | flatness max/mean=1.124 | roundtrips=580 | steps/50 RT≈4.138e7
+Completed MUCA iteration 100/150 | accept=0.3141 | flatness max/mean=1.079 | roundtrips=681 | steps/50 RT≈3.916e7
+Completed MUCA iteration 110/150 | accept=0.3159 | flatness max/mean=1.093 | roundtrips=741 | steps/50 RT≈3.959e7
+Completed MUCA iteration 120/150 | accept=0.315 | flatness max/mean=1.06 | roundtrips=821 | steps/50 RT≈3.898e7
+Completed MUCA iteration 130/150 | accept=0.3159 | flatness max/mean=1.105 | roundtrips=838 | steps/50 RT≈4.137e7
+Completed MUCA iteration 140/150 | accept=0.3138 | flatness max/mean=1.099 | roundtrips=957 | steps/50 RT≈3.901e7
+Completed MUCA iteration 150/150 | accept=0.3165 | flatness max/mean=1.099 | roundtrips=981 | steps/50 RT≈4.077e7
+MUCA complete for D=0.05 | elapsed=295911.7s | total sweeps≈79600000000 | final roundtrips=981 | final avg roundtrips/chain=7.6641
+Early-stop condition was not reached.
+
+Production case: D=0.05 | chains=128 | total samples=5000000000 | proposal Δξ block=0.05 | proposal Δξ local=0.8 | whole-path endpoint windows=all,x_gt0,x_gt_0p5 | path filter x(t)>-0.8
+Whole-path production observation stride = 1000
+Whole-path histogram time stride = 1 (all integration points counted)
+Production complete for D=0.05 | elapsed=10690.6s | reweighted samples=5000000000/5000000000 | overall ESS=6.45671754424414e8 | ESS/N=0.12913435088488281 | aggregate roundtrips=6558
+Endpoint-window diagnostics:
+  -1 ≤ x(T) < 0
+    biased samples in window     = 1984015931
+    reweighted samples in window = 1984015931
+    conditional ESS              = 3.5603888421510726e8
+    out of range yT/meanY/intY/xTyT = 3329568/0/0/3329568
+  x(T) > 0
+    biased samples in window     = 2544807288
+    reweighted samples in window = 2544807288
+    conditional ESS              = 6.935891581717798e8
+    out of range yT/meanY/intY/xTyT = 8288097/0/0/8288097
+  x(T) > 0.5
+    biased samples in window     = 1540897248
+    reweighted samples in window = 1540897248
+    conditional ESS              = 6.741235744147278e8
+    out of range yT/meanY/intY/xTyT = 2479050/0/0/2479050
+  all endpoints
+    biased samples in window     = 5000000000
+    reweighted samples in window = 5000000000
+    conditional ESS              = 6.45671754424414e8
+    out of range yT/meanY/intY/xTyT = 11622438/0/0/11622438
+Whole-path endpoint-window diagnostics (kept points satisfy x(t)>-0.8):
+  all endpoints
+    selected trajectories biased/unbiased = 4999936/4999936
+    out of range path y/xy biased = 6590233/6590254
+    out of range path y/xy unbiased = 6590233/6590254
+  x(T) > 0
+    selected trajectories biased/unbiased = 2544710/2544710
+    out of range path y/xy biased = 5805616/5805637
+    out of range path y/xy unbiased = 5805616/5805637
+  x(T) > 0.5
+    selected trajectories biased/unbiased = 1541619/1541619
+    out of range path y/xy biased = 3791400/3791421
+    out of range path y/xy unbiased = 3791400/3791421
+Saved case file: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/abp_endpoint_conditioned_D0p05.jld2
+Exported data CSV files for abp_endpoint_conditioned_D0p05.jld2 to /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05
+Roundtrip scaling data saved:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/roundtrip_scaling_rows.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/roundtrip_scaling_power_law_fit.csv
+  steps ≈ NaN * (1/D)^NaN | R²=NaN | n=1
+Done sweep.
+JLD2 result files:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/abp_endpoint_conditioned_D0p05.jld2
+CSV/data export files:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/muca_last_histogram_logweights.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/muca_iteration_diagnostics.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/production_roundtrip_trace.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/production_roundtrip_aggregate.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/hist_endpoint_x_T.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/endpoint_all_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/endpoint_all_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/endpoint_x_gt0_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/endpoint_x_gt0_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/endpoint_x_gt_0p5_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/endpoint_x_gt_0p5_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/endpoint_x_gt_0p5_trajectory_summary.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/endpoint_x_gt_0p5_average_trajectory.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/conditional_x_m1_0_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/conditional_x_gt0_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/conditional_x_gt_0p5_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/conditional_all_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/abp_endpoint_conditioned_D0p05/case_summary.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/roundtrip_scaling_rows.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05/data/roundtrip_scaling_power_law_fit.csv
+Finished at: 2026-07-11 06:47:26
+============================================================
+Completed ABP noise-array task, T=40, D-scaled production
+============================================================
+Noise D:                         0.05
+Array task:                      4
+Chosen production observations:  5000000000
+Case directories copied:         1
+JLD2 files copied:               1
+Task output:                     /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05
+Combined output:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/combined
+Output size:
+74M	/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_4_D0p05
+263M	/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/combined
+============================================================

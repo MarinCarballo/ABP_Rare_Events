@@ -1,0 +1,45 @@
+============================================================
+ABP fixed-D propulsion-speed sweep
+============================================================
+Mode:                            muca
+Array job ID:                    1648929
+Array task ID:                   7
+D = Dt = Dr:                     0.025
+Propulsion speed v:              0.355
+Trajectory T:                    40
+Julia threads:                   128
+Task output:                     /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_7_v0p355
+Combined output:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/combined
+MUCA checkpoint:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_7_v0p355/muca_checkpoints/abp_muca_D0p025_v0p355.jld2
+MUCA iterations (actual max):    200
+MUCA moves at final iteration:   800000000
+Production observations:         50000000000
+Production chains:               128
+Julia runner:                     /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/scripts/run_speed_sweep.jl
+Julia runner lines:               563
+Julia runner SHA256:              683d20b0d850ad7af164ed954c15098c8afc7921bc2896ac626a0f532759a151
+============================================================
+julia version 1.12.6
+Starting fixed-D speed-sweep Julia runner
+Runner file: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/scripts/run_speed_sweep.jl
+Entering speed-sweep main with arguments: --mode muca --d 0.025 --v 0.355 --output-dir /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_7_v0p355 --muca-checkpoint /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_7_v0p355/muca_checkpoints/abp_muca_D0p025_v0p355.jld2
+============================================================
+Fixed-D propulsion-speed sweep
+============================================================
+mode = muca
+D = Dt = Dr = 0.025
+v = 0.355
+trajectory_T = 40.0 | dt = 0.01
+threads = 128
+output_dir = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_7_v0p355
+MUCA iterations (actual maximum) = 200
+MUCA final-iteration moves = 800000000
+MUCA D scaling enabled = false
+MUCA early-stop target average RT/chain = 0.5
+MUCA early-stop target aggregate RT = 64.0
+production observations = 50000000000
+production chains = 128
+requested path-observation stride = 1000
+requested path x(t) minimum = -0.8
+MUCA checkpoint = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_7_v0p355/muca_checkpoints/abp_muca_D0p025_v0p355.jld2
+============================================================

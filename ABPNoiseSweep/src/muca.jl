@@ -80,7 +80,7 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
     iter_roundtrips_per_sampling_step = Float64[]
     iter_steps_per_target_roundtrips = Float64[]
     iter_avg_roundtrips_per_chain = Float64[]
-
+    
     n_sweeps_per_chain(i_iter) = max(
         1,
         round(Int, (cfg.n_iter_steps_per_iter * i_iter) / (n_iter_effective * n_chains)),

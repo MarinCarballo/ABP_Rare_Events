@@ -8,6 +8,8 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
     acc = prod.acc
     endpoint_window_specs = prod.endpoint_window_specs
     window_keys = prod.window_keys
+    path_endpoint_specs = prod.path_endpoint_specs
+    path_window_keys = prod.path_window_keys
 
     jldopen(file_path, "w") do file
         # Metadata
@@ -21,8 +23,17 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["metadata/dt"] = cfg.dt
         file["metadata/x0"] = cfg.x0_vec
         file["metadata/potential_active"] = cfg.potential_active
+        file["metadata/path_observation_stride"] = cfg.path_observation_stride
         file["metadata/path_time_stride"] = cfg.path_time_stride
+        file["metadata/path_x_filter_min"] = prod.path_x_min
         file["metadata/saved_path_time_thin"] = cfg.saved_path_time_thin
+        file["metadata/save_movie_paths"] = cfg.save_movie_paths
+        file["metadata/movie_chain_id"] = cfg.movie_chain_id
+        file["metadata/movie_stride"] = cfg.movie_stride
+        file["metadata/movie_path_time_thin"] = cfg.movie_path_time_thin
+        file["metadata/movie_max_trajectories"] = cfg.movie_max_trajectories
+        file["metadata/movie_endpoint_x_min"] = cfg.movie_endpoint_x_min
+        file["metadata/movie_endpoint_x_max"] = cfg.movie_endpoint_x_max
 
         file["metadata/bias_observable"] = "endpoint_x"
         file["metadata/bias_min"] = cfg.bias_min
@@ -101,18 +112,46 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["histograms/biased/x_T"] = acc.counts_x_T_biased
         file["histograms/unbiased/x_T"] = acc.counts_x_T_unbiased
 
-        # Requested whole-trajectory endpoint-positive branch.
-        file["endpoint_positive_condition/condition"] = "x(T) > 0.5, with path points filtered to x(t) > -0.3"
-        file["endpoint_positive_condition/biased/path_y"] = acc.counts_path_y_pos_biased
-        file["endpoint_positive_condition/unbiased/path_y"] = acc.counts_path_y_pos_unbiased
-        file["endpoint_positive_condition/biased/path_x_y"] = acc.counts_path_xy_pos_biased
-        file["endpoint_positive_condition/unbiased/path_x_y"] = acc.counts_path_xy_pos_unbiased
-        file["endpoint_positive_condition/diagnostics/n_biased"] = acc.n_path_traj_pos_biased[1]
-        file["endpoint_positive_condition/diagnostics/n_unbiased"] = acc.n_path_traj_pos_unbiased[1]
-        file["endpoint_positive_condition/diagnostics/out_path_y_biased"] = acc.n_path_y_pos_out_biased[1]
-        file["endpoint_positive_condition/diagnostics/out_path_y_unbiased"] = acc.n_path_y_pos_out_unbiased[1]
-        file["endpoint_positive_condition/diagnostics/out_path_x_y_biased"] = acc.n_path_xy_pos_out_biased[1]
-        file["endpoint_positive_condition/diagnostics/out_path_x_y_unbiased"] = acc.n_path_xy_pos_out_unbiased[1]
+        # Whole-trajectory occupation histograms for all requested endpoint windows.
+        file["path_endpoint_conditions/order"] = path_window_keys
+        for (iw, spec) in enumerate(path_endpoint_specs)
+            key = string(spec.key)
+            base = "path_endpoint_conditions/$key"
+            file["$base/label"] = spec.label
+            file["$base/x_min"] = spec.lo
+            file["$base/x_max"] = spec.hi
+            file["$base/lower_strict"] = spec.lower_strict
+            file["$base/path_x_min"] = prod.path_x_min
+
+            file["$base/biased/path_y"] = acc.counts_path_y_biased[iw]
+            file["$base/unbiased/path_y"] = acc.counts_path_y_unbiased[iw]
+            file["$base/biased/path_x_y"] = acc.counts_path_xy_biased[iw]
+            file["$base/unbiased/path_x_y"] = acc.counts_path_xy_unbiased[iw]
+
+            file["$base/diagnostics/n_biased"] = acc.n_path_traj_biased[iw]
+            file["$base/diagnostics/n_unbiased"] = acc.n_path_traj_unbiased[iw]
+            file["$base/diagnostics/out_path_y_biased"] = acc.n_path_y_out_biased[iw]
+            file["$base/diagnostics/out_path_y_unbiased"] = acc.n_path_y_out_unbiased[iw]
+            file["$base/diagnostics/out_path_x_y_biased"] = acc.n_path_xy_out_biased[iw]
+            file["$base/diagnostics/out_path_x_y_unbiased"] = acc.n_path_xy_out_unbiased[iw]
+        end
+
+        # Backward-compatible alias for the old x(T)>0.5 group.
+        i_gt05 = findfirst(==("x_gt_0p5"), path_window_keys)
+        if i_gt05 !== nothing
+            file["endpoint_positive_condition/condition"] =
+                "x(T) > 0.5, with path points filtered to x(t) > $(prod.path_x_min)"
+            file["endpoint_positive_condition/biased/path_y"] = acc.counts_path_y_biased[i_gt05]
+            file["endpoint_positive_condition/unbiased/path_y"] = acc.counts_path_y_unbiased[i_gt05]
+            file["endpoint_positive_condition/biased/path_x_y"] = acc.counts_path_xy_biased[i_gt05]
+            file["endpoint_positive_condition/unbiased/path_x_y"] = acc.counts_path_xy_unbiased[i_gt05]
+            file["endpoint_positive_condition/diagnostics/n_biased"] = acc.n_path_traj_biased[i_gt05]
+            file["endpoint_positive_condition/diagnostics/n_unbiased"] = acc.n_path_traj_unbiased[i_gt05]
+            file["endpoint_positive_condition/diagnostics/out_path_y_biased"] = acc.n_path_y_out_biased[i_gt05]
+            file["endpoint_positive_condition/diagnostics/out_path_y_unbiased"] = acc.n_path_y_out_unbiased[i_gt05]
+            file["endpoint_positive_condition/diagnostics/out_path_x_y_biased"] = acc.n_path_xy_out_biased[i_gt05]
+            file["endpoint_positive_condition/diagnostics/out_path_x_y_unbiased"] = acc.n_path_xy_out_unbiased[i_gt05]
+        end
 
         # Reweighting diagnostics
         file["histograms/reweighting/logw_shift"] = prod.logw_shift
@@ -125,18 +164,38 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["roundtrips/observable"] = "endpoint_x"
         file["roundtrips/bounds"] = [prod.production_rt_min, prod.production_rt_max]
         file["roundtrips/stride"] = cfg.roundtrip_stride
-        file["roundtrips/steps"] = acc.rt_steps
+        file["roundtrips/chain_ids"] = acc.rt_chain_ids
+        file["roundtrips/local_steps"] = acc.rt_steps
+        file["roundtrips/steps"] = acc.rt_steps  # backward-compatible alias
         file["roundtrips/counts"] = acc.rt_counts
         file["roundtrips/bias_values"] = acc.rt_values
         file["roundtrips/final_count"] = acc.rt_final_count[1]
 
+        # Raw movie path snapshots, if requested.
+        file["movie_trajectories/n_saved"] = length(acc.movie_paths)
+        for (j, path) in enumerate(acc.movie_paths)
+            base = "movie_trajectories/$j"
+            file["$base/movie_id"] = j
+            file["$base/chain_id"] = path.chain_id
+            file["$base/mcmc_step"] = path.mcmc_step
+            file["$base/xs"] = path.xs
+            file["$base/thetas"] = path.thetas
+            file["$base/endpoint_x"] = path.endpoint_x
+            file["$base/endpoint_y"] = path.endpoint_y
+            file["$base/y_mean"] = path.y_mean
+            file["$base/y_int"] = path.y_int
+            file["$base/bias_value"] = path.bias_value
+            file["$base/unbias_weight_shifted"] = path.unbias_weight_shifted
+        end
+
         # Conditional endpoint windows
         file["conditional_windows/order"] = window_keys
-        for (iw, (key_sym, lo, hi, label)) in enumerate(endpoint_window_specs)
-            key = string(key_sym)
-            file["conditional_windows/$key/label"] = label
-            file["conditional_windows/$key/x_min"] = lo
-            file["conditional_windows/$key/x_max"] = hi
+        for (iw, spec) in enumerate(endpoint_window_specs)
+            key = string(spec.key)
+            file["conditional_windows/$key/label"] = spec.label
+            file["conditional_windows/$key/x_min"] = spec.lo
+            file["conditional_windows/$key/x_max"] = spec.hi
+            file["conditional_windows/$key/lower_strict"] = spec.lower_strict
 
             file["conditional_windows/$key/biased/y_T"]       = acc.counts_y_T_biased[iw]
             file["conditional_windows/$key/biased/y_mean"]    = acc.counts_y_mean_biased[iw]
@@ -347,6 +406,121 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             ))
         end
 
+        # Per-chain and aggregate production roundtrip traces.
+        if haskey(file, "roundtrips/chain_ids") && haskey(file, "roundtrips/local_steps")
+            rt_chain_ids = Int.(collect(file["roundtrips/chain_ids"]))
+            rt_steps = Int.(collect(file["roundtrips/local_steps"]))
+            rt_counts = Int.(collect(file["roundtrips/counts"]))
+            rt_values = Float64.(collect(file["roundtrips/bias_values"]))
+
+            n_rt = length(rt_steps)
+            if length(rt_chain_ids) == n_rt == length(rt_counts) == length(rt_values)
+                order = sortperm(1:n_rt; by=i -> (rt_chain_ids[i], rt_steps[i]))
+                push!(outs, abp_write_csv(
+                    joinpath(case_dir, "production_roundtrip_trace.csv"),
+                    ["chain_id", "local_step", "cumulative_roundtrips", "bias_value"],
+                    ((rt_chain_ids[i], rt_steps[i], rt_counts[i], rt_values[i]) for i in order),
+                ))
+
+                counts_by_step = Dict{Int, Vector{Int}}()
+                for i in 1:n_rt
+                    push!(get!(counts_by_step, rt_steps[i], Int[]), rt_counts[i])
+                end
+
+                aggregate_rows = NamedTuple[]
+                for step in sort(collect(keys(counts_by_step)))
+                    cs = counts_by_step[step]
+                    push!(aggregate_rows, (
+                        local_step = step,
+                        aggregate_roundtrips = sum(cs),
+                        chains_reporting = length(cs),
+                        mean_roundtrips_per_chain = sum(cs) / length(cs),
+                    ))
+                end
+
+                push!(outs, abp_write_csv(
+                    joinpath(case_dir, "production_roundtrip_aggregate.csv"),
+                    ["local_step", "aggregate_roundtrips", "chains_reporting", "mean_roundtrips_per_chain"],
+                    aggregate_rows,
+                ))
+            else
+                @warn "Production roundtrip arrays have inconsistent lengths; trace CSVs were skipped."
+            end
+        end
+
+        # Raw trajectory snapshots for movie diagnostics.
+        if haskey(file, "movie_trajectories/n_saved")
+            n_movie = Int(file["movie_trajectories/n_saved"])
+            if n_movie > 0
+                dt = Float64(file["metadata/dt"])
+                movie_time_thin = Int(file["metadata/movie_path_time_thin"])
+
+                summary_rows = NamedTuple[]
+                long_rows = NamedTuple[]
+
+                for movie_id in 1:n_movie
+                    base = "movie_trajectories/$movie_id"
+                    xs = file["$base/xs"]
+                    thetas = collect(file["$base/thetas"])
+                    chain_id = Int(file["$base/chain_id"])
+                    mcmc_step = Int(file["$base/mcmc_step"])
+                    endpoint_x = Float64(file["$base/endpoint_x"])
+                    endpoint_y = Float64(file["$base/endpoint_y"])
+                    y_mean = Float64(file["$base/y_mean"])
+                    y_int = Float64(file["$base/y_int"])
+                    bias_value = Float64(file["$base/bias_value"])
+                    unbias_weight_shifted = Float64(file["$base/unbias_weight_shifted"])
+
+                    push!(summary_rows, (
+                        movie_id = movie_id,
+                        chain_id = chain_id,
+                        mcmc_step = mcmc_step,
+                        n_points = length(xs),
+                        endpoint_x = endpoint_x,
+                        endpoint_y = endpoint_y,
+                        y_mean = y_mean,
+                        y_int = y_int,
+                        bias_value = bias_value,
+                        unbias_weight_shifted = unbias_weight_shifted,
+                    ))
+
+                    for (path_index, point) in enumerate(xs)
+                        theta = Float64(thetas[path_index])
+                        push!(long_rows, (
+                            movie_id = movie_id,
+                            chain_id = chain_id,
+                            mcmc_step = mcmc_step,
+                            path_index = path_index,
+                            physical_time = (path_index - 1) * movie_time_thin * dt,
+                            x = Float64(point[1]),
+                            y = Float64(point[2]),
+                            theta = theta,
+                            cos_theta = cos(theta),
+                            sin_theta = sin(theta),
+                            endpoint_x = endpoint_x,
+                            endpoint_y = endpoint_y,
+                            y_mean = y_mean,
+                            y_int = y_int,
+                            bias_value = bias_value,
+                            unbias_weight_shifted = unbias_weight_shifted,
+                        ))
+                    end
+                end
+
+                push!(outs, abp_write_csv(
+                    joinpath(case_dir, "movie_trajectory_summary.csv"),
+                    ["movie_id", "chain_id", "mcmc_step", "n_points", "endpoint_x", "endpoint_y", "y_mean", "y_int", "bias_value", "unbias_weight_shifted"],
+                    summary_rows,
+                ))
+
+                push!(outs, abp_write_csv(
+                    joinpath(case_dir, "movie_trajectories_long.csv"),
+                    ["movie_id", "chain_id", "mcmc_step", "path_index", "physical_time", "x", "y", "theta", "cos_theta", "sin_theta", "endpoint_x", "endpoint_y", "y_mean", "y_int", "bias_value", "unbias_weight_shifted"],
+                    long_rows,
+                ))
+            end
+        end
+
         x_edges = collect(file["histograms/bins_x_T"])
         x_centers = abp_centers_from_edges(x_edges)
         x_b = collect(file["histograms/biased/x_T"])
@@ -361,47 +535,60 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
 
         path_y_edges = collect(file["histograms/bins_path_y"])
         path_y_centers = abp_centers_from_edges(path_y_edges)
-        path_y_b = collect(file["endpoint_positive_condition/biased/path_y"])
-        path_y_u = collect(file["endpoint_positive_condition/unbiased/path_y"])
-        path_y_b_pdf = abp_safe_pdf_from_mass(path_y_b, path_y_edges)
-        path_y_u_pdf = abp_safe_pdf_from_mass(path_y_u, path_y_edges)
-        push!(outs, abp_write_csv(
-            joinpath(case_dir, "endpoint_x_gt_0p5_filtered_path_y.csv"),
-            ["path_y_center", "biased_count", "unbiased_count", "biased_pdf", "unbiased_pdf"],
-            zip(path_y_centers, path_y_b, path_y_u, path_y_b_pdf, path_y_u_pdf),
-        ))
-
         path_x_edges = collect(file["histograms/bins_path_x"])
         path_x_centers = abp_centers_from_edges(path_x_edges)
-        path_xy_b = Array(file["endpoint_positive_condition/biased/path_x_y"])
-        path_xy_u = Array(file["endpoint_positive_condition/unbiased/path_x_y"])
-        path_xy_b_pdf = abp_safe_pdf2_from_mass(path_xy_b, path_x_edges, path_y_edges)
-        path_xy_u_pdf = abp_safe_pdf2_from_mass(path_xy_u, path_x_edges, path_y_edges)
-        push!(outs, abp_write_csv(
-            joinpath(case_dir, "endpoint_x_gt_0p5_filtered_path_x_y_long.csv"),
-            ["path_x_center", "path_y_center", "biased_count", "unbiased_count", "biased_pdf", "unbiased_pdf"],
-            ((path_x_centers[ix], path_y_centers[iy], path_xy_b[ix, iy], path_xy_u[ix, iy], path_xy_b_pdf[ix, iy], path_xy_u_pdf[ix, iy])
-             for ix in eachindex(path_x_centers) for iy in eachindex(path_y_centers)),
-        ))
 
-        if haskey(file, "saved_trajectories/x_gt0/n_saved")
-            n_saved = Int(file["saved_trajectories/x_gt0/n_saved"])
+        if haskey(file, "path_endpoint_conditions/order")
+            path_keys_order = collect(file["path_endpoint_conditions/order"])
+            for key_raw in path_keys_order
+                key = string(key_raw)
+                base = "path_endpoint_conditions/$key"
+
+                path_y_b = collect(file["$base/biased/path_y"])
+                path_y_u = collect(file["$base/unbiased/path_y"])
+                path_y_b_pdf = abp_safe_pdf_from_mass(path_y_b, path_y_edges)
+                path_y_u_pdf = abp_safe_pdf_from_mass(path_y_u, path_y_edges)
+                push!(outs, abp_write_csv(
+                    joinpath(case_dir, "endpoint_$(key)_filtered_path_y.csv"),
+                    ["path_y_center", "biased_count", "unbiased_count", "biased_pdf", "unbiased_pdf"],
+                    zip(path_y_centers, path_y_b, path_y_u, path_y_b_pdf, path_y_u_pdf),
+                ))
+
+                path_xy_b = Array(file["$base/biased/path_x_y"])
+                path_xy_u = Array(file["$base/unbiased/path_x_y"])
+                path_xy_b_pdf = abp_safe_pdf2_from_mass(path_xy_b, path_x_edges, path_y_edges)
+                path_xy_u_pdf = abp_safe_pdf2_from_mass(path_xy_u, path_x_edges, path_y_edges)
+                push!(outs, abp_write_csv(
+                    joinpath(case_dir, "endpoint_$(key)_filtered_path_x_y_long.csv"),
+                    ["path_x_center", "path_y_center", "biased_count", "unbiased_count", "biased_pdf", "unbiased_pdf"],
+                    ((path_x_centers[ix], path_y_centers[iy],
+                      path_xy_b[ix, iy], path_xy_u[ix, iy],
+                      path_xy_b_pdf[ix, iy], path_xy_u_pdf[ix, iy])
+                     for ix in eachindex(path_x_centers) for iy in eachindex(path_y_centers)),
+                ))
+            end
+        else
+            @warn "No generalized path_endpoint_conditions found; path-window CSVs were not exported."
+        end
+
+        if haskey(file, "saved_trajectories/x_gt_0p5/n_saved")
+            n_saved = Int(file["saved_trajectories/x_gt_0p5/n_saved"])
             if n_saved > 0
                 saved_paths = [(
-                    xs = file["saved_trajectories/x_gt0/$j/xs"],
-                    theta0 = file["saved_trajectories/x_gt0/$j/theta0"],
-                    endpoint_x = file["saved_trajectories/x_gt0/$j/endpoint_x"],
-                    endpoint_y = file["saved_trajectories/x_gt0/$j/endpoint_y"],
-                    y_mean = file["saved_trajectories/x_gt0/$j/y_mean"],
-                    y_int = file["saved_trajectories/x_gt0/$j/y_int"],
-                    bias_value = file["saved_trajectories/x_gt0/$j/bias_value"],
-                    unbias_weight_shifted = file["saved_trajectories/x_gt0/$j/unbias_weight_shifted"],
+                    xs = file["saved_trajectories/x_gt_0p5/$j/xs"],
+                    theta0 = file["saved_trajectories/x_gt_0p5/$j/theta0"],
+                    endpoint_x = file["saved_trajectories/x_gt_0p5/$j/endpoint_x"],
+                    endpoint_y = file["saved_trajectories/x_gt_0p5/$j/endpoint_y"],
+                    y_mean = file["saved_trajectories/x_gt_0p5/$j/y_mean"],
+                    y_int = file["saved_trajectories/x_gt_0p5/$j/y_int"],
+                    bias_value = file["saved_trajectories/x_gt_0p5/$j/bias_value"],
+                    unbias_weight_shifted = file["saved_trajectories/x_gt_0p5/$j/unbias_weight_shifted"],
                 ) for j in 1:n_saved]
 
                 trajectory_rows = NamedTuple[]
                 for (trajectory_id, path) in enumerate(saved_paths)
                     point_count = length(path.xs)
-                    kept_point_count = count(point -> point[1] > -0.3, path.xs)
+                    kept_point_count = count(point -> point[1] > Float64(file["metadata/path_x_filter_min"]), path.xs)
                     push!(trajectory_rows, (
                         trajectory_id = trajectory_id,
                         endpoint_x = path.endpoint_x,
@@ -424,7 +611,7 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
                     saved_paths;
                     dt=file["metadata/dt"],
                     saved_path_time_thin=Int(file["metadata/saved_path_time_thin"]),
-                    path_x_min=-0.6,
+                    path_x_min=Float64(file["metadata/path_x_filter_min"]),
                 )
                 if !isempty(avg_rows)
                     push!(outs, abp_write_csv(
@@ -475,9 +662,21 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             "muca_stopped_early" => file["muca/roundtrip_stop_stopped_early"],
             "muca_stop_consecutive_hits" => file["muca/roundtrip_stop_consecutive_hits"],
             "muca_stop_target_avg_roundtrips_per_chain" => file["muca/roundtrip_stop_target_avg_roundtrips_per_chain"],
-            "endpoint_positive_path_n_biased" => file["endpoint_positive_condition/diagnostics/n_biased"],
-            "endpoint_positive_path_n_unbiased" => file["endpoint_positive_condition/diagnostics/n_unbiased"],
+            "path_observation_stride" => file["metadata/path_observation_stride"],
+            "path_time_stride" => file["metadata/path_time_stride"],
+            "path_x_filter_min" => file["metadata/path_x_filter_min"],
+            "production_roundtrips_final_count" => file["roundtrips/final_count"],
         ]
+
+        if haskey(file, "path_endpoint_conditions/order")
+            for key_raw in collect(file["path_endpoint_conditions/order"])
+                key = string(key_raw)
+                base = "path_endpoint_conditions/$key"
+                push!(summary_pairs, "path_window_$(key)_label" => file["$base/label"])
+                push!(summary_pairs, "path_window_$(key)_n_biased" => file["$base/diagnostics/n_biased"])
+                push!(summary_pairs, "path_window_$(key)_n_unbiased" => file["$base/diagnostics/n_unbiased"])
+            end
+        end
 
         for key in keys_order
             label = file["conditional_windows/$key/label"]

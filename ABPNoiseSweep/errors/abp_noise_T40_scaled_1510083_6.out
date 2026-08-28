@@ -1,0 +1,34 @@
+============================================================
+ABP noise-array task, T=40, D-scaled production
+============================================================
+Project:                         /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep
+Array job ID:                    1510083
+Array task ID:                   6
+Noise D:                         0.03
+Trajectory T:                    40
+Julia executable:                /home/nst/amarin/.julia/juliaup/julia-1.12.6+0.x64.linux.gnu/bin/julia
+Julia threads:                   128
+Task output directory:           /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/task_6_D0p03
+Combined output directory:       /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/combined
+MUCA iterations:                 150
+MUCA steps per iteration:        800000000
+MUCA thermalization:             1000000
+MUCA D scaling reference:        0.05
+Scale MUCA iterations with D:    true
+Roundtrip target fraction:       0.8
+Roundtrip consecutive hits:      5
+Diagnostic roundtrip target:     50
+Scale production with D:         true
+Production scaling model A:      1.167e10
+Production scaling model B:      97.32
+Min production observations:     5000000000
+Max production observations:     20000000000
+Chosen production observations:  5000000000
+Production chains:               128
+Production stride:               10000
+Production roundtrip stride:     10000
+Path-observation stride:         1000
+Path-time stride:                1
+Path x(t) minimum:               -0.8
+============================================================
+julia version 1.12.6

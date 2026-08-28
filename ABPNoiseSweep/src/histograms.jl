@@ -1,4 +1,4 @@
-# Histogram and generic IO path helpers.
+# Histogram and generic IO path helpers. Bin object in MontecarloX (histograms and weights)
 
 function abp_bin_index_from_edges(x::Real, edges::AbstractVector)
     i = searchsortedlast(edges, x)
@@ -7,7 +7,7 @@ function abp_bin_index_from_edges(x::Real, edges::AbstractVector)
     end
     return (1 <= i < length(edges)) ? i : nothing
 end
-
+#Value means the value to be binned, edges is the vector of bin edges, and the function returns the index of the bin that contains the value, or nothing if the value is out of bounds.
 function abp_add_weighted_value!(counts::AbstractVector, edges::AbstractVector, value::Real, weight::Real)
     i = abp_bin_index_from_edges(value, edges)
     i === nothing && return false
@@ -21,14 +21,14 @@ function abp_add_weighted_joint!(counts::AbstractMatrix, x_edges::AbstractVector
     (ix === nothing || iy === nothing) && return false
     counts[ix, iy] += weight
     return true
-end
+end #this function adds a weighted sample to a 2D histogram defined by x_edges and y_edges, returning false if either value is out of bounds.
 
 function abp_centers_from_edges(edges::AbstractVector)
     return 0.5 .* (edges[1:end-1] .+ edges[2:end])
 end
 
 function abp_pdf_from_mass(counts::AbstractVector, edges::AbstractVector)
-    total = sum(counts)
+    total = sum(counts) 
     total == 0.0 && return fill(NaN, length(counts))
     return counts ./ (total .* diff(edges))
 end

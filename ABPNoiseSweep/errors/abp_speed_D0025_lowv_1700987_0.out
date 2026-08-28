@@ -1,0 +1,14 @@
+============================================================
+Fixed-noise low-speed task: MUCA -> production
+D = 0.025 | v = 0.290 | array task = 0
+Job ID = 1700987
+Threads = 128
+MUCA iterations = 200
+MUCA final-iteration moves = 800000000
+Production moves = 55000000000
+Production chains = 128
+Path-observation stride = 1000
+Path filter x(t) > -1.0
+Task output = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_array_1700987/task_0_v0p290
+Runner = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/scripts/run_fixed_D_speed_landscape.jl
+============================================================

@@ -1,5 +1,5 @@
 # Path-space MCMC proposal moves.
-
+#Try Metropolis-Hastings (better mixing?)
 function in_bin_range(x, bins) # check if x is within the range defined by the first and last edges of the bins
     first(bins) <= x < last(bins)
 end
@@ -51,9 +51,6 @@ function update!(
     return sys
 end
 
-# =============================================================================
-# Notebook cell 20
-# =============================================================================
 function block_update!(
     sys::ABPTrajectory,
     alg::ImportanceSampling{<:MulticanonicalEnsemble},
@@ -114,9 +111,6 @@ function block_update!(
     return sys
 end
 
-# =============================================================================
-# Notebook cell 22
-# =============================================================================
 #only updates initial orientation for each MCMC step.
 function theta0_update!(
     sys::ABPTrajectory,
@@ -159,9 +153,7 @@ function theta0_update!(
     return sys
 end
 
-# =============================================================================
-# Notebook cell 24
-# =============================================================================
+
 function reflect_y!(sys::ABPTrajectory)
     for i in eachindex(sys.xs)
         sys.xs[i] = SVector(sys.xs[i][1], -sys.xs[i][2])
@@ -203,9 +195,7 @@ function reflection_update!(
     return sys
 end
 
-# =============================================================================
-# Notebook cell 26
-# =============================================================================
+
 function make_abp_moves(
     obs,
     bins_bias,

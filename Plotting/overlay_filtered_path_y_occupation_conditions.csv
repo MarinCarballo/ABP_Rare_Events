@@ -1,4 +1,9 @@
 label,D,total_mass_after_notebook_cuts,endpoint_condition,production_path_filter,notebook_x_crop,y_range,weight_col
-D=0.01,0.01,1.4923181827931703e-23,x(T)>0.5,x(t)>-0.6,none,-3.0<y(t)<3.0,unbiased_count
-D=0.05,0.05,860451.0724212655,x(T)>0.5,x(t)>-0.6,none,-3.0<y(t)<3.0,unbiased_count
-D=0.1,0.1,808943949.8685474,x(T)>0.5,x(t)>-0.6,none,-3.0<y(t)<3.0,unbiased_count
+D=0.02,0.02,8.31235034532246e-06,x(T)>0.5,x(t)>-0.8,none,-3.0<y(t)<3.0,unbiased_count
+D=0.025,0.025,0.014109944404112349,x(T)>0.5,x(t)>-0.8,none,-3.0<y(t)<3.0,unbiased_count
+D=0.04,0.04,1844.9335391901652,x(T)>0.5,x(t)>-0.8,none,-3.0<y(t)<3.0,unbiased_count
+D=0.05,0.05,83354.17632389613,x(T)>0.5,x(t)>-0.8,none,-3.0<y(t)<3.0,unbiased_count
+D=0.06,0.06,693799.0434835108,x(T)>0.5,x(t)>-0.8,none,-3.0<y(t)<3.0,unbiased_count
+D=0.08,0.08,10758865.480396252,x(T)>0.5,x(t)>-0.8,none,-3.0<y(t)<3.0,unbiased_count
+D=0.1,0.1,58309574.55487982,x(T)>0.5,x(t)>-0.8,none,-3.0<y(t)<3.0,unbiased_count
+D=0.5,0.5,3037591174.7930894,x(T)>0.5,x(t)>-0.8,none,-3.0<y(t)<3.0,unbiased_count

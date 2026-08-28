@@ -1,0 +1,28 @@
+Effective Landau test for ABP crossing profiles
+====================================================
+Input profile table: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_noise_T40_scaled_array_1510083/plots/crossing_phi_profiles_x_gt0.csv
+Endpoint key: x_gt0
+Primary fit window: |y| <= 1.2
+
+Primary-window results
+----------------------
+c2 zero crossing D_c: 0.072103 +/- 0.0015 (naive OLS)
+Expected crossing orientation (c2 increases through zero): True
+c2 local-linear R^2: 0.98836
+c4 positive for all D: False (6/8)
+c4 relative range (max-min)/|mean|: 12.895
+c4 varies slowly by configured tolerance: False
+y_*^2 relation: NRMSE = 0.046431, correlation = 0.9928, n = 5
+y_*^2 agrees by configured tolerance: True
+Median quartic profile-fit R^2: 0.99735
+
+Fit-window robustness
+---------------------
+D_c range across fit windows: 0.070555 to 0.07249
+Relative D_c spread: 0.026978
+D_c robust by configured tolerance: True
+
+Interpretation
+--------------
+These coefficients describe the finite-noise profiles Phi_D(y). At fixed v, an inferred D_c is an effective peak-splitting crossover, not by itself a phase transition of the D->0 LDF.
+The reported OLS standard errors treat histogram bins as independent. Use trajectory/block bootstrap errors for final scientific uncertainty estimates.

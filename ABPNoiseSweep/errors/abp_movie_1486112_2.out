@@ -1,0 +1,216 @@
+============================================================
+ABP movie-path task
+============================================================
+Project:                         /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep
+Array job ID:                    1486112
+Array task ID:                   2
+Noise D:                         0.01
+Trajectory T:                    40
+Julia executable:                /home/nst/amarin/.julia/juliaup/julia-1.12.6+0.x64.linux.gnu/bin/julia
+Julia threads:                   128
+Run root:                        /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112
+Task output directory:           /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01
+Combined output directory:       /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/combined
+MUCA iterations:                 130
+MUCA steps per iteration:        500000000
+MUCA thermalization:             1000000
+Roundtrip target fraction:       0.8
+Roundtrip consecutive hits:      5
+Diagnostic roundtrip target:     50
+Production observations:         2000000000
+Production chains:               16
+Production stride:               10000
+Production roundtrip stride:     5000
+Path-observation stride:         10000
+Path-time stride:                10
+Path x(t) minimum:               -0.6
+Save movie paths:                true
+Movie chain ID:                  1
+Movie stride:                    50000
+Movie path time thin:            4
+Movie max trajectories:          3000
+Movie endpoint x min:            -Inf
+Movie endpoint x max:            Inf
+Movie data root:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs
+Run root:                        /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112
+Task output directory:           /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01
+Combined output directory:       /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/combined
+============================================================
+julia version 1.12.6
+============================================================
+ABP noise sweep cluster script
+Started at: 2026-07-06 20:21:22
+Active project: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/Project.toml
+Julia threads: 128
+CPU threads visible to Julia: 128
+Hostname: nariman92
+============================================================
+Configuration:
+  D_values = [0.01]
+  move_weights [reflection, theta0, block, local] = [0.0, 0.05, 0.55, 0.4]
+  trajectory_T = 40.0 | dt = 0.01 | v = 0.39
+  potential_active = true
+  n_iter = 130
+  n_iter_steps_per_iter = 500000000 final-iteration sampling moves across chains
+  n_therm_muca = 1000000
+  D_scaling_reference = 0.05
+  scale_n_iter_with_D = true
+  block_dxi = 0.05
+  local_dxi = 0.8
+  n_prod_obs_total = 2000000000
+  n_prod_chains = 16
+  path_observation_stride = 10000
+  path_time_stride = 10
+  path_filter_x_min = -0.6
+  save_movie_paths = true
+  movie_chain_id = 1
+  movie_stride = 50000
+  movie_path_time_thin = 4
+  movie_max_trajectories = 3000
+  movie endpoint window = [-Inf, Inf)
+  roundtrip_target = 50
+  roundtrip_avg_target_fraction = 0.8
+  roundtrip_convergence_hits = 5
+  output_dir = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01
+  save_csv = true
+  save_plots = false (ignored by data-only script)
+Derived MUCA iteration schedule:
+  Formula: n_iter_effective(D) = round(n_iter * sqrt(D_scaling_reference / D))
+  n_iter = 130
+  D_scaling_reference = 0.05
+  scale_n_iter_with_D = true
+  D=0.01 | factor=2.2361 | effective n_iter=291 | final-iteration sampling moves≈500000000 | total sampling moves over MUCA ramp≈73000000000
+Running ABP noise sweep.
+trajectory_T = 40.0 (physical integration time)
+D values = [0.01]
+move weights [reflection, theta0, block, local] = [0.0, 0.05, 0.55, 0.4]
+Output dir = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01
+
+============================================================
+MUCA case: D=0.01 Dt=Dr
+trajectory_T=40.0 | tail_temperature=2.0 | slope=-0.5
+D scaling reference=0.05 | n_iter factor=2.236 | effective n_iter=291
+proposal Δξ block=0.05 | proposal Δξ local=0.8 | move weights=[0.0, 0.05, 0.55, 0.4]
+chains=128 | bins=[-1.8, 1.5] | dbias=0.025
+early-stop target: average roundtrips per chain ≥ 102.4 for 5 straight iterations
+============================================================
+Completed MUCA iteration 10/291 | accept=0.326 | flatness max/mean=2.456 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 20/291 | accept=0.3097 | flatness max/mean=2.241 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 30/291 | accept=0.2967 | flatness max/mean=5.381 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 40/291 | accept=0.2903 | flatness max/mean=4.406 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 50/291 | accept=0.2891 | flatness max/mean=3.446 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 60/291 | accept=0.2907 | flatness max/mean=2.745 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 70/291 | accept=0.2901 | flatness max/mean=2.785 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 80/291 | accept=0.2965 | flatness max/mean=2.133 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 90/291 | accept=0.2966 | flatness max/mean=1.753 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 100/291 | accept=0.3028 | flatness max/mean=1.927 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 110/291 | accept=0.3054 | flatness max/mean=2.091 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 120/291 | accept=0.3073 | flatness max/mean=1.904 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 130/291 | accept=0.3089 | flatness max/mean=2.078 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 140/291 | accept=0.3107 | flatness max/mean=1.541 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 150/291 | accept=0.3094 | flatness max/mean=1.666 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 160/291 | accept=0.3121 | flatness max/mean=1.849 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 170/291 | accept=0.3095 | flatness max/mean=1.862 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 180/291 | accept=0.3103 | flatness max/mean=2.096 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 190/291 | accept=0.3062 | flatness max/mean=1.575 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 200/291 | accept=0.3035 | flatness max/mean=1.389 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 210/291 | accept=0.3048 | flatness max/mean=1.346 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 220/291 | accept=0.3024 | flatness max/mean=1.306 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 230/291 | accept=0.3009 | flatness max/mean=1.167 | roundtrips=1 | steps/50 RT≈1.976e10
+Completed MUCA iteration 240/291 | accept=0.3011 | flatness max/mean=1.415 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 250/291 | accept=0.3027 | flatness max/mean=1.553 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 260/291 | accept=0.303 | flatness max/mean=1.747 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 270/291 | accept=0.3056 | flatness max/mean=1.815 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 280/291 | accept=0.3053 | flatness max/mean=1.431 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 290/291 | accept=0.3012 | flatness max/mean=1.193 | roundtrips=1 | steps/50 RT≈2.491e10
+MUCA complete for D=0.01 | elapsed=489587.2s | total sweeps≈110248000000 | final roundtrips=0 | final avg roundtrips/chain=0.0
+Early-stop condition was not reached.
+
+Production case: D=0.01 | chains=16 | total samples=2000000000 | proposal Δξ block=0.05 | proposal Δξ local=0.8 | whole-path endpoint windows=all,x_gt0,x_gt_0p5 | path filter x(t)>-0.6
+Whole-path production observation stride = 10000
+Whole-path histogram time stride = 10 (subsampled time points)
+Movie path snapshots: chain=1 | stride=50000 | time thin=4 | max trajectories=3000 | endpoint window=[-Inf, Inf)
+Production complete for D=0.01 | elapsed=13248.8s | reweighted samples=2000000000/2000000000 | overall ESS=1.727614534969139e8 | ESS/N=0.08638072674845695 | aggregate roundtrips=24
+Endpoint-window diagnostics:
+  -1 ≤ x(T) < 0
+    biased samples in window     = 963836292
+    reweighted samples in window = 963836292
+    conditional ESS              = 9.2637389967667e7
+    out of range yT/meanY/intY/xTyT = 52/0/0/52
+  x(T) > 0
+    biased samples in window     = 834822778
+    reweighted samples in window = 834822778
+    conditional ESS              = 2.4875451669429094e7
+    out of range yT/meanY/intY/xTyT = 61/0/0/61
+  x(T) > 0.5
+    biased samples in window     = 380410425
+    reweighted samples in window = 380410425
+    conditional ESS              = 1.3659387411736738e7
+    out of range yT/meanY/intY/xTyT = 0/0/0/0
+  all endpoints
+    biased samples in window     = 2000000000
+    reweighted samples in window = 2000000000
+    conditional ESS              = 1.727614534969139e8
+    out of range yT/meanY/intY/xTyT = 113/0/0/113
+Whole-path endpoint-window diagnostics (kept points satisfy x(t)>-0.6):
+  all endpoints
+    selected trajectories biased/unbiased = 200000/200000
+    out of range path y/xy biased = 3/3
+    out of range path y/xy unbiased = 3/3
+  x(T) > 0
+    selected trajectories biased/unbiased = 83627/83627
+    out of range path y/xy biased = 3/3
+    out of range path y/xy unbiased = 3/3
+  x(T) > 0.5
+    selected trajectories biased/unbiased = 38128/38128
+    out of range path y/xy biased = 3/3
+    out of range path y/xy unbiased = 3/3
+Saved case file: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/abp_endpoint_conditioned_D0p01.jld2
+Exported data CSV files for abp_endpoint_conditioned_D0p01.jld2 to /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01
+Roundtrip scaling data saved:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/roundtrip_scaling_rows.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/roundtrip_scaling_power_law_fit.csv
+  steps ≈ NaN * (1/D)^NaN | R²=NaN | n=1
+Done sweep.
+JLD2 result files:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/abp_endpoint_conditioned_D0p01.jld2
+CSV/data export files:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/muca_last_histogram_logweights.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/muca_iteration_diagnostics.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/production_roundtrip_trace.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/production_roundtrip_aggregate.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/movie_trajectory_summary.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/movie_trajectories_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/hist_endpoint_x_T.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/endpoint_all_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/endpoint_all_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/endpoint_x_gt0_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/endpoint_x_gt0_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/endpoint_x_gt_0p5_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/endpoint_x_gt_0p5_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/endpoint_x_gt_0p5_trajectory_summary.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/endpoint_x_gt_0p5_average_trajectory.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/conditional_x_m1_0_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/conditional_x_gt0_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/conditional_x_gt_0p5_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/conditional_all_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/abp_endpoint_conditioned_D0p01/case_summary.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/roundtrip_scaling_rows.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01/data/roundtrip_scaling_power_law_fit.csv
+Finished at: 2026-07-12 16:03:10
+============================================================
+Completed ABP movie-path task
+============================================================
+Noise D:                         0.01
+Array task:                      2
+Case directories copied:         1
+JLD2 files copied:               1
+Task output:                     /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_2_D0p01
+Combined output:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/combined
+Movie CSV check:
+/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/combined/data/abp_endpoint_conditioned_D0p01/movie_trajectories_long.csv
+/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/combined/data/abp_endpoint_conditioned_D0p1/movie_trajectories_long.csv
+/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/combined/data/abp_endpoint_conditioned_D0p05/movie_trajectories_long.csv
+Output size:
+4.2G	/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112
+============================================================

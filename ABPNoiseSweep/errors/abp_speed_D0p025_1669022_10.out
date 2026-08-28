@@ -1,0 +1,9 @@
+============================================================
+Fixed-noise speed task: MUCA -> production
+D = 0.025 | v = 0.370 | array task = 10
+Threads = 128 | production chains = 128
+MUCA iterations = 200
+MUCA final-iteration moves = 800000000
+Production moves = 55000000000
+Task output = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_array_1669022/task_10_v0p370
+============================================================

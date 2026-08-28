@@ -1,0 +1,39 @@
+============================================================
+ABP movie-path task
+============================================================
+Project:                         /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep
+Array job ID:                    1486112
+Array task ID:                   3
+Noise D:                         0.005
+Trajectory T:                    40
+Julia executable:                /home/nst/amarin/.julia/juliaup/julia-1.12.6+0.x64.linux.gnu/bin/julia
+Julia threads:                   128
+Run root:                        /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112
+Task output directory:           /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_3_D0p005
+Combined output directory:       /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/combined
+MUCA iterations:                 130
+MUCA steps per iteration:        500000000
+MUCA thermalization:             1000000
+Roundtrip target fraction:       0.8
+Roundtrip consecutive hits:      5
+Diagnostic roundtrip target:     50
+Production observations:         2000000000
+Production chains:               16
+Production stride:               10000
+Production roundtrip stride:     5000
+Path-observation stride:         10000
+Path-time stride:                10
+Path x(t) minimum:               -0.6
+Save movie paths:                true
+Movie chain ID:                  1
+Movie stride:                    50000
+Movie path time thin:            4
+Movie max trajectories:          3000
+Movie endpoint x min:            -Inf
+Movie endpoint x max:            Inf
+Movie data root:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs
+Run root:                        /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112
+Task output directory:           /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/task_3_D0p005
+Combined output directory:       /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/movie_runs/abp_movie_paths_1486112/combined
+============================================================
+julia version 1.12.6

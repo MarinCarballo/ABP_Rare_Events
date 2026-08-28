@@ -1,8 +1,4 @@
 # ABP model, trajectory integration, potential, and observables.
-
-# =============================================================================
-# Notebook cell 7
-# =============================================================================
 #First define the ABP system parameters in a struct for easy access and modification.
 struct ABP
     Dt::Float64
@@ -72,9 +68,7 @@ mutable struct ABPTrajectory #mutable because we will update the trajectory in p
     end
 end
 
-# =============================================================================
-# Notebook cell 9
-# =============================================================================
+# Define potential
 g(x) = (x - 1.0)^2 * (x + 1.0)^2
 
 function potential(sys::ABPTrajectory, i::Int)
@@ -121,9 +115,7 @@ function gradient(sys::ABPTrajectory, i::Int)
     return SVector(df_dx, df_dy)
 end
 
-# =============================================================================
-# Notebook cell 11
-# =============================================================================
+#Integration function for the ABP trajectory, with optional potential
 function integrate!(sys::ABPTrajectory, r::UnitRange{Int}=1:0; potential_active::Bool=false,)
     r = isempty(r) ? eachindex(sys.ξs) : r
 
@@ -163,9 +155,7 @@ function integrate!(sys::ABPTrajectory, r::UnitRange{Int}=1:0; potential_active:
     return sys
 end
 
-# =============================================================================
-# Notebook cell 13
-# =============================================================================
+#Observables for the ABP trajectory
 endpoint_x(sys::ABPTrajectory) = sys.xs[end][1]
 endpoint_y(sys::ABPTrajectory) = sys.xs[end][2]
 endpoint_theta(sys::ABPTrajectory) = mod2pi(sys.θs[end])
@@ -174,9 +164,8 @@ path_y_int(sys::ABPTrajectory) = sys.dt * sum(x[2] for x in sys.xs)
 mean_y(sys::ABPTrajectory) = mean(x[2] for x in sys.xs)
 max_x(sys::ABPTrajectory) = maximum(x[1] for x in sys.xs)
 
-# =============================================================================
-# Notebook cell 15
-# =============================================================================
+#Constants
+
 const right_center = SVector(1.0, 0.0)
 const right_radius = 0.2
 

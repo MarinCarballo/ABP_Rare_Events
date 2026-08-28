@@ -1,0 +1,100 @@
+============================================================
+ABP fixed-D propulsion-speed sweep
+============================================================
+Mode:                            muca
+Array job ID:                    1648929
+Array task ID:                   9
+D = Dt = Dr:                     0.025
+Propulsion speed v:              0.365
+Trajectory T:                    40
+Julia threads:                   128
+Task output:                     /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365
+Combined output:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/combined
+MUCA checkpoint:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365/muca_checkpoints/abp_muca_D0p025_v0p365.jld2
+MUCA iterations (actual max):    200
+MUCA moves at final iteration:   800000000
+Production observations:         50000000000
+Production chains:               128
+Julia runner:                     /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/scripts/run_speed_sweep.jl
+Julia runner lines:               563
+Julia runner SHA256:              683d20b0d850ad7af164ed954c15098c8afc7921bc2896ac626a0f532759a151
+============================================================
+julia version 1.12.6
+Starting fixed-D speed-sweep Julia runner
+Runner file: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/scripts/run_speed_sweep.jl
+Entering speed-sweep main with arguments: --mode muca --d 0.025 --v 0.365 --output-dir /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365 --muca-checkpoint /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365/muca_checkpoints/abp_muca_D0p025_v0p365.jld2
+============================================================
+Fixed-D propulsion-speed sweep
+============================================================
+mode = muca
+D = Dt = Dr = 0.025
+v = 0.365
+trajectory_T = 40.0 | dt = 0.01
+threads = 128
+output_dir = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365
+MUCA iterations (actual maximum) = 200
+MUCA final-iteration moves = 800000000
+MUCA D scaling enabled = false
+MUCA early-stop target average RT/chain = 0.5
+MUCA early-stop target aggregate RT = 64.0
+production observations = 50000000000
+production chains = 128
+requested path-observation stride = 1000
+requested path x(t) minimum = -0.8
+MUCA checkpoint = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365/muca_checkpoints/abp_muca_D0p025_v0p365.jld2
+============================================================
+
+============================================================
+MUCA case: D=0.025 Dt=Dr
+trajectory_T=40.0 | tail_temperature=2.0 | slope=-0.5
+D scaling reference=0.025 | n_iter factor=1.0 | effective n_iter=200
+proposal Δξ block=0.05 | proposal Δξ local=0.8 | move weights=[0.0, 0.05, 0.55, 0.4]
+chains=128 | bins=[-1.8, 1.5] | dbias=0.025
+early-stop target: average roundtrips per chain ≥ 0.5 for 5 straight iterations
+============================================================
+Completed MUCA iteration 10/200 | accept=0.309 | flatness max/mean=3.315 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 20/200 | accept=0.3029 | flatness max/mean=2.571 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 30/200 | accept=0.3119 | flatness max/mean=2.099 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 40/200 | accept=0.3079 | flatness max/mean=2.145 | roundtrips=2 | steps/50 RT≈4.0e9
+Completed MUCA iteration 50/200 | accept=0.3114 | flatness max/mean=1.844 | roundtrips=2 | steps/50 RT≈5.0e9
+Completed MUCA iteration 60/200 | accept=0.3104 | flatness max/mean=1.598 | roundtrips=6 | steps/50 RT≈2.0e9
+Completed MUCA iteration 70/200 | accept=0.3121 | flatness max/mean=1.369 | roundtrips=6 | steps/50 RT≈2.333e9
+Completed MUCA iteration 80/200 | accept=0.3146 | flatness max/mean=1.314 | roundtrips=7 | steps/50 RT≈2.286e9
+Completed MUCA iteration 90/200 | accept=0.3139 | flatness max/mean=1.301 | roundtrips=7 | steps/50 RT≈2.571e9
+Completed MUCA iteration 100/200 | accept=0.3112 | flatness max/mean=1.242 | roundtrips=14 | steps/50 RT≈1.429e9
+Completed MUCA iteration 110/200 | accept=0.3104 | flatness max/mean=1.114 | roundtrips=19 | steps/50 RT≈1.158e9
+Completed MUCA iteration 120/200 | accept=0.313 | flatness max/mean=1.246 | roundtrips=16 | steps/50 RT≈1.5e9
+Completed MUCA iteration 130/200 | accept=0.3157 | flatness max/mean=1.244 | roundtrips=34 | steps/50 RT≈7.647e8
+Completed MUCA iteration 140/200 | accept=0.3106 | flatness max/mean=1.202 | roundtrips=23 | steps/50 RT≈1.217e9
+Completed MUCA iteration 150/200 | accept=0.3116 | flatness max/mean=1.161 | roundtrips=25 | steps/50 RT≈1.2e9
+Completed MUCA iteration 160/200 | accept=0.316 | flatness max/mean=1.266 | roundtrips=35 | steps/50 RT≈9.143e8
+Completed MUCA iteration 170/200 | accept=0.3104 | flatness max/mean=1.212 | roundtrips=32 | steps/50 RT≈1.062e9
+Completed MUCA iteration 180/200 | accept=0.3129 | flatness max/mean=1.139 | roundtrips=44 | steps/50 RT≈8.182e8
+Completed MUCA iteration 190/200 | accept=0.3113 | flatness max/mean=1.089 | roundtrips=40 | steps/50 RT≈9.5e8
+Completed MUCA iteration 200/200 | accept=0.3102 | flatness max/mean=1.18 | roundtrips=44 | steps/50 RT≈9.091e8
+MUCA complete for D=0.025 | elapsed=327658.1s | total sweeps≈106000000000 | final roundtrips=44 | final avg roundtrips/chain=0.3438
+Early-stop condition was not reached.
+Saved MUCA checkpoint: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365/muca_checkpoints/abp_muca_D0p025_v0p365.jld2
+Saved MUCA diagnostics: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365/muca_diagnostics_D0p025_v0p365.csv
+============================================================
+Completed fixed-D speed task
+mode = muca | D = 0.025 | v = 0.365
+checkpoint = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365/muca_checkpoints/abp_muca_D0p025_v0p365.jld2
+CSV files written = 0
+Finished at: 2026-08-03 14:28:44
+============================================================
+============================================================
+Completed ABP fixed-D speed task
+============================================================
+Mode:                            muca
+D:                               0.025
+v:                               0.365
+Checkpoints copied:              1
+Diagnostics copied:              1
+Production JLD2 files copied:    0
+Production case dirs copied:     0
+Task output:                     /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365
+Combined output:                 /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/combined
+2.0K	/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/task_9_v0p365
+560K	/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_muca_array_1648929/combined
+============================================================

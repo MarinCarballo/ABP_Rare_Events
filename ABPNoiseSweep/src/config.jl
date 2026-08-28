@@ -6,7 +6,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Physical ABP trajectory integration time. 
     trajectory_T::Float64 = 40.0 #changed from 20.0 to 40.0 to allow more roundtrips at low D, which should help with convergence diagnostics and reduce noise in the results.
     dt::Float64 = 1e-2
-    v::Float64 = 0.38
+    v::Float64 = 0.39
     x0_vec::Vector{Float64} = Float64[-1.0, 0.0]
     potential_active::Bool = true
 
@@ -21,7 +21,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Diagnostic/extension anchors in x(T).
     xT_min::Float64 = -1.0
     xT_max::Float64 =  1.0
-    xT_extension_margin::Float64 = 0.4
+    xT_extension_margin::Float64 = 0.2
 
     # MUCA iteration schedule.
     # If scale_n_iter_with_D=true, the number of recursive MUCA iterations is
@@ -29,9 +29,9 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # The ramp of sampling moves is stretched over the effective number of
     # iterations, so the final iteration still uses approximately
     # n_iter_steps_per_iter total sampling moves across chains.
-    n_iter::Int = 150
-    n_iter_steps_per_iter::Int = 500_000_000
-    n_therm_muca::Int = 1_000_000
+    n_iter::Int = 90
+    n_iter_steps_per_iter::Int = 120_000_000
+    n_therm_muca::Int = 100_000
     D_scaling_reference::Float64 = 0.01
     scale_n_iter_with_D::Bool = true
 
@@ -53,7 +53,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Total production samples across chains = n_prod_obs_total.
     production_parallel::Bool = true
     n_prod_chains::Int = Threads.nthreads()
-    n_therm_prod::Int = 1_000_000
+    n_therm_prod::Int = 100_000
     n_prod_obs_total::Int = 60_000_000
     prod_stride::Int = 10_000
     roundtrip_stride::Int = 10_000
@@ -70,17 +70,31 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     #
     # roundtrip_target is only used for diagnostics such as "steps per 100 RT";
     # it does not control when MUCA stops.
-    roundtrip_target::Int = 32
+    roundtrip_target::Int = 50
     roundtrip_avg_target_fraction::Float64 = 0.5
     roundtrip_convergence_hits::Int = 3
 
-    # Whole-trajectory counting. path_time_stride=1 means every saved integration
-    # point in the trajectory is counted when x(T)>0.
+    # Whole-trajectory occupation counting.
+    # path_observation_stride thins production MCMC states before scanning paths.
+    # path_time_stride thins integration points within each selected trajectory.
+    # Every kept point must also satisfy x(t) > path_filter_x_min.
+    path_observation_stride::Int = 1
     path_time_stride::Int = 1
+    path_filter_x_min::Float64 = -1.0
+
+    # Optional raw trajectory snapshots for movie diagnostics.
+    # These are not used for probabilities; they are only for visualization.
+    save_movie_paths::Bool = false
+    movie_chain_id::Int = 1
+    movie_stride::Int = 10_000
+    movie_path_time_thin::Int = 10
+    movie_max_trajectories::Int = 500
+    movie_endpoint_x_min::Float64 = -Inf
+    movie_endpoint_x_max::Float64 = Inf
 
     # Storage thinning only; does not affect histograms.
     saved_path_time_thin::Int = 5
-    max_saved_paths_per_window::Int = 500
+    max_saved_paths_per_window::Int = 300
 
     # Histogram ranges for y and path heatmaps.
     y_abs::Float64 = 2.0
@@ -144,7 +158,13 @@ function abp_validate_config!(cfg::ABPNoiseSweepConfig)
     cfg.n_therm_prod < 0 && error("n_therm_prod must be non-negative.")
     cfg.prod_stride < 1 && error("prod_stride must be at least 1.")
     cfg.roundtrip_stride < 1 && error("roundtrip_stride must be at least 1.")
+    cfg.path_observation_stride < 1 && error("path_observation_stride must be at least 1.")
     cfg.path_time_stride < 1 && error("path_time_stride must be at least 1.")
+    cfg.movie_chain_id < 1 && error("movie_chain_id must be at least 1.")
+    cfg.movie_stride < 1 && error("movie_stride must be at least 1.")
+    cfg.movie_path_time_thin < 1 && error("movie_path_time_thin must be at least 1.")
+    cfg.movie_max_trajectories < 0 && error("movie_max_trajectories must be non-negative.")
+    cfg.movie_endpoint_x_min >= cfg.movie_endpoint_x_max && error("movie_endpoint_x_min must be smaller than movie_endpoint_x_max.")
     cfg.saved_path_time_thin < 1 && error("saved_path_time_thin must be at least 1.")
     cfg.max_saved_paths_per_window < 0 && error("max_saved_paths_per_window must be non-negative.")
     cfg.bias_min >= cfg.bias_max && error("bias_min must be smaller than bias_max.")
@@ -157,6 +177,8 @@ function abp_validate_config!(cfg::ABPNoiseSweepConfig)
     cfg.n_y_bins < 1 && error("n_y_bins must be positive.")
     cfg.n_y_int_bins < 1 && error("n_y_int_bins must be positive.")
     cfg.path_x_min >= cfg.path_x_max && error("path_x_min must be smaller than path_x_max.")
+    cfg.path_filter_x_min < cfg.path_x_min && error("path_filter_x_min must be inside the path histogram x range.")
+    cfg.path_filter_x_min >= cfg.path_x_max && error("path_filter_x_min must be smaller than path_x_max.")
     cfg.n_path_x_bins < 1 && error("n_path_x_bins must be positive.")
     return cfg
 end

@@ -1,0 +1,130 @@
+============================================================
+Fixed-noise speed task: MUCA -> production
+D = 0.025 | v = 0.375 | array task = 11
+Threads = 128 | production chains = 128
+MUCA iterations = 200
+MUCA final-iteration moves = 800000000
+Production moves = 55000000000
+Task output = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_speed_D0p025_array_1669022/task_11_v0p375
+============================================================
+============================================================
+Fixed-noise ABP speed landscape: MUCA -> production
+D = Dt = Dr = 0.025 | v = 0.375
+Julia threads = 128
+MUCA iterations = 200
+Approximate total MUCA sampling moves = 80400000000
+Production moves = 55000000000
+Production chains = 128
+Path-observation stride = 1000
+Output = data/fixed_D0p025_speed_landscape/v_0p375
+============================================================
+Running ABP noise sweep.
+trajectory_T = 40.0 (physical integration time)
+D values = [0.025]
+move weights [reflection, theta0, block, local] = [0.0, 0.05, 0.55, 0.4]
+Output dir = data/fixed_D0p025_speed_landscape/v_0p375
+
+============================================================
+MUCA case: D=0.025 Dt=Dr
+trajectory_T=40.0 | tail_temperature=2.0 | slope=-0.5
+D scaling reference=0.025 | n_iter factor=1.0 | effective n_iter=200
+proposal Δξ block=0.05 | proposal Δξ local=0.8 | move weights=[0.0, 0.05, 0.55, 0.4]
+chains=128 | bins=[-1.8, 1.5] | dbias=0.05
+early-stop target: average roundtrips per chain ≥ 128.0 for 3 straight iterations
+============================================================
+Completed MUCA iteration 10/200 | accept=0.3106 | flatness max/mean=4.492 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 20/200 | accept=0.3072 | flatness max/mean=3.221 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 30/200 | accept=0.3082 | flatness max/mean=1.84 | roundtrips=1 | steps/50 RT≈6.0e9
+Completed MUCA iteration 40/200 | accept=0.3105 | flatness max/mean=1.693 | roundtrips=2 | steps/50 RT≈4.0e9
+Completed MUCA iteration 50/200 | accept=0.3104 | flatness max/mean=1.475 | roundtrips=6 | steps/50 RT≈1.667e9
+Completed MUCA iteration 60/200 | accept=0.3147 | flatness max/mean=1.152 | roundtrips=6 | steps/50 RT≈2.0e9
+Completed MUCA iteration 70/200 | accept=0.3114 | flatness max/mean=1.431 | roundtrips=9 | steps/50 RT≈1.556e9
+Completed MUCA iteration 80/200 | accept=0.3096 | flatness max/mean=1.434 | roundtrips=8 | steps/50 RT≈2.0e9
+Completed MUCA iteration 90/200 | accept=0.3123 | flatness max/mean=1.288 | roundtrips=14 | steps/50 RT≈1.286e9
+Completed MUCA iteration 100/200 | accept=0.308 | flatness max/mean=1.496 | roundtrips=6 | steps/50 RT≈3.333e9
+Completed MUCA iteration 110/200 | accept=0.31 | flatness max/mean=1.393 | roundtrips=19 | steps/50 RT≈1.158e9
+Completed MUCA iteration 120/200 | accept=0.3103 | flatness max/mean=1.265 | roundtrips=22 | steps/50 RT≈1.091e9
+Completed MUCA iteration 130/200 | accept=0.3109 | flatness max/mean=1.152 | roundtrips=17 | steps/50 RT≈1.529e9
+Completed MUCA iteration 140/200 | accept=0.3136 | flatness max/mean=1.29 | roundtrips=29 | steps/50 RT≈9.655e8
+Completed MUCA iteration 150/200 | accept=0.3101 | flatness max/mean=1.137 | roundtrips=24 | steps/50 RT≈1.25e9
+Completed MUCA iteration 160/200 | accept=0.312 | flatness max/mean=1.316 | roundtrips=25 | steps/50 RT≈1.28e9
+Completed MUCA iteration 170/200 | accept=0.3113 | flatness max/mean=1.197 | roundtrips=28 | steps/50 RT≈1.214e9
+Completed MUCA iteration 180/200 | accept=0.31 | flatness max/mean=1.287 | roundtrips=30 | steps/50 RT≈1.2e9
+Completed MUCA iteration 190/200 | accept=0.3095 | flatness max/mean=1.423 | roundtrips=33 | steps/50 RT≈1.152e9
+Completed MUCA iteration 200/200 | accept=0.3074 | flatness max/mean=1.295 | roundtrips=42 | steps/50 RT≈9.524e8
+MUCA complete for D=0.025 | elapsed=443285.6s | total sweeps≈106000000000 | final roundtrips=42 | final avg roundtrips/chain=0.3281
+Early-stop condition was not reached.
+
+Production case: D=0.025 | chains=128 | total samples=55000000000 | proposal Δξ block=0.05 | proposal Δξ local=0.8 | whole-path endpoint windows=all,x_gt0,x_gt_0p5 | path filter x(t)>-1.0
+Whole-path production observation stride = 1000
+Whole-path histogram time stride = 1 (all integration points counted)
+Production complete for D=0.025 | elapsed=107123.8s | reweighted samples=55000000000/55000000000 | overall ESS=6.189231150396207e9 | ESS/N=0.11253147546174921 | aggregate roundtrips=4340
+Endpoint-window diagnostics:
+  -1 ≤ x(T) < 0
+    biased samples in window     = 24466220802
+    reweighted samples in window = 24466220802
+    conditional ESS              = 3.330776640102229e9
+    out of range yT/meanY/intY/xTyT = 1130021/0/0/1130021
+  x(T) > 0
+    biased samples in window     = 24252341704
+    reweighted samples in window = 24252341704
+    conditional ESS              = 3.1695794730576363e9
+    out of range yT/meanY/intY/xTyT = 3850069/0/0/3850069
+  x(T) > 0.5
+    biased samples in window     = 12514412948
+    reweighted samples in window = 12514412948
+    conditional ESS              = 2.874023700656319e9
+    out of range yT/meanY/intY/xTyT = 1530371/0/0/1530371
+  all endpoints
+    biased samples in window     = 55000000000
+    reweighted samples in window = 55000000000
+    conditional ESS              = 6.189231150396207e9
+    out of range yT/meanY/intY/xTyT = 4980090/0/0/4980090
+Whole-path endpoint-window diagnostics (kept points satisfy x(t)>-1.0):
+  all endpoints
+    selected trajectories biased/unbiased = 54999936/54999936
+    out of range path y/xy biased = 6012674/6012674
+    out of range path y/xy unbiased = 6012674/6012674
+  x(T) > 0
+    selected trajectories biased/unbiased = 24251970/24251970
+    out of range path y/xy biased = 5172497/5172497
+    out of range path y/xy unbiased = 5172497/5172497
+  x(T) > 0.5
+    selected trajectories biased/unbiased = 12514016/12514016
+    out of range path y/xy biased = 2777760/2777760
+    out of range path y/xy unbiased = 2777760/2777760
+Saved case file: data/fixed_D0p025_speed_landscape/v_0p375/abp_endpoint_conditioned_D0p025.jld2
+Exported data CSV files for abp_endpoint_conditioned_D0p025.jld2 to data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025
+Roundtrip scaling data saved:
+  data/fixed_D0p025_speed_landscape/v_0p375/data/roundtrip_scaling_rows.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/roundtrip_scaling_power_law_fit.csv
+  steps ≈ NaN * (1/D)^NaN | R²=NaN | n=1
+Done sweep.
+JLD2 result files:
+  data/fixed_D0p025_speed_landscape/v_0p375/abp_endpoint_conditioned_D0p025.jld2
+CSV/data export files:
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/muca_last_histogram_logweights.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/muca_iteration_diagnostics.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/production_roundtrip_trace.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/production_roundtrip_aggregate.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/hist_endpoint_x_T.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/endpoint_all_filtered_path_y.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/endpoint_all_filtered_path_x_y_long.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt0_filtered_path_y.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt0_filtered_path_x_y_long.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_filtered_path_y.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_filtered_path_x_y_long.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_trajectory_summary.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_average_trajectory.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/conditional_x_m1_0_one_dimensional_histograms.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/conditional_x_gt0_one_dimensional_histograms.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/conditional_x_gt_0p5_one_dimensional_histograms.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/conditional_all_one_dimensional_histograms.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/abp_endpoint_conditioned_D0p025/case_summary.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/roundtrip_scaling_rows.csv
+  data/fixed_D0p025_speed_landscape/v_0p375/data/roundtrip_scaling_power_law_fit.csv
+
+SUCCESS: MUCA and production completed for v = 0.375
+Main result: data/fixed_D0p025_speed_landscape/v_0p375/abp_endpoint_conditioned_D0p025.jld2
+CSV files written: 20
+ERROR: expected one JLD2 result, found 0
