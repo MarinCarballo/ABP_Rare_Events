@@ -1,0 +1,4 @@
+label,D,total_mass_after_notebook_cuts,endpoint_condition,production_path_filter,notebook_x_crop,y_range,weight_col
+D=0.01,0.01,1.4923181827931703e-23,x(T)>0.5,x(t)>-0.6,none,-3.0<y(t)<3.0,unbiased_count
+D=0.05,0.05,860451.0724212655,x(T)>0.5,x(t)>-0.6,none,-3.0<y(t)<3.0,unbiased_count
+D=0.1,0.1,808943949.8685474,x(T)>0.5,x(t)>-0.6,none,-3.0<y(t)<3.0,unbiased_count

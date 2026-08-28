@@ -1,19 +1,22 @@
 #!/bin/bash
-    #SBATCH --job-name=abp_noise_sweep_1
-    #SBATCH --partition=titan
-    #SBATCH --time=7-00:00:00
-    #SBATCH --nodes=1
-    #SBATCH --ntasks-per-node=32
-    #SBATCH --cpus-per-task=2
+#SBATCH --job-name=abp_noise_sweep_1
+#SBATCH --partition=titan
+#SBATCH --time=7-00:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=32
+#SBATCH --error=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/errors/abp_noise_sweep_1.err
+#SBATCH --output=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/errors/abp_noise_sweep_1.out
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-cd "${PROJECT_DIR}"
-mkdir -p logs
+PROJECT_DIR="/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep"
+cd "$PROJECT_DIR"
 
-: "${JULIA_CMD:=julia}"
+echo ${PROJECT_DIR}
+#call julia
+
+: "${JULIA_CMD:=/home/nst/amarin/.julia/juliaup/julia-1.12.6+0.x64.linux.gnu/bin/julia}"
 : "${JULIA_NUM_THREADS:=${SLURM_CPUS_PER_TASK:-1}}"
 
 # Dependency setup. Keep these false if
@@ -21,22 +24,22 @@ mkdir -p logs
 : "${ABP_INSTANTIATE:=false}"
 : "${ABP_PRECOMPILE:=false}"
 
-: "${ABP_D_VALUES:=0.1,0.01}"
+: "${ABP_D_VALUES:=0.1,0.05,0.01, 0.005}"
 : "${ABP_MOVE_WEIGHTS:=run/move_weights.json}" # JSON file with the default move weights.
-: "${ABP_OUTPUT_DIR:=abp_noise_sweep_endpoint_conditioned}" #: "${ABP_OUTPUT_DIR:=/scratch/$USER/ABP_runs/run_001}"
+: "${ABP_OUTPUT_DIR:=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data}" #: "${ABP_OUTPUT_DIR:=/scratch/$USER/ABP_runs/run_001}"
 : "${ABP_SAVE_CSV:=true}"
 
-: "${ABP_N_ITER:=20}"
-: "${ABP_N_ITER_STEPS_PER_ITER:=10000000}"
-: "${ABP_N_THERM_MUCA:=100000}"
+: "${ABP_N_ITER:=150}"
+: "${ABP_N_ITER_STEPS_PER_ITER:=800000000}"
+: "${ABP_N_THERM_MUCA:=1000000}"
 : "${ABP_D_SCALING_REFERENCE:=0.01}"
 : "${ABP_SCALE_N_ITER_WITH_D:=true}"
 : "${ABP_BLOCK_DXI:=0.05}"
 : "${ABP_LOCAL_DXI:=0.8}"
 
-: "${ABP_N_PROD_OBS_TOTAL:=6000000}"
+: "${ABP_N_PROD_OBS_TOTAL:=100000000}"
 : "${ABP_N_PROD_CHAINS:=${JULIA_NUM_THREADS}}"
-: "${ABP_N_THERM_PROD:=100000}"
+: "${ABP_N_THERM_PROD:=1000000}"
 : "${ABP_PROD_STRIDE:=10000}"
 : "${ABP_ROUNDTRIP_STRIDE:=10000}"
 
@@ -56,5 +59,7 @@ printf '  ABP_OUTPUT_DIR: %s\n' "$ABP_OUTPUT_DIR"
 printf '  ABP_N_ITER: %s\n' "$ABP_N_ITER"
 printf '  ABP_D_SCALING_REFERENCE: %s\n' "$ABP_D_SCALING_REFERENCE"
 printf '  ABP_SCALE_N_ITER_WITH_D: %s\n' "$ABP_SCALE_N_ITER_WITH_D"
+printf '  JULIA_CMD: %s\n' "$JULIA_CMD"
+"$JULIA_CMD" --version
 
 exec "$JULIA_CMD" --project=. scripts/run_noise_sweep.jl "$@"

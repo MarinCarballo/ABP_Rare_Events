@@ -1,0 +1,13 @@
+/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep
+Running ABPNoiseSweep from /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep
+  JULIA_NUM_THREADS: 32
+  ABP_INSTANTIATE: false
+  ABP_PRECOMPILE: false
+  ABP_D_VALUES: 0.1,0.05,0.01, 0.005
+  ABP_MOVE_WEIGHTS: run/move_weights.json
+  ABP_OUTPUT_DIR: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data
+  ABP_N_ITER: 150
+  ABP_D_SCALING_REFERENCE: 0.01
+  ABP_SCALE_N_ITER_WITH_D: true
+  JULIA_CMD: /home/nst/amarin/.julia/juliaup/julia-1.12.6+0.x64.linux.gnu/bin/julia
+julia version 1.12.6

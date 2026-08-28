@@ -6,7 +6,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Physical ABP trajectory integration time. 
     trajectory_T::Float64 = 40.0 #changed from 20.0 to 40.0 to allow more roundtrips at low D, which should help with convergence diagnostics and reduce noise in the results.
     dt::Float64 = 1e-2
-    v::Float64 = 0.36
+    v::Float64 = 0.38
     x0_vec::Vector{Float64} = Float64[-1.0, 0.0]
     potential_active::Bool = true
 
@@ -21,7 +21,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Diagnostic/extension anchors in x(T).
     xT_min::Float64 = -1.0
     xT_max::Float64 =  1.0
-    xT_extension_margin::Float64 = 0.2
+    xT_extension_margin::Float64 = 0.4
 
     # MUCA iteration schedule.
     # If scale_n_iter_with_D=true, the number of recursive MUCA iterations is
@@ -29,9 +29,9 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # The ramp of sampling moves is stretched over the effective number of
     # iterations, so the final iteration still uses approximately
     # n_iter_steps_per_iter total sampling moves across chains.
-    n_iter::Int = 90
-    n_iter_steps_per_iter::Int = 120_000_000
-    n_therm_muca::Int = 100_000
+    n_iter::Int = 150
+    n_iter_steps_per_iter::Int = 500_000_000
+    n_therm_muca::Int = 1_000_000
     D_scaling_reference::Float64 = 0.01
     scale_n_iter_with_D::Bool = true
 
@@ -53,7 +53,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Total production samples across chains = n_prod_obs_total.
     production_parallel::Bool = true
     n_prod_chains::Int = Threads.nthreads()
-    n_therm_prod::Int = 100_000
+    n_therm_prod::Int = 1_000_000
     n_prod_obs_total::Int = 60_000_000
     prod_stride::Int = 10_000
     roundtrip_stride::Int = 10_000
@@ -70,7 +70,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     #
     # roundtrip_target is only used for diagnostics such as "steps per 100 RT";
     # it does not control when MUCA stops.
-    roundtrip_target::Int = 50
+    roundtrip_target::Int = 32
     roundtrip_avg_target_fraction::Float64 = 0.5
     roundtrip_convergence_hits::Int = 3
 
@@ -80,7 +80,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
 
     # Storage thinning only; does not affect histograms.
     saved_path_time_thin::Int = 5
-    max_saved_paths_per_window::Int = 300
+    max_saved_paths_per_window::Int = 500
 
     # Histogram ranges for y and path heatmaps.
     y_abs::Float64 = 2.0
