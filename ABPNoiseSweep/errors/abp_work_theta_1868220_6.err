@@ -1,0 +1,790 @@
+  Activating project at `~/Desktop/ABP_Rare_Events/ABPNoiseSweep`
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   1%|▍                                   |  ETA: 1 days, 5:37:35[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   2%|▌                                   |  ETA: 1 days, 6:23:19[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   2%|▊                                   |  ETA: 1 days, 6:55:09[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   2%|▉                                   |  ETA: 1 days, 7:28:13[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   3%|█▏                                  |  ETA: 1 days, 7:56:48[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   4%|█▎                                  |  ETA: 1 days, 8:25:04[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   4%|█▌                                  |  ETA: 1 days, 8:51:07[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   4%|█▋                                  |  ETA: 1 days, 9:15:46[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   5%|█▊                                  |  ETA: 1 days, 9:39:49[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   6%|██                                  |  ETA: 1 days, 10:03:56[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   6%|██▏                                 |  ETA: 1 days, 10:26:38[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   6%|██▍                                 |  ETA: 1 days, 10:47:42[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   7%|██▌                                 |  ETA: 1 days, 11:09:17[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   8%|██▊                                 |  ETA: 1 days, 11:28:22[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   8%|██▉                                 |  ETA: 1 days, 11:47:28[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   8%|███                                 |  ETA: 1 days, 12:05:39[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...   9%|███▎                                |  ETA: 1 days, 12:23:13[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  10%|███▍                                |  ETA: 1 days, 12:41:00[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  10%|███▋                                |  ETA: 1 days, 12:58:31[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  10%|███▊                                |  ETA: 1 days, 13:15:19[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  11%|████                                |  ETA: 1 days, 13:31:25[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  12%|████▏                               |  ETA: 1 days, 13:46:34[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  12%|████▍                               |  ETA: 1 days, 14:00:47[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  12%|████▌                               |  ETA: 1 days, 14:16:52[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  13%|████▋                               |  ETA: 1 days, 14:30:45[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  14%|████▉                               |  ETA: 1 days, 14:45:04[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  14%|█████                               |  ETA: 1 days, 14:57:18[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  14%|█████▎                              |  ETA: 1 days, 15:09:25[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  15%|█████▍                              |  ETA: 1 days, 15:21:09[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  16%|█████▋                              |  ETA: 1 days, 15:32:58[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  16%|█████▊                              |  ETA: 1 days, 15:44:12[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  16%|██████                              |  ETA: 1 days, 15:55:25[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  17%|██████▏                             |  ETA: 1 days, 16:05:42[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  18%|██████▎                             |  ETA: 1 days, 16:16:10[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  18%|██████▌                             |  ETA: 1 days, 16:25:42[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  18%|██████▋                             |  ETA: 1 days, 16:36:02[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  19%|██████▉                             |  ETA: 1 days, 16:44:53[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  20%|███████                             |  ETA: 1 days, 16:53:13[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  20%|███████▎                            |  ETA: 1 days, 17:01:18[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  20%|███████▍                            |  ETA: 1 days, 17:09:33[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  21%|███████▌                            |  ETA: 1 days, 17:17:28[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  22%|███████▊                            |  ETA: 1 days, 17:25:04[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  22%|███████▉                            |  ETA: 1 days, 17:32:37[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  22%|████████▏                           |  ETA: 1 days, 17:40:02[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  23%|████████▎                           |  ETA: 1 days, 17:46:39[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  24%|████████▌                           |  ETA: 1 days, 17:53:10[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  24%|████████▋                           |  ETA: 1 days, 17:59:27[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  24%|████████▉                           |  ETA: 1 days, 18:05:50[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  25%|█████████                           |  ETA: 1 days, 18:11:23[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  26%|█████████▏                          |  ETA: 1 days, 18:16:43[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  26%|█████████▍                          |  ETA: 1 days, 18:21:46[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  26%|█████████▌                          |  ETA: 1 days, 18:26:13[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  27%|█████████▊                          |  ETA: 1 days, 18:30:08[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  28%|█████████▉                          |  ETA: 1 days, 18:34:12[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  28%|██████████▏                         |  ETA: 1 days, 18:37:44[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  28%|██████████▎                         |  ETA: 1 days, 18:40:58[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  29%|██████████▌                         |  ETA: 1 days, 18:44:04[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  30%|██████████▋                         |  ETA: 1 days, 18:46:42[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  30%|██████████▊                         |  ETA: 1 days, 18:49:29[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  30%|███████████                         |  ETA: 1 days, 18:51:31[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  31%|███████████▏                        |  ETA: 1 days, 18:53:11[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  32%|███████████▍                        |  ETA: 1 days, 18:54:47[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  32%|███████████▌                        |  ETA: 1 days, 18:56:06[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  32%|███████████▊                        |  ETA: 1 days, 18:57:01[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  33%|███████████▉                        |  ETA: 1 days, 18:56:39[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  34%|████████████                        |  ETA: 1 days, 18:56:53[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  34%|████████████▎                       |  ETA: 1 days, 18:56:43[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  34%|████████████▍                       |  ETA: 1 days, 18:56:43[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  35%|████████████▋                       |  ETA: 1 days, 18:55:48[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  36%|████████████▊                       |  ETA: 1 days, 18:55:07[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  36%|█████████████                       |  ETA: 1 days, 18:53:15[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  36%|█████████████▏                      |  ETA: 1 days, 18:51:19[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  37%|█████████████▍                      |  ETA: 1 days, 18:48:54[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  38%|█████████████▌                      |  ETA: 1 days, 18:46:34[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  38%|█████████████▋                      |  ETA: 1 days, 18:43:41[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  38%|█████████████▉                      |  ETA: 1 days, 18:41:10[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  39%|██████████████                      |  ETA: 1 days, 18:37:30[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  40%|██████████████▎                     |  ETA: 1 days, 18:33:58[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  40%|██████████████▍                     |  ETA: 1 days, 18:29:46[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  40%|██████████████▋                     |  ETA: 1 days, 18:25:57[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  41%|██████████████▊                     |  ETA: 1 days, 18:21:23[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  42%|███████████████                     |  ETA: 1 days, 18:16:57[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  42%|███████████████▏                    |  ETA: 1 days, 18:12:03[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  42%|███████████████▎                    |  ETA: 1 days, 18:07:02[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  43%|███████████████▌                    |  ETA: 1 days, 18:01:35[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  44%|███████████████▋                    |  ETA: 1 days, 17:56:35[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  44%|███████████████▉                    |  ETA: 1 days, 17:51:34[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  44%|████████████████                    |  ETA: 1 days, 17:46:10[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  45%|████████████████▎                   |  ETA: 1 days, 17:40:40[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  46%|████████████████▍                   |  ETA: 1 days, 17:35:00[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  46%|████████████████▌                   |  ETA: 1 days, 17:28:46[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  46%|████████████████▊                   |  ETA: 1 days, 17:22:06[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  47%|████████████████▉                   |  ETA: 1 days, 17:15:23[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  48%|█████████████████▏                  |  ETA: 1 days, 17:08:22[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  48%|█████████████████▎                  |  ETA: 1 days, 17:01:46[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  48%|█████████████████▌                  |  ETA: 1 days, 16:54:11[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  49%|█████████████████▋                  |  ETA: 1 days, 16:46:14[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  50%|█████████████████▉                  |  ETA: 1 days, 16:37:45[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  50%|██████████████████                  |  ETA: 1 days, 16:29:10[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  50%|██████████████████▏                 |  ETA: 1 days, 16:20:17[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  51%|██████████████████▍                 |  ETA: 1 days, 16:11:03[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  52%|██████████████████▌                 |  ETA: 1 days, 16:01:23[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  52%|██████████████████▊                 |  ETA: 1 days, 15:51:23[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  52%|██████████████████▉                 |  ETA: 1 days, 15:42:14[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  53%|███████████████████▏                |  ETA: 1 days, 15:32:20[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  54%|███████████████████▎                |  ETA: 1 days, 15:22:01[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  54%|███████████████████▌                |  ETA: 1 days, 15:11:26[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  54%|███████████████████▋                |  ETA: 1 days, 15:00:39[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  55%|███████████████████▊                |  ETA: 1 days, 14:49:24[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  56%|████████████████████                |  ETA: 1 days, 14:37:10[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  56%|████████████████████▏               |  ETA: 1 days, 14:24:06[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  56%|████████████████████▍               |  ETA: 1 days, 14:10:57[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  57%|████████████████████▌               |  ETA: 1 days, 13:57:15[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  58%|████████████████████▊               |  ETA: 1 days, 13:43:38[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  58%|████████████████████▉               |  ETA: 1 days, 13:29:26[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  58%|█████████████████████               |  ETA: 1 days, 13:15:03[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  59%|█████████████████████▎              |  ETA: 1 days, 13:00:28[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  60%|█████████████████████▍              |  ETA: 1 days, 12:45:30[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  60%|█████████████████████▋              |  ETA: 1 days, 12:30:21[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  60%|█████████████████████▊              |  ETA: 1 days, 12:14:44[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  61%|██████████████████████              |  ETA: 1 days, 11:58:53[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  62%|██████████████████████▏             |  ETA: 1 days, 11:42:39[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  62%|██████████████████████▍             |  ETA: 1 days, 11:26:35[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  62%|██████████████████████▌             |  ETA: 1 days, 11:10:27[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  63%|██████████████████████▋             |  ETA: 1 days, 10:54:09[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  64%|██████████████████████▉             |  ETA: 1 days, 10:37:15[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  64%|███████████████████████             |  ETA: 1 days, 10:19:59[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  64%|███████████████████████▎            |  ETA: 1 days, 10:02:25[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  65%|███████████████████████▍            |  ETA: 1 days, 9:44:27[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  66%|███████████████████████▋            |  ETA: 1 days, 9:25:57[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  66%|███████████████████████▊            |  ETA: 1 days, 9:07:14[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  66%|████████████████████████            |  ETA: 1 days, 8:48:18[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  67%|████████████████████████▏           |  ETA: 1 days, 8:29:04[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  68%|████████████████████████▎           |  ETA: 1 days, 8:10:07[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  68%|████████████████████████▌           |  ETA: 1 days, 7:50:10[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  68%|████████████████████████▋           |  ETA: 1 days, 7:30:00[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  69%|████████████████████████▉           |  ETA: 1 days, 7:09:20[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  70%|█████████████████████████           |  ETA: 1 days, 6:48:29[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  70%|█████████████████████████▎          |  ETA: 1 days, 6:27:25[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  70%|█████████████████████████▍          |  ETA: 1 days, 6:06:02[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  71%|█████████████████████████▌          |  ETA: 1 days, 5:43:57[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  72%|█████████████████████████▊          |  ETA: 1 days, 5:21:30[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  72%|█████████████████████████▉          |  ETA: 1 days, 4:58:49[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  72%|██████████████████████████▏         |  ETA: 1 days, 4:35:42[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  73%|██████████████████████████▎         |  ETA: 1 days, 4:12:25[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  74%|██████████████████████████▌         |  ETA: 1 days, 3:49:02[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  74%|██████████████████████████▋         |  ETA: 1 days, 3:25:19[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  74%|██████████████████████████▉         |  ETA: 1 days, 3:01:27[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  75%|███████████████████████████         |  ETA: 1 days, 2:37:30[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  76%|███████████████████████████▏        |  ETA: 1 days, 2:12:46[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  76%|███████████████████████████▍        |  ETA: 1 days, 1:48:10[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  76%|███████████████████████████▌        |  ETA: 1 days, 1:23:20[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  77%|███████████████████████████▊        |  ETA: 1 days, 0:58:00[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  78%|███████████████████████████▉        |  ETA: 1 days, 0:32:25[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  78%|████████████████████████████▏       |  ETA: 1 days, 0:06:14[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  78%|████████████████████████████▎       |  ETA: 23:39:51[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  79%|████████████████████████████▌       |  ETA: 23:13:11[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  80%|████████████████████████████▋       |  ETA: 22:46:24[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  80%|████████████████████████████▊       |  ETA: 22:19:08[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  80%|█████████████████████████████       |  ETA: 21:51:41[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  81%|█████████████████████████████▏      |  ETA: 21:23:56[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  82%|█████████████████████████████▍      |  ETA: 20:55:51[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  82%|█████████████████████████████▌      |  ETA: 20:27:33[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  82%|█████████████████████████████▊      |  ETA: 19:58:59[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  83%|█████████████████████████████▉      |  ETA: 19:30:09[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  84%|██████████████████████████████      |  ETA: 19:00:58[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  84%|██████████████████████████████▎     |  ETA: 18:31:28[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  84%|██████████████████████████████▍     |  ETA: 18:01:39[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  85%|██████████████████████████████▋     |  ETA: 17:31:29[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  86%|██████████████████████████████▊     |  ETA: 17:00:58[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  86%|███████████████████████████████     |  ETA: 16:30:11[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  86%|███████████████████████████████▏    |  ETA: 15:58:57[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  87%|███████████████████████████████▍    |  ETA: 15:27:21[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  88%|███████████████████████████████▌    |  ETA: 14:55:23[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  88%|███████████████████████████████▋    |  ETA: 14:23:13[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  88%|███████████████████████████████▉    |  ETA: 13:50:43[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  89%|████████████████████████████████    |  ETA: 13:17:51[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  90%|████████████████████████████████▎   |  ETA: 12:44:36[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  90%|████████████████████████████████▍   |  ETA: 12:11:08[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  90%|████████████████████████████████▋   |  ETA: 11:37:21[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  91%|████████████████████████████████▊   |  ETA: 11:03:15[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  92%|█████████████████████████████████   |  ETA: 10:28:54[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  92%|█████████████████████████████████▏  |  ETA: 9:54:20[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  92%|█████████████████████████████████▎  |  ETA: 9:19:29[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  93%|█████████████████████████████████▌  |  ETA: 8:44:21[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  94%|█████████████████████████████████▋  |  ETA: 8:08:49[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  94%|█████████████████████████████████▉  |  ETA: 7:33:03[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  94%|██████████████████████████████████  |  ETA: 6:56:56[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  95%|██████████████████████████████████▎ |  ETA: 6:20:28[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  96%|██████████████████████████████████▍ |  ETA: 5:43:44[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  96%|██████████████████████████████████▌ |  ETA: 5:06:40[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  96%|██████████████████████████████████▊ |  ETA: 4:29:20[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  97%|██████████████████████████████████▉ |  ETA: 3:51:42[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  98%|███████████████████████████████████▏|  ETA: 3:13:47[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  98%|███████████████████████████████████▎|  ETA: 2:35:36[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  98%|███████████████████████████████████▌|  ETA: 1:57:07[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  99%|███████████████████████████████████▋|  ETA: 1:18:22[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025...  99%|███████████████████████████████████▉|  ETA: 0:39:19[K┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+┌ Warning: Overwriting d_logweight where recursive precision has been accumulated. This discards converged weight estimates.
+└ @ MonteCarloX ~/.julia/packages/MonteCarloX/2hHBm/src/ensembles/multicanonical.jl:118
+MUCA D=0.025... 100%|████████████████████████████████████| Time: 5 days, 11:33:09[K

@@ -35,7 +35,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     D_scaling_reference::Float64 = 0.01
     scale_n_iter_with_D::Bool = true
 
-    # Path-space proposal amplitudes in standardized noise variables ξ.
+    # Additive Gaussian random-walk amplitudes in standardized noise variables ξ.
     # These are fixed across D by default. Reflection is controlled only through
     # move_weights below.
     block_dxi::Float64 = 0.05
@@ -77,9 +77,13 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Whole-trajectory occupation counting.
     # path_observation_stride thins production MCMC states before scanning paths.
     # path_time_stride thins integration points within each selected trajectory.
+    # active_work_observation_stride independently thins the more expensive
+    # full-resolution Stratonovich work calculation.  It must be a multiple of
+    # path_observation_stride so both can share one trajectory scan.
     # Every kept point must also satisfy x(t) > path_filter_x_min.
     path_observation_stride::Int = 1
     path_time_stride::Int = 1
+    active_work_observation_stride::Int = 10_000
     path_filter_x_min::Float64 = -1.0
 
     # Optional raw trajectory snapshots for movie diagnostics.
@@ -103,6 +107,7 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     path_x_min::Float64 = -1.5
     path_x_max::Float64 =  1.5
     n_path_x_bins::Int = 241
+    n_path_theta_bins::Int = 180
 
     # Output. This project writes JLD2 plus CSV data exports; plotting is separate.
     output_dir::String = "abp_noise_sweep_endpoint_conditioned"
@@ -160,6 +165,10 @@ function abp_validate_config!(cfg::ABPNoiseSweepConfig)
     cfg.roundtrip_stride < 1 && error("roundtrip_stride must be at least 1.")
     cfg.path_observation_stride < 1 && error("path_observation_stride must be at least 1.")
     cfg.path_time_stride < 1 && error("path_time_stride must be at least 1.")
+    cfg.active_work_observation_stride < 1 && error("active_work_observation_stride must be at least 1.")
+    cfg.active_work_observation_stride % cfg.path_observation_stride == 0 || error(
+        "active_work_observation_stride must be a multiple of path_observation_stride."
+    )
     cfg.movie_chain_id < 1 && error("movie_chain_id must be at least 1.")
     cfg.movie_stride < 1 && error("movie_stride must be at least 1.")
     cfg.movie_path_time_thin < 1 && error("movie_path_time_thin must be at least 1.")
@@ -180,5 +189,6 @@ function abp_validate_config!(cfg::ABPNoiseSweepConfig)
     cfg.path_filter_x_min < cfg.path_x_min && error("path_filter_x_min must be inside the path histogram x range.")
     cfg.path_filter_x_min >= cfg.path_x_max && error("path_filter_x_min must be smaller than path_x_max.")
     cfg.n_path_x_bins < 1 && error("n_path_x_bins must be positive.")
+    cfg.n_path_theta_bins < 1 && error("n_path_theta_bins must be positive.")
     return cfg
 end

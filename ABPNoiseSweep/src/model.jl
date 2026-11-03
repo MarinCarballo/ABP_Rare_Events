@@ -164,6 +164,66 @@ path_y_int(sys::ABPTrajectory) = sys.dt * sum(x[2] for x in sys.xs)
 mean_y(sys::ABPTrajectory) = mean(x[2] for x in sys.xs)
 max_x(sys::ABPTrajectory) = maximum(x[1] for x in sys.xs)
 
+"""
+    active_work_and_first_lr_crossing(sys; crossing_x=0.0)
+
+Compute the active work along one complete ABP trajectory,
+
+    W_a = v * integral e(theta) dot dr (Stratonovich),
+
+with unit mobility.  The stochastic line integral is discretized with the
+midpoint (Stratonovich) rule.  The same pass also locates the first
+left-to-right crossing of `x = crossing_x` and linearly interpolates its
+crossing ordinate and physical time.
+
+The returned named tuple contains `active_work`, `crossing_y`,
+`crossing_time`, and `has_crossing`.  Crossing values are `NaN` when no
+left-to-right crossing occurs.
+"""
+function active_work_and_first_lr_crossing(
+    sys::ABPTrajectory;
+    crossing_x::Real=0.0,
+)
+    W_active = 0.0
+    crossing_y = NaN
+    crossing_time = NaN
+    has_crossing = false
+    x_cross = Float64(crossing_x)
+
+    @inbounds for k in eachindex(sys.ξs)
+        r0 = sys.xs[k]
+        r1 = sys.xs[k + 1]
+        dr = r1 - r0
+
+        # Midpoint rule for the Stratonovich active-work integral.  The stored
+        # angles are unwrapped, so the arithmetic midpoint is continuous.
+        theta_mid = 0.5 * (sys.θs[k] + sys.θs[k + 1])
+        W_active += sys.v * (
+            cos(theta_mid) * dr[1] + sin(theta_mid) * dr[2]
+        )
+
+        if !has_crossing && r0[1] < x_cross <= r1[1]
+            alpha = (x_cross - r0[1]) / (r1[1] - r0[1])
+            crossing_y = r0[2] + alpha * (r1[2] - r0[2])
+            crossing_time = ((k - 1) + alpha) * sys.dt
+            has_crossing = true
+        end
+    end
+
+    return (
+        active_work = W_active,
+        crossing_y = crossing_y,
+        crossing_time = crossing_time,
+        has_crossing = has_crossing,
+    )
+end
+
+active_work(sys::ABPTrajectory) =
+    active_work_and_first_lr_crossing(sys).active_work
+
+normalized_active_work(sys::ABPTrajectory) =
+    active_work(sys) / (sys.v^2 * sys.T)
+
 #Constants
 
 const right_center = SVector(1.0, 0.0)

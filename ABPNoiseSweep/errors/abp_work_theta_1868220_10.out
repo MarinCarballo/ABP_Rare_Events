@@ -1,0 +1,146 @@
+MUCA -> production with the installed move kernel
+D=0.025 | v=0.370 | array task=10
+Threads=128 | production chains=128
+MUCA iterations=200 | final-iteration moves=800000000
+Production moves=55000000000
+Path stride=1000 | physical-time stride=1
+Active-work stride=10000 | theta bins=180
+Path-point filter: x(t)>-1
+Task output: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370
+============================================================
+Fixed-noise ABP speed landscape: MUCA -> production
+D = Dt = Dr = 0.025 | v = 0.37
+Julia threads = 128
+MUCA iterations = 200
+Approximate total MUCA sampling moves = 80400000000
+Production moves = 55000000000
+Production chains = 128
+Noise proposals are defined by the installed src/moves.jl | block delta_xi = 0.05 | local delta_xi = 0.8
+Path-observation stride = 1000
+Path-orientation theta bins = 180
+Active-work observation stride = 10000
+Output = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370
+============================================================
+Running ABP noise sweep.
+trajectory_T = 40.0 (physical integration time)
+D values = [0.025]
+move weights [reflection, theta0, block, local] = [0.0, 0.05, 0.55, 0.4]
+Output dir = /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370
+
+============================================================
+MUCA case: D=0.025 Dt=Dr
+trajectory_T=40.0 | tail_temperature=2.0 | slope=-0.5
+D scaling reference=0.025 | n_iter factor=1.0 | effective n_iter=200
+proposal Δξ block=0.05 | proposal Δξ local=0.8 | move weights=[0.0, 0.05, 0.55, 0.4]
+chains=128 | bins=[-1.8, 1.5] | dbias=0.05
+early-stop target: average roundtrips per chain ≥ 64.0 for 5 straight iterations
+============================================================
+Completed MUCA iteration 10/200 | accept=0.3126 | flatness max/mean=3.251 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 20/200 | accept=0.3065 | flatness max/mean=2.993 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 30/200 | accept=0.3091 | flatness max/mean=2.622 | roundtrips=0 | steps/50 RT≈Inf
+Completed MUCA iteration 40/200 | accept=0.3112 | flatness max/mean=1.845 | roundtrips=2 | steps/50 RT≈4.0e9
+Completed MUCA iteration 50/200 | accept=0.3075 | flatness max/mean=1.827 | roundtrips=2 | steps/50 RT≈5.0e9
+Completed MUCA iteration 60/200 | accept=0.3111 | flatness max/mean=1.495 | roundtrips=2 | steps/50 RT≈6.0e9
+Completed MUCA iteration 70/200 | accept=0.3113 | flatness max/mean=1.269 | roundtrips=7 | steps/50 RT≈2.0e9
+Completed MUCA iteration 80/200 | accept=0.3126 | flatness max/mean=1.356 | roundtrips=12 | steps/50 RT≈1.333e9
+Completed MUCA iteration 90/200 | accept=0.3111 | flatness max/mean=1.437 | roundtrips=9 | steps/50 RT≈2.0e9
+Completed MUCA iteration 100/200 | accept=0.314 | flatness max/mean=1.471 | roundtrips=13 | steps/50 RT≈1.538e9
+Completed MUCA iteration 110/200 | accept=0.3123 | flatness max/mean=1.368 | roundtrips=15 | steps/50 RT≈1.467e9
+Completed MUCA iteration 120/200 | accept=0.3129 | flatness max/mean=1.492 | roundtrips=22 | steps/50 RT≈1.091e9
+Completed MUCA iteration 130/200 | accept=0.3133 | flatness max/mean=1.59 | roundtrips=21 | steps/50 RT≈1.238e9
+Completed MUCA iteration 140/200 | accept=0.3108 | flatness max/mean=1.642 | roundtrips=17 | steps/50 RT≈1.647e9
+Completed MUCA iteration 150/200 | accept=0.3107 | flatness max/mean=1.549 | roundtrips=23 | steps/50 RT≈1.304e9
+Completed MUCA iteration 160/200 | accept=0.3134 | flatness max/mean=1.591 | roundtrips=24 | steps/50 RT≈1.333e9
+Completed MUCA iteration 170/200 | accept=0.3109 | flatness max/mean=1.569 | roundtrips=37 | steps/50 RT≈9.189e8
+Completed MUCA iteration 180/200 | accept=0.3117 | flatness max/mean=1.231 | roundtrips=32 | steps/50 RT≈1.125e9
+Completed MUCA iteration 190/200 | accept=0.3109 | flatness max/mean=1.376 | roundtrips=42 | steps/50 RT≈9.048e8
+Completed MUCA iteration 200/200 | accept=0.3136 | flatness max/mean=1.225 | roundtrips=40 | steps/50 RT≈1.0e9
+MUCA complete for D=0.025 | elapsed=441122.9s | total sweeps≈106000000000 | final roundtrips=40 | final avg roundtrips/chain=0.3125
+Early-stop condition was not reached.
+
+Production case: D=0.025 | chains=128 | total samples=55000000000 | noise proposal=additive Gaussian random-walk MH | block Δξ=0.05 | local Δξ=0.8 | whole-path endpoint windows=all,x_gt0,x_gt_0p5 | path filter x(t)>-1.0
+Whole-path production observation stride = 1000
+Whole-path histogram time stride = 1 (all integration points counted)
+Path-orientation histogram: P(x(t), theta(t) | x(T)>0.5) | theta wrapped to [0, 2pi) | theta bins=180
+Active-work production observation stride = 10000
+Production complete for D=0.025 | elapsed=121795.3s | reweighted samples=55000000000/55000000000 | overall ESS=6.221912815283537e9 | ESS/N=0.11312568755060977 | aggregate roundtrips=4199
+Endpoint-window diagnostics:
+  -1 ≤ x(T) < 0
+    biased samples in window     = 24563171702
+    reweighted samples in window = 24563171702
+    conditional ESS              = 3.3342735789996157e9
+    out of range yT/meanY/intY/xTyT = 939544/0/0/939544
+  x(T) > 0
+    biased samples in window     = 24068961273
+    reweighted samples in window = 24068961273
+    conditional ESS              = 2.896095933807538e9
+    out of range yT/meanY/intY/xTyT = 3522703/0/0/3522703
+  x(T) > 0.5
+    biased samples in window     = 12178073664
+    reweighted samples in window = 12178073664
+    conditional ESS              = 2.667414106510241e9
+    out of range yT/meanY/intY/xTyT = 1400555/0/0/1400555
+  all endpoints
+    biased samples in window     = 55000000000
+    reweighted samples in window = 55000000000
+    conditional ESS              = 6.221912815283537e9
+    out of range yT/meanY/intY/xTyT = 4462247/0/0/4462247
+Whole-path endpoint-window diagnostics (kept points satisfy x(t)>-1.0):
+  all endpoints
+    selected trajectories biased/unbiased = 54999936/54999936
+    out of range path y/xy biased = 4819024/4819024
+    out of range path y/xy unbiased = 4819024/4819024
+  x(T) > 0
+    selected trajectories biased/unbiased = 24067297/24067297
+    out of range path y/xy biased = 4178436/4178436
+    out of range path y/xy unbiased = 4178436/4178436
+  x(T) > 0.5
+    selected trajectories biased/unbiased = 12175311/12175311
+    out of range path y/xy biased = 2176203/2176203
+    out of range path y/xy unbiased = 2176203/2176203
+Path-orientation diagnostics for x(T)>0.5:
+  out of range x-theta biased/unbiased = 0/0
+Route-resolved active-work diagnostics for x(T)>0.5:
+  convention: W_a = v integral e(theta) circle dr (unit mobility)
+  first left-to-right crossing x = 0.0
+  sampled/no crossing/crossing-y out of range = 1217091/0/275
+  unbiased mean W_a = 0.7451300716886574 | normalized mean W_a/(v^2 T) = 0.13607196342013467
+Saved case file: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/abp_endpoint_conditioned_D0p025.jld2
+Exported data CSV files for abp_endpoint_conditioned_D0p025.jld2 to /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025
+Roundtrip scaling data saved:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/roundtrip_scaling_rows.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/roundtrip_scaling_power_law_fit.csv
+  steps ≈ NaN * (1/D)^NaN | R²=NaN | n=1
+Done sweep.
+JLD2 result files:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/abp_endpoint_conditioned_D0p025.jld2
+CSV/data export files:
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/muca_last_histogram_logweights.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/muca_iteration_diagnostics.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/production_roundtrip_trace.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/production_roundtrip_aggregate.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/hist_endpoint_x_T.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/active_work_vs_crossing_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/chain_active_work_vs_crossing_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_all_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_all_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt0_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt0_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_filtered_path_y.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_filtered_path_x_y_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_filtered_path_x_theta_long.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_trajectory_summary.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/endpoint_x_gt_0p5_average_trajectory.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/conditional_x_m1_0_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/conditional_x_gt0_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/conditional_x_gt_0p5_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/conditional_all_one_dimensional_histograms.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/abp_endpoint_conditioned_D0p025/case_summary.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/roundtrip_scaling_rows.csv
+  /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/data/roundtrip_scaling_power_law_fit.csv
+
+SUCCESS: MUCA and production completed for v = 0.37
+Main result: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/task_10_v0p370/abp_endpoint_conditioned_D0p025.jld2
+CSV files written: 23
+Completed D=0.025, v=0.370
+Notebook RUN_ROOTS: [Path("/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868220/combined")]

@@ -21,6 +21,7 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
     edges_y_int = collect(range(-cfg.y_abs * cfg.trajectory_T, cfg.y_abs * cfg.trajectory_T, length=cfg.n_y_int_bins + 1))
     edges_path_x = collect(range(cfg.path_x_min, cfg.path_x_max, length=cfg.n_path_x_bins + 1))
     edges_path_y = copy(edges_y_T)
+    edges_path_theta = collect(range(0.0, 2π, length=cfg.n_path_theta_bins + 1))
 
     # Endpoint-conditioned one-dimensional observables and saved examples.
     endpoint_window_specs = [
@@ -42,6 +43,12 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
     ]
     n_path_windows = length(path_endpoint_specs)
     path_window_keys = [string(w.key) for w in path_endpoint_specs]
+    active_work_path_window = findfirst(==("x_gt_0p5"), path_window_keys)
+    active_work_path_window === nothing && error(
+        "The x(T)>0.5 path window required for orientation and route analysis is missing."
+    )
+    path_theta_window = active_work_path_window
+    active_work_crossing_x = 0.0
 
     n_prod_chains = cfg.production_parallel ? max(1, cfg.n_prod_chains) : 1
     n_prod_chains = min(n_prod_chains, cfg.n_prod_obs_total)
@@ -51,7 +58,11 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
     end
 
     accs = [
-        abp_make_prod_accumulator(edges_x_T, edges_y_T, edges_y_mean, edges_y_int, edges_path_x, edges_path_y, n_windows, n_path_windows)
+        abp_make_prod_accumulator(
+            edges_x_T, edges_y_T, edges_y_mean, edges_y_int,
+            edges_path_x, edges_path_y, edges_path_theta,
+            n_windows, n_path_windows,
+        )
         for _ in 1:n_prod_chains
     ]
 
@@ -72,13 +83,19 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
         println("Production case: D=", D,
             " | chains=", n_prod_chains,
             " | total samples=", cfg.n_prod_obs_total,
-            " | proposal Δξ block=", round(muca.block_dxi; sigdigits=4),
-            " | proposal Δξ local=", round(muca.local_dxi; sigdigits=4),
+            " | noise proposal=additive Gaussian random-walk MH",
+            " | block Δξ=", round(muca.block_dxi; sigdigits=4),
+            " | local Δξ=", round(muca.local_dxi; sigdigits=4),
             " | whole-path endpoint windows=", join(path_window_keys, ","),
             " | path filter x(t)>", path_x_min)
     println("Whole-path production observation stride = ", cfg.path_observation_stride)
     println("Whole-path histogram time stride = ", cfg.path_time_stride,
             cfg.path_time_stride == 1 ? " (all integration points counted)" : " (subsampled time points)")
+    println("Path-orientation histogram: P(x(t), theta(t) | x(T)>0.5)",
+            " | theta wrapped to [0, 2pi)",
+            " | theta bins=", cfg.n_path_theta_bins)
+    println("Active-work production observation stride = ",
+            cfg.active_work_observation_stride)
     if cfg.save_movie_paths
         println("Movie path snapshots: chain=", cfg.movie_chain_id,
                 " | stride=", cfg.movie_stride,
@@ -93,8 +110,11 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
                 abp_run_production_chain!(
                     accs[chain_id], cfg, D, muca.alg, muca.abp, obs, bins_bias,
                     edges_bias, learned_logw_values, logw_shift,
-                    edges_x_T, edges_y_T, edges_y_mean, edges_y_int, edges_path_x, edges_path_y,
+                    edges_x_T, edges_y_T, edges_y_mean, edges_y_int,
+                    edges_path_x, edges_path_y, edges_path_theta,
                     endpoint_window_specs, path_endpoint_specs, path_x_min,
+                    path_theta_window,
+                    active_work_path_window, active_work_crossing_x,
                     chain_id, n_steps_chain[chain_id], production_rt_min, production_rt_max,
                     moves_prod, move_weights_prod, max_saved_paths_per_window_chain,
                 )
@@ -104,8 +124,11 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
                 abp_run_production_chain!(
                     accs[chain_id], cfg, D, muca.alg, muca.abp, obs, bins_bias,
                     edges_bias, learned_logw_values, logw_shift,
-                    edges_x_T, edges_y_T, edges_y_mean, edges_y_int, edges_path_x, edges_path_y,
+                    edges_x_T, edges_y_T, edges_y_mean, edges_y_int,
+                    edges_path_x, edges_path_y, edges_path_theta,
                     endpoint_window_specs, path_endpoint_specs, path_x_min,
+                    path_theta_window,
+                    active_work_path_window, active_work_crossing_x,
                     chain_id, n_steps_chain[chain_id], production_rt_min, production_rt_max,
                     moves_prod, move_weights_prod, max_saved_paths_per_window_chain,
                 )
@@ -113,8 +136,14 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
         end
     end
 
-    acc = accs[1]
-    for i in 2:length(accs)
+    # Merge into a fresh accumulator so that the original per-chain sufficient
+    # statistics remain available for chain-delete jackknife uncertainties.
+    acc = abp_make_prod_accumulator(
+        edges_x_T, edges_y_T, edges_y_mean, edges_y_int,
+        edges_path_x, edges_path_y, edges_path_theta,
+        n_windows, n_path_windows,
+    )
+    for i in eachindex(accs)
         abp_merge_prod_accumulators!(
             acc, accs[i];
             max_saved_paths_per_window=cfg.max_saved_paths_per_window,
@@ -153,6 +182,23 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
         println("    out of range path y/xy unbiased = ",
                 acc.n_path_y_out_unbiased[iw], "/", acc.n_path_xy_out_unbiased[iw])
     end
+    println("Path-orientation diagnostics for x(T)>0.5:")
+    println("  out of range x-theta biased/unbiased = ",
+            acc.n_path_xtheta_out_biased[1], "/",
+            acc.n_path_xtheta_out_unbiased[1])
+    work_mass = sum(acc.active_work_mass_unbiased)
+    work_mean = work_mass > 0.0 ?
+        sum(acc.active_work_sum_unbiased) / work_mass : NaN
+    println("Route-resolved active-work diagnostics for x(T)>0.5:")
+    println("  convention: W_a = v integral e(theta) circle dr (unit mobility)")
+    println("  first left-to-right crossing x = ", active_work_crossing_x)
+    println("  sampled/no crossing/crossing-y out of range = ",
+            acc.n_active_work_observations[1], "/",
+            acc.n_active_work_no_crossing[1], "/",
+            acc.n_active_work_crossing_y_out[1])
+    println("  unbiased mean W_a = ", work_mean,
+            " | normalized mean W_a/(v^2 T) = ",
+            work_mean / (cfg.v^2 * cfg.trajectory_T))
     return (
         acc = acc,
         edges_x_T = edges_x_T,
@@ -161,17 +207,22 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
         edges_y_int = edges_y_int,
         edges_path_x = edges_path_x,
         edges_path_y = edges_path_y,
+        edges_path_theta = edges_path_theta,
         endpoint_window_specs = endpoint_window_specs,
         window_keys = window_keys,
         path_endpoint_specs = path_endpoint_specs,
         path_window_keys = path_window_keys,
         path_x_min = path_x_min,
+        path_theta_window = path_theta_window,
+        active_work_path_window = active_work_path_window,
+        active_work_crossing_x = active_work_crossing_x,
         learned_logw_values = learned_logw_values,
         logw_shift = logw_shift,
         production_rt_min = production_rt_min,
         production_rt_max = production_rt_max,
         n_prod_chains = n_prod_chains,
         n_steps_chain = n_steps_chain,
+        chain_accs = accs,
         t_prod = t_prod,
     )
 end
@@ -179,8 +230,11 @@ end
 function abp_run_production_chain!(
     acc, cfg::ABPNoiseSweepConfig, D::Real, alg_template, abp, obs, bins_bias,
     learned_bias_edges, learned_logw_values, logw_shift,
-    edges_x_T, edges_y_T, edges_y_mean, edges_y_int, edges_path_x, edges_path_y,
+    edges_x_T, edges_y_T, edges_y_mean, edges_y_int,
+    edges_path_x, edges_path_y, edges_path_theta,
     endpoint_window_specs, path_endpoint_specs, path_x_min::Real,
+    path_theta_window::Int,
+    active_work_path_window::Int, active_work_crossing_x::Real,
     chain_id::Int, n_prod_steps::Int, production_rt_min::Real, production_rt_max::Real,
     moves_prod, move_weights_prod, max_saved_paths_per_window_chain::Int,
 )
@@ -271,10 +325,19 @@ function abp_run_production_chain!(
             end
 
             if !isempty(matching_path_windows)
-                abp_add_whole_path_conditioned_windows!(
-                    acc, sys, matching_path_windows, edges_path_x, edges_path_y, w_path;
+                measure_active_work =
+                    mcmc_step % cfg.active_work_observation_stride == 0 &&
+                    active_work_path_window in matching_path_windows
+                route_metrics = abp_add_whole_path_conditioned_windows!(
+                    acc, sys, matching_path_windows, edges_path_x, edges_path_y,
+                    edges_path_theta, path_theta_window, w_path;
                     path_time_stride=cfg.path_time_stride,
                     path_x_min=path_x_min,
+                    compute_route_metrics=measure_active_work,
+                    route_crossing_x=active_work_crossing_x,
+                )
+                route_metrics === nothing || abp_add_active_work_crossing!(
+                    acc, edges_y_T, route_metrics, w_path,
                 )
             end
         end

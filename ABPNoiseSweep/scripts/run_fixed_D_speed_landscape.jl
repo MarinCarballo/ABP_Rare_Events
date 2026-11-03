@@ -67,8 +67,16 @@ const PATH_OBSERVATION_STRIDE =
     env_int("ABP_PATH_OBSERVATION_STRIDE", 1_000)
 const PATH_TIME_STRIDE =
     env_int("ABP_PATH_TIME_STRIDE", 1)
+const ACTIVE_WORK_OBSERVATION_STRIDE =
+    env_int("ABP_ACTIVE_WORK_OBSERVATION_STRIDE", 10_000)
 const PATH_FILTER_X_MIN =
     env_float("ABP_PATH_FILTER_X_MIN", -1.0)
+const N_PATH_THETA_BINS =
+    env_int("ABP_N_PATH_THETA_BINS", 180)
+
+# Additive Gaussian random-walk proposal amplitudes.
+const BLOCK_DXI = env_float("ABP_BLOCK_DXI", 0.05)
+const LOCAL_DXI = env_float("ABP_LOCAL_DXI", 0.8)
 
 const ROUNDTRIP_TOTAL_TARGET_FRACTION =
     env_float("ABP_ROUNDTRIP_TOTAL_TARGET_FRACTION", 0.5)
@@ -99,26 +107,27 @@ cfg = ABPNoiseSweepConfig(
     n_therm_muca = N_THERM_MUCA,
     D_scaling_reference = D,
     scale_n_iter_with_D = false,
-    block_dxi = 0.05,
-    local_dxi = 0.8,
+    block_dxi = BLOCK_DXI,
+    local_dxi = LOCAL_DXI,
     move_weights = Float64[0.0, 0.05, 0.55, 0.40],
 
-    # Complete the modest MUCA schedule unless transport is exceptionally good.
-    roundtrip_target = 50,
-    roundtrip_avg_target_fraction = 1.0,
-    roundtrip_convergence_hits = 3,
+    # Honor the settings submitted by the Slurm wrapper.
+    roundtrip_target = ROUNDTRIP_TARGET,
+    roundtrip_avg_target_fraction = ROUNDTRIP_TOTAL_TARGET_FRACTION,
+    roundtrip_convergence_hits = ROUNDTRIP_CONVERGENCE_HITS,
 
     # Production begins immediately after MUCA in this same Julia process.
     production_parallel = true,
     n_prod_chains = N_PRODUCTION_CHAINS,
     n_therm_prod = N_THERM_PRODUCTION,
     n_prod_obs_total = N_PRODUCTION_MOVES,
-    prod_stride = 1_000,
-    roundtrip_stride = 1_000,
+    prod_stride = PROD_STRIDE,
+    roundtrip_stride = ROUNDTRIP_STRIDE,
 
     # Whole-path landscape conditioned on x(T)>0.5.
     path_observation_stride = PATH_OBSERVATION_STRIDE,
     path_time_stride = PATH_TIME_STRIDE,
+    active_work_observation_stride = ACTIVE_WORK_OBSERVATION_STRIDE,
     path_filter_x_min = PATH_FILTER_X_MIN,
     saved_path_time_thin = 5,
     max_saved_paths_per_window = 120,
@@ -130,6 +139,7 @@ cfg = ABPNoiseSweepConfig(
     path_x_min = -1.5,
     path_x_max = 1.5,
     n_path_x_bins = 241,
+    n_path_theta_bins = N_PATH_THETA_BINS,
 
     output_dir = OUTPUT_DIR,
     save_csv = env_bool("ABP_SAVE_CSV", true),
@@ -152,7 +162,12 @@ println("MUCA iterations = ", N_MUCA_ITER)
 println("Approximate total MUCA sampling moves = ", approx_muca_moves)
 println("Production moves = ", N_PRODUCTION_MOVES)
 println("Production chains = ", N_PRODUCTION_CHAINS)
+println("Noise proposals are defined by the installed src/moves.jl",
+        " | block delta_xi = ", BLOCK_DXI,
+        " | local delta_xi = ", LOCAL_DXI)
 println("Path-observation stride = ", PATH_OBSERVATION_STRIDE)
+println("Path-orientation theta bins = ", N_PATH_THETA_BINS)
+println("Active-work observation stride = ", ACTIVE_WORK_OBSERVATION_STRIDE)
 println("Output = ", OUTPUT_DIR)
 println("============================================================")
 

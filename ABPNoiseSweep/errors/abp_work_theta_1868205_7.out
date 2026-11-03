@@ -1,0 +1,9 @@
+MUCA -> production with the installed move kernel
+D=0.025 | v=0.355 | array task=7
+Threads=128 | production chains=128
+MUCA iterations=200 | final-iteration moves=800000000
+Production moves=55000000000
+Path stride=1000 | physical-time stride=1
+Active-work stride=10000 | theta bins=180
+Path-point filter: x(t)>-1
+Task output: /home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/data/abp_work_theta_D0p025_array_1868205/task_7_v0p355

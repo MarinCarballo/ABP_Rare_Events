@@ -18,13 +18,20 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["metadata/Dr"] = Float64(D)
         file["metadata/v"] = cfg.v
         file["metadata/move_weights"] = cfg.move_weights
-        file["metadata/move_weights_order"] = ["reflection_update", "theta0_update", "block_update", "single_noise_update"]
+        file["metadata/move_weights_order"] = ["reflection_update", "theta0_update", "block_random_walk_mh", "local_random_walk_mh"]
+        file["metadata/noise_proposal"] = "additive_gaussian_random_walk_mh"
         file["metadata/trajectory_T"] = cfg.trajectory_T
         file["metadata/dt"] = cfg.dt
         file["metadata/x0"] = cfg.x0_vec
         file["metadata/potential_active"] = cfg.potential_active
         file["metadata/path_observation_stride"] = cfg.path_observation_stride
         file["metadata/path_time_stride"] = cfg.path_time_stride
+        file["metadata/n_path_theta_bins"] = cfg.n_path_theta_bins
+        file["metadata/path_theta_definition"] =
+            "theta(t) modulo 2pi, in [0, 2pi)"
+        file["metadata/path_theta_endpoint_condition"] = "x(T) > 0.5"
+        file["metadata/active_work_observation_stride"] =
+            cfg.active_work_observation_stride
         file["metadata/path_x_filter_min"] = prod.path_x_min
         file["metadata/saved_path_time_thin"] = cfg.saved_path_time_thin
         file["metadata/save_movie_paths"] = cfg.save_movie_paths
@@ -34,6 +41,13 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["metadata/movie_max_trajectories"] = cfg.movie_max_trajectories
         file["metadata/movie_endpoint_x_min"] = cfg.movie_endpoint_x_min
         file["metadata/movie_endpoint_x_max"] = cfg.movie_endpoint_x_max
+        file["metadata/active_work_definition"] =
+            "W_a = v * integral e(theta) circle dr, midpoint Stratonovich rule, mobility=1"
+        file["metadata/active_work_normalization"] = "W_a / (v^2 * trajectory_T)"
+        file["metadata/active_work_endpoint_condition"] = "x(T) > 0.5"
+        file["metadata/active_work_route_coordinate"] =
+            "m = y(tau_c) at the first left-to-right crossing of x=0"
+        file["metadata/active_work_crossing_x"] = prod.active_work_crossing_x
 
         file["metadata/bias_observable"] = "endpoint_x"
         file["metadata/bias_min"] = cfg.bias_min
@@ -107,6 +121,8 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["histograms/bins_y_int"] = prod.edges_y_int
         file["histograms/bins_path_x"] = prod.edges_path_x
         file["histograms/bins_path_y"] = prod.edges_path_y
+        file["histograms/bins_path_theta"] = prod.edges_path_theta
+        file["histograms/bins_active_work_crossing_y"] = prod.edges_y_T
 
         # Endpoint-x histograms
         file["histograms/biased/x_T"] = acc.counts_x_T_biased
@@ -128,6 +144,15 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
             file["$base/biased/path_x_y"] = acc.counts_path_xy_biased[iw]
             file["$base/unbiased/path_x_y"] = acc.counts_path_xy_unbiased[iw]
 
+            if iw == prod.path_theta_window
+                file["$base/biased/path_x_theta"] = acc.counts_path_xtheta_biased
+                file["$base/unbiased/path_x_theta"] = acc.counts_path_xtheta_unbiased
+                file["$base/diagnostics/out_path_x_theta_biased"] =
+                    acc.n_path_xtheta_out_biased[1]
+                file["$base/diagnostics/out_path_x_theta_unbiased"] =
+                    acc.n_path_xtheta_out_unbiased[1]
+            end
+
             file["$base/diagnostics/n_biased"] = acc.n_path_traj_biased[iw]
             file["$base/diagnostics/n_unbiased"] = acc.n_path_traj_unbiased[iw]
             file["$base/diagnostics/out_path_y_biased"] = acc.n_path_y_out_biased[iw]
@@ -145,12 +170,87 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
             file["endpoint_positive_condition/unbiased/path_y"] = acc.counts_path_y_unbiased[i_gt05]
             file["endpoint_positive_condition/biased/path_x_y"] = acc.counts_path_xy_biased[i_gt05]
             file["endpoint_positive_condition/unbiased/path_x_y"] = acc.counts_path_xy_unbiased[i_gt05]
+            file["endpoint_positive_condition/biased/path_x_theta"] = acc.counts_path_xtheta_biased
+            file["endpoint_positive_condition/unbiased/path_x_theta"] = acc.counts_path_xtheta_unbiased
             file["endpoint_positive_condition/diagnostics/n_biased"] = acc.n_path_traj_biased[i_gt05]
             file["endpoint_positive_condition/diagnostics/n_unbiased"] = acc.n_path_traj_unbiased[i_gt05]
             file["endpoint_positive_condition/diagnostics/out_path_y_biased"] = acc.n_path_y_out_biased[i_gt05]
             file["endpoint_positive_condition/diagnostics/out_path_y_unbiased"] = acc.n_path_y_out_unbiased[i_gt05]
             file["endpoint_positive_condition/diagnostics/out_path_x_y_biased"] = acc.n_path_xy_out_biased[i_gt05]
             file["endpoint_positive_condition/diagnostics/out_path_x_y_unbiased"] = acc.n_path_xy_out_unbiased[i_gt05]
+            file["endpoint_positive_condition/diagnostics/out_path_x_theta_biased"] = acc.n_path_xtheta_out_biased[1]
+            file["endpoint_positive_condition/diagnostics/out_path_x_theta_unbiased"] = acc.n_path_xtheta_out_unbiased[1]
+        end
+
+        # Active work versus the first left-to-right crossing ordinate.  Route
+        # cuts are deliberately not fixed here; notebooks can sum arbitrary
+        # crossing-y bins into flat, upper-SB, lower-SB, or combined-SB routes.
+        file["active_work/endpoint_condition"] = "x(T) > 0.5"
+        file["active_work/crossing_x"] = prod.active_work_crossing_x
+        file["active_work/crossing_y_bins"] = prod.edges_y_T
+        file["active_work/biased/mass"] = acc.active_work_mass_biased
+        file["active_work/biased/sum_W"] = acc.active_work_sum_biased
+        file["active_work/biased/sum_W2"] = acc.active_work_sum2_biased
+        file["active_work/biased/sum_crossing_time"] = acc.crossing_time_sum_biased
+        file["active_work/unbiased/mass"] = acc.active_work_mass_unbiased
+        file["active_work/unbiased/mass2"] = acc.active_work_mass2_unbiased
+        file["active_work/unbiased/sum_W"] = acc.active_work_sum_unbiased
+        file["active_work/unbiased/sum_W2"] = acc.active_work_sum2_unbiased
+        file["active_work/unbiased/sum_crossing_time"] = acc.crossing_time_sum_unbiased
+        file["active_work/diagnostics/n_sampled"] = acc.n_active_work_observations[1]
+        file["active_work/diagnostics/n_no_crossing"] = acc.n_active_work_no_crossing[1]
+        file["active_work/diagnostics/n_crossing_y_out"] = acc.n_active_work_crossing_y_out[1]
+
+        # Chain-resolved sufficient statistics.  These are the independent
+        # units used by delete-one-chain jackknife error bands.  Only unbiased
+        # histograms are retained because those are the physical PDFs.  The
+        # full path x-y and x-theta histograms are saved only for x(T)>0.5,
+        # the route-analysis condition, to avoid tripling the output size.
+        file["chain_statistics/n_chains"] = length(prod.chain_accs)
+        file["chain_statistics/path_x_y_window_key"] = "x_gt_0p5"
+        file["chain_statistics/path_x_theta_window_key"] = "x_gt_0p5"
+        for (chain_id, chain_acc) in enumerate(prod.chain_accs)
+            base = "chain_statistics/chains/$chain_id"
+            file["$base/n_steps"] = prod.n_steps_chain[chain_id]
+            file["$base/unbiased/x_T"] = chain_acc.counts_x_T_unbiased
+            file["$base/reweighting/sum_w_all"] = chain_acc.sum_w_all[1]
+            file["$base/reweighting/sum_w2_all"] = chain_acc.sum_w2_all[1]
+
+            for (iw, spec) in enumerate(endpoint_window_specs)
+                key = string(spec.key)
+                cbase = "$base/conditional_windows/$key"
+                file["$cbase/unbiased/y_T"] = chain_acc.counts_y_T_unbiased[iw]
+                file["$cbase/unbiased/y_mean"] = chain_acc.counts_y_mean_unbiased[iw]
+                file["$cbase/unbiased/y_int"] = chain_acc.counts_y_int_unbiased[iw]
+                file["$cbase/reweighting/sum_w"] = chain_acc.sum_w_by_window[iw]
+                file["$cbase/reweighting/sum_w2"] = chain_acc.sum_w2_by_window[iw]
+            end
+
+            path_base = "$base/path_endpoint_conditions/x_gt_0p5"
+            path_xy_chain =
+                chain_acc.counts_path_xy_unbiased[prod.active_work_path_window]
+            file["$path_base/unbiased/path_x_y_flat_julia_column_major"] =
+                vec(path_xy_chain)
+            file["$path_base/unbiased/path_x_y_shape"] = collect(size(path_xy_chain))
+            path_xtheta_chain = chain_acc.counts_path_xtheta_unbiased
+            file["$path_base/unbiased/path_x_theta_flat_julia_column_major"] =
+                vec(path_xtheta_chain)
+            file["$path_base/unbiased/path_x_theta_shape"] =
+                collect(size(path_xtheta_chain))
+
+            work_base = "$base/active_work"
+            file["$work_base/unbiased/mass"] = chain_acc.active_work_mass_unbiased
+            file["$work_base/unbiased/mass2"] = chain_acc.active_work_mass2_unbiased
+            file["$work_base/unbiased/sum_W"] = chain_acc.active_work_sum_unbiased
+            file["$work_base/unbiased/sum_W2"] = chain_acc.active_work_sum2_unbiased
+            file["$work_base/unbiased/sum_crossing_time"] =
+                chain_acc.crossing_time_sum_unbiased
+            file["$work_base/diagnostics/n_sampled"] =
+                chain_acc.n_active_work_observations[1]
+            file["$work_base/diagnostics/n_no_crossing"] =
+                chain_acc.n_active_work_no_crossing[1]
+            file["$work_base/diagnostics/n_crossing_y_out"] =
+                chain_acc.n_active_work_crossing_y_out[1]
         end
 
         # Reweighting diagnostics
@@ -220,6 +320,7 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
             file["saved_trajectories/$key/n_saved"] = length(acc.saved_paths[iw])
             for (j, path) in enumerate(acc.saved_paths[iw])
                 file["saved_trajectories/$key/$j/xs"] = path.xs
+                file["saved_trajectories/$key/$j/thetas"] = path.thetas
                 file["saved_trajectories/$key/$j/theta0"] = path.theta0
                 file["saved_trajectories/$key/$j/endpoint_x"] = path.endpoint_x
                 file["saved_trajectories/$key/$j/endpoint_y"] = path.endpoint_y
@@ -533,10 +634,94 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             zip(x_centers, x_b, x_u, x_b_pdf, x_u_pdf),
         ))
 
+        if haskey(file, "active_work/unbiased/mass")
+            crossing_y_edges = collect(file["active_work/crossing_y_bins"])
+            crossing_y_centers = abp_centers_from_edges(crossing_y_edges)
+            b_mass = Float64.(collect(file["active_work/biased/mass"]))
+            b_sum = Float64.(collect(file["active_work/biased/sum_W"]))
+            b_sum2 = Float64.(collect(file["active_work/biased/sum_W2"]))
+            b_tau = Float64.(collect(file["active_work/biased/sum_crossing_time"]))
+            u_mass = Float64.(collect(file["active_work/unbiased/mass"]))
+            u_mass2 = Float64.(collect(file["active_work/unbiased/mass2"]))
+            u_sum = Float64.(collect(file["active_work/unbiased/sum_W"]))
+            u_sum2 = Float64.(collect(file["active_work/unbiased/sum_W2"]))
+            u_tau = Float64.(collect(file["active_work/unbiased/sum_crossing_time"]))
+            normalization = Float64(file["metadata/v"])^2 *
+                Float64(file["metadata/trajectory_T"])
+
+            active_work_rows = NamedTuple[]
+            for i in eachindex(crossing_y_centers)
+                b_mean = b_mass[i] > 0.0 ? b_sum[i] / b_mass[i] : NaN
+                b_var = b_mass[i] > 0.0 ?
+                    max(0.0, b_sum2[i] / b_mass[i] - b_mean^2) : NaN
+                u_mean = u_mass[i] > 0.0 ? u_sum[i] / u_mass[i] : NaN
+                u_var = u_mass[i] > 0.0 ?
+                    max(0.0, u_sum2[i] / u_mass[i] - u_mean^2) : NaN
+                u_ess = u_mass2[i] > 0.0 ? u_mass[i]^2 / u_mass2[i] : NaN
+                push!(active_work_rows, (
+                    crossing_y_center = crossing_y_centers[i],
+                    biased_mass = b_mass[i],
+                    unbiased_mass = u_mass[i],
+                    unbiased_ess = u_ess,
+                    biased_mean_active_work = b_mean,
+                    biased_std_active_work = sqrt(b_var),
+                    unbiased_mean_active_work = u_mean,
+                    unbiased_std_active_work = sqrt(u_var),
+                    biased_mean_normalized_active_work = b_mean / normalization,
+                    unbiased_mean_normalized_active_work = u_mean / normalization,
+                    biased_mean_crossing_time = b_mass[i] > 0.0 ? b_tau[i] / b_mass[i] : NaN,
+                    unbiased_mean_crossing_time = u_mass[i] > 0.0 ? u_tau[i] / u_mass[i] : NaN,
+                ))
+            end
+            push!(outs, abp_write_csv(
+                joinpath(case_dir, "active_work_vs_crossing_y.csv"),
+                ["crossing_y_center", "biased_mass", "unbiased_mass", "unbiased_ess",
+                 "biased_mean_active_work", "biased_std_active_work",
+                 "unbiased_mean_active_work", "unbiased_std_active_work",
+                 "biased_mean_normalized_active_work", "unbiased_mean_normalized_active_work",
+                 "biased_mean_crossing_time", "unbiased_mean_crossing_time"],
+                active_work_rows,
+            ))
+
+            if haskey(file, "chain_statistics/n_chains")
+                n_chains = Int(file["chain_statistics/n_chains"])
+                chain_work_rows = NamedTuple[]
+                for chain_id in 1:n_chains
+                    base = "chain_statistics/chains/$chain_id/active_work/unbiased"
+                    c_mass = Float64.(collect(file["$base/mass"]))
+                    c_mass2 = Float64.(collect(file["$base/mass2"]))
+                    c_sum = Float64.(collect(file["$base/sum_W"]))
+                    c_sum2 = Float64.(collect(file["$base/sum_W2"]))
+                    c_tau = Float64.(collect(file["$base/sum_crossing_time"]))
+                    for i in eachindex(crossing_y_centers)
+                        push!(chain_work_rows, (
+                            chain_id = chain_id,
+                            crossing_y_center = crossing_y_centers[i],
+                            mass = c_mass[i],
+                            mass2 = c_mass2[i],
+                            sum_active_work = c_sum[i],
+                            sum_active_work2 = c_sum2[i],
+                            sum_crossing_time = c_tau[i],
+                        ))
+                    end
+                end
+                push!(outs, abp_write_csv(
+                    joinpath(case_dir, "chain_active_work_vs_crossing_y.csv"),
+                    ["chain_id", "crossing_y_center", "mass", "mass2",
+                     "sum_active_work", "sum_active_work2", "sum_crossing_time"],
+                    chain_work_rows,
+                ))
+            end
+        end
+
         path_y_edges = collect(file["histograms/bins_path_y"])
         path_y_centers = abp_centers_from_edges(path_y_edges)
         path_x_edges = collect(file["histograms/bins_path_x"])
         path_x_centers = abp_centers_from_edges(path_x_edges)
+        path_theta_edges = haskey(file, "histograms/bins_path_theta") ?
+            collect(file["histograms/bins_path_theta"]) : Float64[]
+        path_theta_centers = isempty(path_theta_edges) ? Float64[] :
+            abp_centers_from_edges(path_theta_edges)
 
         if haskey(file, "path_endpoint_conditions/order")
             path_keys_order = collect(file["path_endpoint_conditions/order"])
@@ -566,6 +751,26 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
                       path_xy_b_pdf[ix, iy], path_xy_u_pdf[ix, iy])
                      for ix in eachindex(path_x_centers) for iy in eachindex(path_y_centers)),
                 ))
+
+                if haskey(file, "$base/unbiased/path_x_theta")
+                    path_xtheta_b = Array(file["$base/biased/path_x_theta"])
+                    path_xtheta_u = Array(file["$base/unbiased/path_x_theta"])
+                    path_xtheta_b_pdf = abp_safe_pdf2_from_mass(
+                        path_xtheta_b, path_x_edges, path_theta_edges,
+                    )
+                    path_xtheta_u_pdf = abp_safe_pdf2_from_mass(
+                        path_xtheta_u, path_x_edges, path_theta_edges,
+                    )
+                    push!(outs, abp_write_csv(
+                        joinpath(case_dir, "endpoint_$(key)_filtered_path_x_theta_long.csv"),
+                        ["path_x_center", "path_theta_center", "biased_count", "unbiased_count", "biased_pdf", "unbiased_pdf"],
+                        ((path_x_centers[ix], path_theta_centers[itheta],
+                          path_xtheta_b[ix, itheta], path_xtheta_u[ix, itheta],
+                          path_xtheta_b_pdf[ix, itheta], path_xtheta_u_pdf[ix, itheta])
+                         for ix in eachindex(path_x_centers)
+                         for itheta in eachindex(path_theta_centers)),
+                    ))
+                end
             end
         else
             @warn "No generalized path_endpoint_conditions found; path-window CSVs were not exported."
@@ -576,6 +781,8 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             if n_saved > 0
                 saved_paths = [(
                     xs = file["saved_trajectories/x_gt_0p5/$j/xs"],
+                    thetas = haskey(file, "saved_trajectories/x_gt_0p5/$j/thetas") ?
+                        file["saved_trajectories/x_gt_0p5/$j/thetas"] : Float64[],
                     theta0 = file["saved_trajectories/x_gt_0p5/$j/theta0"],
                     endpoint_x = file["saved_trajectories/x_gt_0p5/$j/endpoint_x"],
                     endpoint_y = file["saved_trajectories/x_gt_0p5/$j/endpoint_y"],
@@ -664,6 +871,9 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             "muca_stop_target_avg_roundtrips_per_chain" => file["muca/roundtrip_stop_target_avg_roundtrips_per_chain"],
             "path_observation_stride" => file["metadata/path_observation_stride"],
             "path_time_stride" => file["metadata/path_time_stride"],
+            "active_work_observation_stride" =>
+                (haskey(file, "metadata/active_work_observation_stride") ?
+                 file["metadata/active_work_observation_stride"] : missing),
             "path_x_filter_min" => file["metadata/path_x_filter_min"],
             "production_roundtrips_final_count" => file["roundtrips/final_count"],
         ]
