@@ -19,6 +19,24 @@
 
 set -euo pipefail
 
+# Optional numerical update of the same SDE; default keeps existing Euler runs.
+: "${ABP_INTEGRATOR:=euler}"
+export ABP_INTEGRATOR
+# Optional pCN MCMC proposal (independent of the time integrator).
+: "${ABP_NOISE_PROPOSAL:=random_walk}"
+: "${ABP_BLOCK_PCN_BETA:=0.05}"
+: "${ABP_LOCAL_PCN_BETA:=0.8}"
+export ABP_NOISE_PROPOSAL ABP_BLOCK_PCN_BETA ABP_LOCAL_PCN_BETA
+
+# Diagnostic capture spans MUCA iterations, independently of production movies.
+: "${ABP_SAVE_MUCA_MOVIE_PATHS:=true}"
+: "${ABP_MUCA_MOVIE_STRIDE:=50000}"
+: "${ABP_MUCA_MOVIE_MAX_TRAJECTORIES:=6000}"
+: "${ABP_SAVED_PATH_TIME_THIN:=1}"
+: "${ABP_MAX_SAVED_PATHS_PER_WINDOW:=120}"
+export ABP_SAVE_MUCA_MOVIE_PATHS ABP_MUCA_MOVIE_STRIDE ABP_MUCA_MOVIE_MAX_TRAJECTORIES
+export ABP_SAVED_PATH_TIME_THIN ABP_MAX_SAVED_PATHS_PER_WINDOW
+
 
 # ============================================================
 # Project

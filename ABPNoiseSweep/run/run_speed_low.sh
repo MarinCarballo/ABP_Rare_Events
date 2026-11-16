@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=128
 #SBATCH --mem=384G
 #SBATCH --exclusive
-#SBATCH --array=0-5
+#SBATCH --array=0-9
 #SBATCH --error=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/errors/abp_speed_D0025_lowv_%A_%a.err
 #SBATCH --output=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/errors/abp_speed_D0025_lowv_%A_%a.out
 
@@ -18,7 +18,8 @@ PROJECT_DIR="/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep"
 cd "$PROJECT_DIR"
 mkdir -p "$PROJECT_DIR/errors" "$PROJECT_DIR/data"
 
-V_VALUES=("0.290" "0.295" "0.300" "0.305" "0.310" "0.315")
+# Resolve both sides of the user-supplied critical speed near 0.32.
+V_VALUES=("0.280" "0.285" "0.290" "0.295" "0.300" "0.305" "0.310" "0.315" "0.320" "0.325")
 
 ARRAY_INDEX="${SLURM_ARRAY_TASK_ID}"
 if (( ARRAY_INDEX < 0 || ARRAY_INDEX >= ${#V_VALUES[@]} )); then
@@ -31,6 +32,8 @@ V_TAG="${V//./p}"
 V_TAG="${V_TAG//-/m}"
 
 export ABP_V="$V"
+: "${ABP_INTEGRATOR:=euler}"
+export ABP_INTEGRATOR
 export JULIA_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
 export ABP_INSTANTIATE=false
 export ABP_PRECOMPILE=false
@@ -85,7 +88,7 @@ echo "Task output = ${TASK_OUTPUT_DIR}"
 echo "Runner = ${RUNNER_FILE}"
 echo "============================================================"
 
-"$JULIA_CMD" --startup-file=no --project="$PROJECT_DIR" "$RUNNER_FILE"
+"$JULIA_CMD" --startup-file=no --project="$PROJECT_DIR" "$RUNNER_FILE" "$@"
 
 echo
 echo "Produced files:"

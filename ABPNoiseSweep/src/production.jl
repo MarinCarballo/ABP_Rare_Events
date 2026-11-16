@@ -52,6 +52,9 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
 
     n_prod_chains = cfg.production_parallel ? max(1, cfg.n_prod_chains) : 1
     n_prod_chains = min(n_prod_chains, cfg.n_prod_obs_total)
+    if cfg.save_movie_paths && cfg.movie_max_trajectories > 0 && cfg.movie_chain_id > n_prod_chains
+        error("movie_chain_id exceeds the number of production chains ($n_prod_chains).")
+    end
     n_steps_chain = [cfg.n_prod_obs_total ÷ n_prod_chains for _ in 1:n_prod_chains]
     for i in 1:(cfg.n_prod_obs_total % n_prod_chains)
         n_steps_chain[i] += 1
@@ -73,17 +76,20 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
         move_weights=cfg.move_weights,
         block_dxi=muca.block_dxi,
         local_dxi=muca.local_dxi,
+        noise_proposal=cfg.noise_proposal,
+        block_pcn_beta=cfg.block_pcn_beta,
+        local_pcn_beta=cfg.local_pcn_beta,
     )
 
     production_rt_min = cfg.xT_min
     production_rt_max = cfg.xT_max
-    max_saved_paths_per_window_chain = max(1, ceil(Int, cfg.max_saved_paths_per_window / n_prod_chains))
+    max_saved_paths_per_window_chain = cld(cfg.max_saved_paths_per_window, n_prod_chains)
 
     println()
         println("Production case: D=", D,
             " | chains=", n_prod_chains,
             " | total samples=", cfg.n_prod_obs_total,
-            " | noise proposal=additive Gaussian random-walk MH",
+            " | noise proposal=", cfg.noise_proposal,
             " | block Δξ=", round(muca.block_dxi; sigdigits=4),
             " | local Δξ=", round(muca.local_dxi; sigdigits=4),
             " | whole-path endpoint windows=", join(path_window_keys, ","),
@@ -96,12 +102,18 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
             " | theta bins=", cfg.n_path_theta_bins)
     println("Active-work production observation stride = ",
             cfg.active_work_observation_stride)
-    if cfg.save_movie_paths
+    if cfg.noise_proposal === :pcn
+        println("pCN beta (block/local) = ", cfg.block_pcn_beta, " / ", cfg.local_pcn_beta)
+    end
+    if cfg.save_movie_paths && cfg.movie_max_trajectories > 0
         println("Movie path snapshots: chain=", cfg.movie_chain_id,
                 " | stride=", cfg.movie_stride,
                 " | time thin=", cfg.movie_path_time_thin,
                 " | max trajectories=", cfg.movie_max_trajectories,
                 " | endpoint window=[", cfg.movie_endpoint_x_min, ", ", cfg.movie_endpoint_x_max, ")")
+        println("Movie effective stride across selected production chain = ",
+                abp_movie_effective_stride(cfg.movie_stride,
+                    n_steps_chain[cfg.movie_chain_id], cfg.movie_max_trajectories))
     end
 
     t_prod = @elapsed begin
@@ -199,6 +211,10 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
     println("  unbiased mean W_a = ", work_mean,
             " | normalized mean W_a/(v^2 T) = ",
             work_mean / (cfg.v^2 * cfg.trajectory_T))
+    work_x_mean = work_mass > 0.0 ? sum(acc.active_work_x_sum_unbiased) / work_mass : NaN
+    work_y_mean = work_mass > 0.0 ? sum(acc.active_work_y_sum_unbiased) / work_mass : NaN
+    println("  full-path mean W_a,x = ", work_x_mean, " | mean W_a,y = ", work_y_mean,
+            " | component closure (x+y-total) = ", work_x_mean + work_y_mean - work_mean)
     return (
         acc = acc,
         edges_x_T = edges_x_T,
@@ -246,6 +262,7 @@ function abp_run_production_chain!(
         x0=cfg.x0_vec,
         θ0=:uniform,
         potential_active=cfg.potential_active,
+        integrator=cfg.integrator,
     )
 
     alg = deepcopy(alg_template)
@@ -261,6 +278,11 @@ function abp_run_production_chain!(
     reset!(alg)
 
     rt_prod = Roundtrips(production_rt_min, production_rt_max)
+    matching_path_windows = Int[]
+    sizehint!(matching_path_windows, length(path_endpoint_specs))
+    movie_stride = abp_movie_effective_stride(
+        cfg.movie_stride, n_prod_steps, cfg.movie_max_trajectories,
+    )
 
     for mcmc_step in 1:n_prod_steps
         random_move!(sys, alg, moves_prod, move_weights_prod)
@@ -281,7 +303,7 @@ function abp_run_production_chain!(
 
         if cfg.save_movie_paths &&
            chain_id == cfg.movie_chain_id &&
-           mcmc_step % cfg.movie_stride == 0 &&
+           ((mcmc_step - 1) % movie_stride == 0 || mcmc_step == n_prod_steps) &&
            xT_now >= cfg.movie_endpoint_x_min &&
            xT_now < cfg.movie_endpoint_x_max
             abp_maybe_save_movie_path!(
@@ -296,6 +318,7 @@ function abp_run_production_chain!(
                 w_path=w_path,
                 max_movie_paths=cfg.movie_max_trajectories,
                 movie_path_time_thin=cfg.movie_path_time_thin,
+                replace_last=mcmc_step == n_prod_steps,
             )
         end
 
@@ -316,7 +339,7 @@ function abp_run_production_chain!(
         end
 
         if mcmc_step % cfg.path_observation_stride == 0
-            matching_path_windows = Int[]
+            empty!(matching_path_windows)
             for (iw, spec) in enumerate(path_endpoint_specs)
                 abp_matches_endpoint_spec(xT_now, spec) || continue
                 push!(matching_path_windows, iw)
@@ -378,6 +401,8 @@ function abp_run_production_chain!(
                     acc, sys, iw, xT_now, yT_now, ymean_now, yint_now, bias_value_now, w_path;
                     max_saved_paths_per_window_chain=max_saved_paths_per_window_chain,
                     saved_path_time_thin=cfg.saved_path_time_thin,
+                    chain_id=chain_id,
+                    mcmc_step=mcmc_step,
                 )
             end
         end

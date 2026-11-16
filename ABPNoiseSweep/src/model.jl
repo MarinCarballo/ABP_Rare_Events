@@ -26,6 +26,8 @@ mutable struct ABPTrajectory #mutable because we will update the trajectory in p
 
     tmp_xs :: Vector{SVector{2, Float64}}
     tmp_θs :: Vector{Float64}
+    tmp_ξs :: Vector{SVector{3, Float64}}
+    integrator :: Symbol
 
     function ABPTrajectory(
         rng::AbstractRNG,
@@ -35,7 +37,9 @@ mutable struct ABPTrajectory #mutable because we will update the trajectory in p
         x0::Vector{Float64}=[0.0, 0.0],
         θ0::Symbol=:uniform,
         potential_active::Bool=false,
+        integrator::Symbol=:euler,
     )
+        integrator in (:euler, :crank_nicolson) || error("integrator must be :euler or :crank_nicolson.")
         N   = round(Int, T / dt) + 1  # number of time steps
         σ_T = sqrt(2 * abp.Dt * dt) # translational noise strength
         σ_R = sqrt(2 * abp.Dr * dt) # rotational noise strength
@@ -57,7 +61,9 @@ mutable struct ABPTrajectory #mutable because we will update the trajectory in p
         tmp_xs = copy(xs) # temporary storage for positions during integration
         tmp_θs = copy(θs) # temporary storage for orientations during integration
 
-        sys = new(rng, dt, T, abp.v, abp.Dt, abp.Dr, σ_T, σ_R, ξs, xs, θs, tmp_xs, tmp_θs,)
+        tmp_ξs = similar(ξs) # chain-local scratch space for block proposals
+        sys = new(rng, dt, T, abp.v, abp.Dt, abp.Dr, σ_T, σ_R, ξs, xs, θs,
+                  tmp_xs, tmp_θs, tmp_ξs, integrator)
 
         integrate!(sys; potential_active=potential_active) # integrate the trajectory to fill in the positions and orientations
 
@@ -67,6 +73,9 @@ mutable struct ABPTrajectory #mutable because we will update the trajectory in p
         return sys
     end
 end
+
+ABPTrajectory(abp::ABP, T::Float64; kwargs...) =
+    ABPTrajectory(Random.default_rng(), abp, T; kwargs...)
 
 # Define potential
 g(x) = (x - 1.0)^2 * (x + 1.0)^2
@@ -88,8 +97,11 @@ function potential(sys::ABPTrajectory, i::Int)
 end
 
 function gradient(sys::ABPTrajectory, i::Int)
-    x = sys.xs[i][1]
-    y = sys.xs[i][2]
+    return gradient(sys.xs[i])
+end
+
+function gradient(position::SVector{2, Float64})
+    x, y = position
 
     lambda_ = 2.5
     k = 0.3
@@ -115,9 +127,90 @@ function gradient(sys::ABPTrajectory, i::Int)
     return SVector(df_dx, df_dy)
 end
 
+# Hessian of the same potential, used only by the optional implicit solver.
+function potential_hessian(position::SVector{2, Float64})
+    x, y = position
+    lambda_ = 2.5
+    k = 0.3
+    f_0 = 0.5 * lambda_ * y^2
+    f_bar = 1.0 + 0.5 * k * y^2
+    denom = f_0 + f_bar
+    f_mix = (f_0 * f_bar) / denom
+    q = lambda_ * f_bar^2 + k * f_0^2
+    dfmix_dy = y * q / denom^2
+    d2fmix_dy2 = q / denom^2 + 2 * lambda_ * k * y^2 / denom -
+                    2 * (lambda_ + k) * y^2 * q / denom^3
+    gxy = (x - 1.0)^2 * (x + 1.0)^2
+    hxx = (12 * x^2 - 4) * (f_bar - f_mix)
+    hxy = 4 * x * (x^2 - 1) * (k * y - dfmix_dy)
+    hyy = gxy * (k - d2fmix_dy2) + d2fmix_dy2
+    return SMatrix{2, 2}(hxx, hxy, hxy, hyy)
+end
+
+"""
+    crank_nicolson_position(x, rhs, half_dt)
+
+Solve `x_new + half_dt * gradient(x_new) = rhs` using damped Newton
+iterations. Failure stops the run: treating numerical failures as rejected
+Monte Carlo moves would silently condition the sampled noise distribution.
+"""
+function crank_nicolson_position(x::SVector{2, Float64}, rhs::SVector{2, Float64}, half_dt::Float64)
+    tolerance = 1e-12 * (1 + norm(rhs, Inf))
+    identity = one(SMatrix{2, 2, Float64, 4})
+    for _ in 1:40
+        residual = x + half_dt * gradient(x) - rhs
+        residual_norm = norm(residual, Inf)
+        residual_norm <= tolerance && return x
+        jacobian = identity + half_dt * potential_hessian(x)
+        correction = jacobian \ residual
+        step = 1.0
+        accepted = false
+        for _ in 1:20
+            candidate = x - step * correction
+            candidate_residual = candidate + half_dt * gradient(candidate) - rhs
+            if norm(candidate_residual, Inf) < residual_norm
+                x = candidate
+                accepted = true
+                break
+            end
+            step *= 0.5
+        end
+        accepted || break
+    end
+    error("Crank–Nicolson position solve did not converge; reduce dt and rerun.")
+end
+
+function integrate_crank_nicolson!(sys::ABPTrajectory, r::AbstractUnitRange{Int}; potential_active::Bool)
+    θ = sys.θs[first(r)]
+    x = sys.xs[first(r)]
+    half_dt = 0.5 * sys.dt
+    for time_index in r
+        ξ = sys.ξs[time_index]
+        θ_new = θ + sys.σ_R * ξ[3]
+        propulsion = sys.v * half_dt * (
+            SVector(cos(θ), sin(θ)) + SVector(cos(θ_new), sin(θ_new))
+        )
+        rhs = x + propulsion + sys.σ_T * SVector(ξ[1], ξ[2])
+        if potential_active
+            rhs -= half_dt * gradient(x)
+            x = crank_nicolson_position(x, rhs, half_dt)
+        else
+            x = rhs
+        end
+        θ = θ_new
+        sys.xs[time_index + 1] = x
+        sys.θs[time_index + 1] = θ
+    end
+    return sys
+end
+
 #Integration function for the ABP trajectory, with optional potential
 function integrate!(sys::ABPTrajectory, r::UnitRange{Int}=1:0; potential_active::Bool=false,)
     r = isempty(r) ? eachindex(sys.ξs) : r
+    isempty(r) && return sys
+    if sys.integrator === :crank_nicolson
+        return integrate_crank_nicolson!(sys, r; potential_active=potential_active)
+    end
 
     θ = sys.θs[first(r)]
     x = sys.xs[first(r)]
@@ -176,15 +269,20 @@ midpoint (Stratonovich) rule.  The same pass also locates the first
 left-to-right crossing of `x = crossing_x` and linearly interpolates its
 crossing ordinate and physical time.
 
-The returned named tuple contains `active_work`, `crossing_y`,
-`crossing_time`, and `has_crossing`.  Crossing values are `NaN` when no
-left-to-right crossing occurs.
+The returned named tuple contains `active_work`, `active_work_x`,
+`active_work_y`, `crossing_y`, `crossing_time`, and `has_crossing`.
+The components are the full-path integrals `v * integral cos(theta) dx`
+and `v * integral sin(theta) dy`, with the same midpoint rule. The crossing
+labels the path; it does not truncate either work integral. Crossing values
+are `NaN` when no left-to-right crossing occurs.
 """
 function active_work_and_first_lr_crossing(
     sys::ABPTrajectory;
     crossing_x::Real=0.0,
 )
     W_active = 0.0
+    W_active_x = 0.0
+    W_active_y = 0.0
     crossing_y = NaN
     crossing_time = NaN
     has_crossing = false
@@ -198,9 +296,15 @@ function active_work_and_first_lr_crossing(
         # Midpoint rule for the Stratonovich active-work integral.  The stored
         # angles are unwrapped, so the arithmetic midpoint is continuous.
         theta_mid = 0.5 * (sys.θs[k] + sys.θs[k + 1])
+        cos_mid = cos(theta_mid)
+        sin_mid = sin(theta_mid)
+        # Keep the existing total's arithmetic and summation order. Summing
+        # separately accumulated components would change floating-point totals.
         W_active += sys.v * (
-            cos(theta_mid) * dr[1] + sin(theta_mid) * dr[2]
+            cos_mid * dr[1] + sin_mid * dr[2]
         )
+        W_active_x += sys.v * (cos_mid * dr[1])
+        W_active_y += sys.v * (sin_mid * dr[2])
 
         if !has_crossing && r0[1] < x_cross <= r1[1]
             alpha = (x_cross - r0[1]) / (r1[1] - r0[1])
@@ -212,11 +316,24 @@ function active_work_and_first_lr_crossing(
 
     return (
         active_work = W_active,
+        active_work_x = W_active_x,
+        active_work_y = W_active_y,
         crossing_y = crossing_y,
         crossing_time = crossing_time,
         has_crossing = has_crossing,
     )
 end
+
+"""Full-path total and Cartesian components of midpoint active work."""
+function active_work_components(sys::ABPTrajectory)
+    metrics = active_work_and_first_lr_crossing(sys)
+    return (active_work=metrics.active_work,
+            active_work_x=metrics.active_work_x,
+            active_work_y=metrics.active_work_y)
+end
+
+active_work_x(sys::ABPTrajectory) = active_work_and_first_lr_crossing(sys).active_work_x
+active_work_y(sys::ABPTrajectory) = active_work_and_first_lr_crossing(sys).active_work_y
 
 active_work(sys::ABPTrajectory) =
     active_work_and_first_lr_crossing(sys).active_work

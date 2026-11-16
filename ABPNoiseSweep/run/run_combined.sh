@@ -15,6 +15,10 @@
 
 set -euo pipefail
 
+# Set ABP_INTEGRATOR=crank_nicolson to opt into the implicit update.
+: "${ABP_INTEGRATOR:=euler}"
+export ABP_INTEGRATOR
+
 
 # ============================================================
 # Project
@@ -305,4 +309,3 @@ printf 'Task output:                     %s\n' "$TASK_OUTPUT_DIR"
 printf 'Combined output:                 %s\n' "$COMBINED_RUN_DIR"
 
 echo "============================================================"
-```

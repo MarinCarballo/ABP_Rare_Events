@@ -2,7 +2,7 @@
 # Submit from ABPNoiseSweep after creating errors/ (Slurm opens logs first):
 #   mkdir -p errors
 #   sbatch run/submit_production_work_theta.sh
-#SBATCH --job-name=abp_work_theta_D0p025
+#SBATCH --job-name=DRAFT_abp_work_theta_D0p025
 #SBATCH --partition=nariman
 #SBATCH --exclude=nariman[09-12]
 #SBATCH --time=7-00:00:00
@@ -10,7 +10,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=128
 #SBATCH --mem=96G
-#SBATCH --array=0-14
+#SBATCH --array=0-22
 #SBATCH --error=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/errors/abp_work_theta_%A_%a.err
 #SBATCH --output=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/errors/abp_work_theta_%A_%a.out
 
@@ -22,9 +22,9 @@ PROJECT_DIR="${ABP_PROJECT_DIR:-/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNois
 cd "$PROJECT_DIR"
 mkdir -p "$PROJECT_DIR/data" "$PROJECT_DIR/errors"
 
-# Existing fixed-D speed grid: 15 tasks, one full MUCA -> production per speed.
+# Fixed-D grid bracketing the user-supplied critical speed near 0.32.
 # If adding velocities here, also update #SBATCH --array above.
-V_VALUES=(0.320 0.325 0.330 0.335 0.340 0.345 0.350 0.355 0.360 0.365 0.370 0.375 0.380 0.385 0.390)
+V_VALUES=(0.280 0.285 0.290 0.295 0.300 0.305 0.310 0.315 0.320 0.325 0.330 0.335 0.340 0.345 0.350 0.355 0.360 0.365 0.370 0.375 0.380 0.385 0.390)
 ARRAY_INDEX="${SLURM_ARRAY_TASK_ID:?Submit this script using sbatch --array.}"
 ARRAY_JOB_ID="${SLURM_ARRAY_JOB_ID:?Missing Slurm array job ID.}"
 if [[ ! "$ARRAY_INDEX" =~ ^[0-9]+$ ]] || (( ARRAY_INDEX >= ${#V_VALUES[@]} )); then
@@ -71,6 +71,20 @@ export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
 : "${ABP_ROUNDTRIP_TARGET:=50}"
 : "${ABP_SAVE_CSV:=true}"
 
+# Optional numerical update; Euler preserves the historical default.
+: "${ABP_INTEGRATOR:=euler}"
+export ABP_INTEGRATOR
+# pCN is a separate path-sampling move; it keeps Euler's physical update.
+: "${ABP_NOISE_PROPOSAL:=random_walk}"
+: "${ABP_BLOCK_PCN_BETA:=0.05}"
+: "${ABP_LOCAL_PCN_BETA:=0.8}"
+export ABP_NOISE_PROPOSAL ABP_BLOCK_PCN_BETA ABP_LOCAL_PCN_BETA
+
+# Storage-only settings: keep complete production examples for the notebook.
+: "${ABP_SAVED_PATH_TIME_THIN:=1}"
+: "${ABP_MAX_SAVED_PATHS_PER_WINDOW:=120}"
+export ABP_SAVED_PATH_TIME_THIN ABP_MAX_SAVED_PATHS_PER_WINDOW
+
 if (( ABP_N_PROD_CHAINS < 1 || ABP_N_PROD_CHAINS > JULIA_NUM_THREADS )); then
     echo "ERROR: production chains must be between 1 and allocated Julia threads." >&2
     exit 1
@@ -96,6 +110,7 @@ export ABP_SAVE_CSV
 
 echo "MUCA -> production with the installed move kernel"
 echo "D=0.025 | v=$ABP_V | array task=$ARRAY_INDEX"
+echo "Integrator=$ABP_INTEGRATOR"
 echo "Threads=$JULIA_NUM_THREADS | production chains=$ABP_N_PROD_CHAINS"
 echo "MUCA iterations=$ABP_N_ITER | final-iteration moves=$ABP_N_ITER_STEPS_PER_ITER"
 echo "Production moves=$ABP_N_PROD_OBS_TOTAL"
@@ -104,7 +119,7 @@ echo "Active-work stride=$ABP_ACTIVE_WORK_OBSERVATION_STRIDE | theta bins=$ABP_N
 echo "Path-point filter: x(t)>$ABP_PATH_FILTER_X_MIN"
 echo "Task output: $ABP_OUTPUT_DIR"
 
-"$JULIA_CMD" --project=. --threads="$JULIA_NUM_THREADS" scripts/run_fixed_D_speed_landscape.jl
+"$JULIA_CMD" --project=. --threads="$JULIA_NUM_THREADS" scripts/run_fixed_D_speed_landscape.jl "$@"
 
 # All task files use a D-only basename. Add v when collecting them for plotting.
 shopt -s nullglob

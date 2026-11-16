@@ -19,6 +19,7 @@ export abp_n_iter_for_D, abp_iteration_schedule_rows
 export run_abp_noise_sweep, main
 export endpoint_x, endpoint_y, endpoint_theta, endpoint_distance, path_y_int, mean_y, max_x
 export active_work, normalized_active_work, active_work_and_first_lr_crossing
+export active_work_components, active_work_x, active_work_y
 
 include("runtime.jl")
 include("model.jl")

@@ -14,6 +14,13 @@ using ABPNoiseSweep
     @test abp_n_iter_for_D(cfg, 0.005) == 127
 end
 
+include("model_integrator_tests.jl")
+include("calculation_audit_tests.jl")
+include("active_work_components_tests.jl")
+include("active_work_components_io_tests.jl")
+include("movie_paths_tests.jl")
+include("pipeline_tests.jl")
+
 @testset "trajectory construction" begin
     abp = ABP(Dt=0.01, Dr=0.01, v=0.36)
     traj = ABPTrajectory(abp, 0.1; dt=0.01)

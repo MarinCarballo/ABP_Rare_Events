@@ -1,0 +1,2 @@
+# Cluster scripts must remain directly executable after a Windows checkout.
+*.sh text eol=lf

@@ -80,6 +80,18 @@ function abp_make_prod_accumulator(
         active_work_sum2_biased       = zeros(Float64, length(edges_y_T) - 1),
         active_work_sum_unbiased      = zeros(Float64, length(edges_y_T) - 1),
         active_work_sum2_unbiased     = zeros(Float64, length(edges_y_T) - 1),
+        # Cartesian moments use the same observations, crossing bins, and
+        # weights as the total. The cross moment retains their covariance.
+        active_work_x_sum_biased      = zeros(Float64, length(edges_y_T) - 1),
+        active_work_x_sum2_biased     = zeros(Float64, length(edges_y_T) - 1),
+        active_work_y_sum_biased      = zeros(Float64, length(edges_y_T) - 1),
+        active_work_y_sum2_biased     = zeros(Float64, length(edges_y_T) - 1),
+        active_work_xy_sum_biased     = zeros(Float64, length(edges_y_T) - 1),
+        active_work_x_sum_unbiased    = zeros(Float64, length(edges_y_T) - 1),
+        active_work_x_sum2_unbiased   = zeros(Float64, length(edges_y_T) - 1),
+        active_work_y_sum_unbiased    = zeros(Float64, length(edges_y_T) - 1),
+        active_work_y_sum2_unbiased   = zeros(Float64, length(edges_y_T) - 1),
+        active_work_xy_sum_unbiased   = zeros(Float64, length(edges_y_T) - 1),
         crossing_time_sum_biased      = zeros(Float64, length(edges_y_T) - 1),
         crossing_time_sum_unbiased    = zeros(Float64, length(edges_y_T) - 1),
         n_active_work_observations    = [0],
@@ -156,6 +168,16 @@ function abp_merge_prod_accumulators!(a, b; max_saved_paths_per_window::Int, max
     a.active_work_sum2_biased    .+= b.active_work_sum2_biased
     a.active_work_sum_unbiased   .+= b.active_work_sum_unbiased
     a.active_work_sum2_unbiased  .+= b.active_work_sum2_unbiased
+    a.active_work_x_sum_biased   .+= b.active_work_x_sum_biased
+    a.active_work_x_sum2_biased  .+= b.active_work_x_sum2_biased
+    a.active_work_y_sum_biased   .+= b.active_work_y_sum_biased
+    a.active_work_y_sum2_biased  .+= b.active_work_y_sum2_biased
+    a.active_work_xy_sum_biased  .+= b.active_work_xy_sum_biased
+    a.active_work_x_sum_unbiased  .+= b.active_work_x_sum_unbiased
+    a.active_work_x_sum2_unbiased .+= b.active_work_x_sum2_unbiased
+    a.active_work_y_sum_unbiased  .+= b.active_work_y_sum_unbiased
+    a.active_work_y_sum2_unbiased .+= b.active_work_y_sum2_unbiased
+    a.active_work_xy_sum_unbiased .+= b.active_work_xy_sum_unbiased
     a.crossing_time_sum_biased   .+= b.crossing_time_sum_biased
     a.crossing_time_sum_unbiased .+= b.crossing_time_sum_unbiased
     a.n_active_work_observations[1]   += b.n_active_work_observations[1]
@@ -207,11 +229,18 @@ function abp_add_active_work_crossing!(
     end
 
     W_active = route_metrics.active_work
+    W_active_x = route_metrics.active_work_x
+    W_active_y = route_metrics.active_work_y
     tau_cross = route_metrics.crossing_time
 
     acc.active_work_mass_biased[ibin] += 1.0
     acc.active_work_sum_biased[ibin] += W_active
     acc.active_work_sum2_biased[ibin] += W_active^2
+    acc.active_work_x_sum_biased[ibin] += W_active_x
+    acc.active_work_x_sum2_biased[ibin] += W_active_x^2
+    acc.active_work_y_sum_biased[ibin] += W_active_y
+    acc.active_work_y_sum2_biased[ibin] += W_active_y^2
+    acc.active_work_xy_sum_biased[ibin] += W_active_x * W_active_y
     acc.crossing_time_sum_biased[ibin] += tau_cross
 
     if isfinite(unbias_weight) && unbias_weight > 0.0
@@ -219,6 +248,11 @@ function abp_add_active_work_crossing!(
         acc.active_work_mass2_unbiased[ibin] += unbias_weight^2
         acc.active_work_sum_unbiased[ibin] += unbias_weight * W_active
         acc.active_work_sum2_unbiased[ibin] += unbias_weight * W_active^2
+        acc.active_work_x_sum_unbiased[ibin] += unbias_weight * W_active_x
+        acc.active_work_x_sum2_unbiased[ibin] += unbias_weight * W_active_x^2
+        acc.active_work_y_sum_unbiased[ibin] += unbias_weight * W_active_y
+        acc.active_work_y_sum2_unbiased[ibin] += unbias_weight * W_active_y^2
+        acc.active_work_xy_sum_unbiased[ibin] += unbias_weight * (W_active_x * W_active_y)
         acc.crossing_time_sum_unbiased[ibin] += unbias_weight * tau_cross
     end
 
@@ -245,6 +279,8 @@ function abp_add_whole_path_conditioned_windows!(
     accumulate_theta = theta_path_window in path_window_indices
 
     W_active = 0.0
+    W_active_x = 0.0
+    W_active_y = 0.0
     crossing_y = NaN
     crossing_time = NaN
     has_crossing = false
@@ -259,9 +295,13 @@ function abp_add_whole_path_conditioned_windows!(
                 r1 = sys.xs[k + 1]
                 dr = r1 - r0
                 theta_mid = 0.5 * (sys.θs[k] + sys.θs[k + 1])
+                cos_mid = cos(theta_mid)
+                sin_mid = sin(theta_mid)
                 W_active += sys.v * (
-                    cos(theta_mid) * dr[1] + sin(theta_mid) * dr[2]
+                    cos_mid * dr[1] + sin_mid * dr[2]
                 )
+                W_active_x += sys.v * (cos_mid * dr[1])
+                W_active_y += sys.v * (sin_mid * dr[2])
 
                 if !has_crossing && r0[1] < x_cross <= r1[1]
                     alpha = (x_cross - r0[1]) / (r1[1] - r0[1])
@@ -292,6 +332,8 @@ function abp_add_whole_path_conditioned_windows!(
 
     return compute_route_metrics ? (
         active_work = W_active,
+        active_work_x = W_active_x,
+        active_work_y = W_active_y,
         crossing_y = crossing_y,
         crossing_time = crossing_time,
         has_crossing = has_crossing,
@@ -365,6 +407,17 @@ end
     return nothing
 end
 
+"""Indices for a display copy, always retaining both physical-time endpoints."""
+function abp_snapshot_indices(n::Int, thin::Int)
+    inds = collect(1:thin:n)
+    !isempty(inds) && last(inds) != n && push!(inds, n)
+    return inds
+end
+
+"""Deterministic cadence spanning a known run length within a snapshot budget."""
+abp_movie_effective_stride(requested::Int, n_steps::Int, capacity::Int) =
+    capacity > 0 ? max(requested, cld(n_steps, capacity)) : max(requested, 1)
+
 function abp_maybe_save_path!(
     acc,
     sys,
@@ -377,13 +430,19 @@ function abp_maybe_save_path!(
     w_path;
     max_saved_paths_per_window_chain::Int,
     saved_path_time_thin::Int,
+    chain_id::Int=0,
+    mcmc_step::Int=0,
 )
     length(acc.saved_paths[iw]) >= max_saved_paths_per_window_chain && return nothing
 
-    inds = 1:saved_path_time_thin:length(sys.xs)
+    inds = abp_snapshot_indices(length(sys.xs), saved_path_time_thin)
     push!(acc.saved_paths[iw], (
-        xs = copy(sys.xs[inds]),
+        xs = sys.xs[inds],
         thetas = mod2pi.(sys.θs[inds]),
+        thetas_unwrapped = sys.θs[inds],
+        physical_times = (inds .- 1) .* sys.dt,
+        chain_id = chain_id,
+        mcmc_step = mcmc_step,
         theta0 = mod2pi(sys.θs[1]),
         endpoint_x = xT_now,
         endpoint_y = yT_now,
@@ -412,24 +471,39 @@ function abp_maybe_save_movie_path!(
     w_path,
     max_movie_paths::Int,
     movie_path_time_thin::Int,
+    phase::Symbol=:production,
+    iteration::Int=0,
+    iteration_step::Int=mcmc_step,
+    sampling_step::Int=mcmc_step,
+    replace_last::Bool=false,
 )
     max_movie_paths <= 0 && return nothing
-    length(acc.movie_paths) >= max_movie_paths && return nothing
+    full = length(acc.movie_paths) >= max_movie_paths
+    full && !replace_last && return nothing
+    if !isempty(acc.movie_paths) && last(acc.movie_paths).mcmc_step == mcmc_step
+        return nothing
+    end
 
-    inds = 1:movie_path_time_thin:length(sys.xs)
-    push!(acc.movie_paths, (
-        movie_id = length(acc.movie_paths) + 1,
+    inds = abp_snapshot_indices(length(sys.xs), movie_path_time_thin)
+    snapshot = (
+        movie_id = full ? length(acc.movie_paths) : length(acc.movie_paths) + 1,
         chain_id = chain_id,
         mcmc_step = mcmc_step,
-        xs = copy(sys.xs[inds]),
-        thetas = copy(sys.θs[inds]),
+        phase = string(phase),
+        iteration = iteration,
+        iteration_step = iteration_step,
+        sampling_step = sampling_step,
+        xs = sys.xs[inds],
+        thetas = sys.θs[inds],
+        physical_times = (inds .- 1) .* sys.dt,
         endpoint_x = xT_now,
         endpoint_y = yT_now,
         y_mean = ymean_now,
         y_int = yint_now,
         bias_value = bias_value_now,
         unbias_weight_shifted = w_path,
-    ))
+    )
+    full ? (acc.movie_paths[end] = snapshot) : push!(acc.movie_paths, snapshot)
 
     return nothing
 end

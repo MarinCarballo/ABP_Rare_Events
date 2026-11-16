@@ -16,6 +16,10 @@
 
 set -euo pipefail
 
+# Set ABP_INTEGRATOR=crank_nicolson to opt into the implicit update.
+: "${ABP_INTEGRATOR:=euler}"
+export ABP_INTEGRATOR
+
 
 # ============================================================
 # Project

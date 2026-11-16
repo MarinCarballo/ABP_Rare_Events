@@ -11,17 +11,28 @@ function update!(
     Δξ::Float64=0.8;
     bins=nothing,
     potential_active::Bool=true,
+    noise_proposal::Symbol=:random_walk,
+    pcn_beta::Float64=0.8,
 )
+    noise_proposal in (:random_walk, :pcn) || error("noise_proposal must be :random_walk or :pcn.")
+    noise_proposal === :pcn && !(0 < pcn_beta <= 1) && error("pcn_beta must be in (0, 1].")
     noise_index = rand(alg.rng, eachindex(sys.ξs))
 
     old_ξ = sys.ξs[noise_index]
-    new_ξ = old_ξ + Δξ * (@SVector randn(alg.rng, 3))
+    new_ξ = if noise_proposal === :pcn
+        sqrt(1 - pcn_beta^2) * old_ξ + pcn_beta * (@SVector randn(alg.rng, 3))
+    else
+        old_ξ + Δξ * (@SVector randn(alg.rng, 3))
+    end
 
     log_prior_ratio = -0.5 * (sum(new_ξ .^ 2) - sum(old_ξ .^ 2))
 
-    if rand(alg.rng) < exp(min(0.0, log_prior_ratio))
-        sys.tmp_xs[noise_index:end] .= sys.xs[noise_index:end]
-        sys.tmp_θs[noise_index:end] .= sys.θs[noise_index:end]
+    # pCN is reversible with respect to the Gaussian prior, so only the
+    # endpoint bias requires a Metropolis test. Keep random-walk draw order.
+    if noise_proposal === :pcn || rand(alg.rng) < exp(min(0.0, log_prior_ratio))
+        n_suffix = length(sys.xs) - noise_index + 1
+        copyto!(sys.tmp_xs, noise_index, sys.xs, noise_index, n_suffix)
+        copyto!(sys.tmp_θs, noise_index, sys.θs, noise_index, n_suffix)
 
         d_old = obs(sys)
 
@@ -40,8 +51,8 @@ function update!(
             (!in_bin_range(d_old, bins) || !in_bin_range(d_new, bins))
 
         if outside_bins || !accept!(alg, d_new, d_old)
-            sys.xs[noise_index:end] .= sys.tmp_xs[noise_index:end]
-            sys.θs[noise_index:end] .= sys.tmp_θs[noise_index:end]
+            copyto!(sys.xs, noise_index, sys.tmp_xs, noise_index, n_suffix)
+            copyto!(sys.θs, noise_index, sys.tmp_θs, noise_index, n_suffix)
             sys.ξs[noise_index] = old_ξ
         end
     end
@@ -59,7 +70,11 @@ function block_update!(
     block_size::Int=100,
     bins=nothing,
     potential_active::Bool=true,
+    noise_proposal::Symbol=:random_walk,
+    pcn_beta::Float64=0.05,
 )
+    noise_proposal in (:random_walk, :pcn) || error("noise_proposal must be :random_walk or :pcn.")
+    noise_proposal === :pcn && !(0 < pcn_beta <= 1) && error("pcn_beta must be in (0, 1].")
     Nξ = length(sys.ξs)
 
     block_size = min(block_size, Nξ) # ensure block size does not exceed number of noise variables
@@ -67,25 +82,36 @@ function block_update!(
     i0 = rand(alg.rng, 1:Nξ) # randomly select the starting index of the block
     i1 = min(Nξ, i0 + block_size - 1) # randomly select ending index
 
-    old_ξs = copy(sys.ξs[i0:i1]) 
-    new_ξs = similar(old_ξs)
-
+    n_block = i1 - i0 + 1
     log_prior_ratio = 0.0
 
-    for k in eachindex(old_ξs) # loop over the selected block of noise variables
-        new_ξ = old_ξs[k] + Δξ * (@SVector randn(alg.rng, 3))
-        new_ξs[k] = new_ξ
+    for k in 1:n_block # chain-local proposal scratch; preserve draw/reduction order
+        old_ξ = sys.ξs[i0 + k - 1]
+        new_ξ = if noise_proposal === :pcn
+            sqrt(1 - pcn_beta^2) * old_ξ + pcn_beta * (@SVector randn(alg.rng, 3))
+        else
+            old_ξ + Δξ * (@SVector randn(alg.rng, 3))
+        end
+        sys.tmp_ξs[k] = new_ξ
 
-        log_prior_ratio += -0.5 * (sum(new_ξ .^ 2) - sum(old_ξs[k] .^ 2))
+        if noise_proposal === :random_walk
+            log_prior_ratio += -0.5 * (sum(new_ξ .^ 2) - sum(old_ξ .^ 2))
+        end
     end
 
-    if rand(alg.rng) < exp(min(0.0, log_prior_ratio))
-        sys.tmp_xs[i0:end] .= sys.xs[i0:end]
-        sys.tmp_θs[i0:end] .= sys.θs[i0:end]
+    if noise_proposal === :pcn || rand(alg.rng) < exp(min(0.0, log_prior_ratio))
+        n_suffix = length(sys.xs) - i0 + 1
+        copyto!(sys.tmp_xs, i0, sys.xs, i0, n_suffix)
+        copyto!(sys.tmp_θs, i0, sys.θs, i0, n_suffix)
 
         d_old = obs(sys)
 
-        sys.ξs[i0:i1] .= new_ξs
+        # Install the proposal and retain the old block in the same buffer.
+        for k in 1:n_block
+            old_ξ = sys.ξs[i0 + k - 1]
+            sys.ξs[i0 + k - 1] = sys.tmp_ξs[k]
+            sys.tmp_ξs[k] = old_ξ
+        end
 
         integrate!(
             sys,
@@ -100,9 +126,9 @@ function block_update!(
             (!in_bin_range(d_old, bins) || !in_bin_range(d_new, bins))
 
         if outside_bins || !accept!(alg, d_new, d_old)
-            sys.xs[i0:end] .= sys.tmp_xs[i0:end]
-            sys.θs[i0:end] .= sys.tmp_θs[i0:end]
-            sys.ξs[i0:i1] .= old_ξs
+            copyto!(sys.xs, i0, sys.tmp_xs, i0, n_suffix)
+            copyto!(sys.θs, i0, sys.tmp_θs, i0, n_suffix)
+            copyto!(sys.ξs, i0, sys.tmp_ξs, 1, n_block)
         end
     end
 
@@ -110,6 +136,8 @@ function block_update!(
 
     return sys
 end
+
+const ABP_BLOCK_SIZES = [50, 100, 250, 500, 1000]
 
 #only updates initial orientation for each MCMC step.
 function theta0_update!(
@@ -203,15 +231,23 @@ function make_abp_moves(
     move_weights::AbstractVector{<:Real}=Float64[0.0, 0.05, 0.55, 0.40],
     block_dxi::Real=0.05,
     local_dxi::Real=0.8,
+    noise_proposal::Symbol=:random_walk,
+    block_pcn_beta::Real=0.05,
+    local_pcn_beta::Real=0.8,
 )
     @assert length(move_weights) == 4 "move_weights must be [reflection, theta0, block, local]."
     @assert all(w -> w >= 0.0, move_weights) "move_weights must be nonnegative."
     @assert sum(move_weights) > 0.0 "At least one move weight must be positive."
     @assert block_dxi > 0.0 "block_dxi must be positive."
     @assert local_dxi > 0.0 "local_dxi must be positive."
+    @assert noise_proposal in (:random_walk, :pcn) "noise_proposal must be :random_walk or :pcn."
+    @assert 0 < block_pcn_beta <= 1 "block_pcn_beta must be in (0, 1]."
+    @assert 0 < local_pcn_beta <= 1 "local_pcn_beta must be in (0, 1]."
 
     block_dxi = Float64(block_dxi)
     local_dxi = Float64(local_dxi)
+    block_pcn_beta = Float64(block_pcn_beta)
+    local_pcn_beta = Float64(local_pcn_beta)
 
     moves = [
         (sys, alg) -> reflection_update!(
@@ -234,9 +270,11 @@ function make_abp_moves(
             alg,
             obs,
             block_dxi;
-            block_size=rand(alg.rng, [50, 100, 250, 500, 1000]),
+            block_size=rand(alg.rng, ABP_BLOCK_SIZES),
             bins=bins_bias,
             potential_active=potential_active,
+            noise_proposal=noise_proposal,
+            pcn_beta=block_pcn_beta,
         ),
 
         (sys, alg) -> update!(
@@ -246,6 +284,8 @@ function make_abp_moves(
             local_dxi;
             bins=bins_bias,
             potential_active=potential_active,
+            noise_proposal=noise_proposal,
+            pcn_beta=local_pcn_beta,
         ),
     ]
 

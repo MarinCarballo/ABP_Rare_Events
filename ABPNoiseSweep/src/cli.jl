@@ -30,6 +30,11 @@ function abp_apply_env_overrides!(cfg::ABPNoiseSweepConfig)
     haskey(ENV, "ABP_OUTPUT_DIR") && (cfg.output_dir = ENV["ABP_OUTPUT_DIR"])
 
     haskey(ENV, "ABP_TRAJECTORY_T") && (cfg.trajectory_T = parse(Float64, ENV["ABP_TRAJECTORY_T"]))
+    haskey(ENV, "ABP_DT") && (cfg.dt = parse(Float64, ENV["ABP_DT"]))
+    haskey(ENV, "ABP_V") && (cfg.v = parse(Float64, ENV["ABP_V"]))
+    haskey(ENV, "ABP_INTEGRATOR") && (cfg.integrator = Symbol(lowercase(strip(ENV["ABP_INTEGRATOR"]))))
+    haskey(ENV, "ABP_SAVED_PATH_TIME_THIN") && (cfg.saved_path_time_thin = parse(Int, ENV["ABP_SAVED_PATH_TIME_THIN"]))
+    haskey(ENV, "ABP_MAX_SAVED_PATHS_PER_WINDOW") && (cfg.max_saved_paths_per_window = parse(Int, ENV["ABP_MAX_SAVED_PATHS_PER_WINDOW"]))
 
     haskey(ENV, "ABP_N_ITER") && (cfg.n_iter = parse(Int, ENV["ABP_N_ITER"]))
     haskey(ENV, "ABP_N_ITER_STEPS_PER_ITER") && (cfg.n_iter_steps_per_iter = parse(Int, ENV["ABP_N_ITER_STEPS_PER_ITER"]))
@@ -38,6 +43,9 @@ function abp_apply_env_overrides!(cfg::ABPNoiseSweepConfig)
     haskey(ENV, "ABP_SCALE_N_ITER_WITH_D") && (cfg.scale_n_iter_with_D = abp_env_bool("ABP_SCALE_N_ITER_WITH_D", cfg.scale_n_iter_with_D))
     haskey(ENV, "ABP_BLOCK_DXI") && (cfg.block_dxi = parse(Float64, ENV["ABP_BLOCK_DXI"]))
     haskey(ENV, "ABP_LOCAL_DXI") && (cfg.local_dxi = parse(Float64, ENV["ABP_LOCAL_DXI"]))
+    haskey(ENV, "ABP_NOISE_PROPOSAL") && (cfg.noise_proposal = Symbol(lowercase(strip(ENV["ABP_NOISE_PROPOSAL"]))))
+    haskey(ENV, "ABP_BLOCK_PCN_BETA") && (cfg.block_pcn_beta = parse(Float64, ENV["ABP_BLOCK_PCN_BETA"]))
+    haskey(ENV, "ABP_LOCAL_PCN_BETA") && (cfg.local_pcn_beta = parse(Float64, ENV["ABP_LOCAL_PCN_BETA"]))
 
     haskey(ENV, "ABP_N_PROD_OBS_TOTAL") && (cfg.n_prod_obs_total = parse(Int, ENV["ABP_N_PROD_OBS_TOTAL"]))
     haskey(ENV, "ABP_N_PROD_CHAINS") && (cfg.n_prod_chains = parse(Int, ENV["ABP_N_PROD_CHAINS"]))
@@ -51,6 +59,9 @@ function abp_apply_env_overrides!(cfg::ABPNoiseSweepConfig)
     haskey(ENV, "ABP_N_PATH_THETA_BINS") && (cfg.n_path_theta_bins = parse(Int, ENV["ABP_N_PATH_THETA_BINS"]))
 
     haskey(ENV, "ABP_SAVE_MOVIE_PATHS") && (cfg.save_movie_paths = abp_env_bool("ABP_SAVE_MOVIE_PATHS", cfg.save_movie_paths))
+    haskey(ENV, "ABP_SAVE_MUCA_MOVIE_PATHS") && (cfg.save_muca_movie_paths = abp_env_bool("ABP_SAVE_MUCA_MOVIE_PATHS", cfg.save_muca_movie_paths))
+    haskey(ENV, "ABP_MUCA_MOVIE_STRIDE") && (cfg.muca_movie_stride = parse(Int, ENV["ABP_MUCA_MOVIE_STRIDE"]))
+    haskey(ENV, "ABP_MUCA_MOVIE_MAX_TRAJECTORIES") && (cfg.muca_movie_max_trajectories = parse(Int, ENV["ABP_MUCA_MOVIE_MAX_TRAJECTORIES"]))
     haskey(ENV, "ABP_MOVIE_CHAIN_ID") && (cfg.movie_chain_id = parse(Int, ENV["ABP_MOVIE_CHAIN_ID"]))
     haskey(ENV, "ABP_MOVIE_STRIDE") && (cfg.movie_stride = parse(Int, ENV["ABP_MOVIE_STRIDE"]))
     haskey(ENV, "ABP_MOVIE_PATH_TIME_THIN") && (cfg.movie_path_time_thin = parse(Int, ENV["ABP_MOVIE_PATH_TIME_THIN"]))
@@ -93,7 +104,14 @@ function abp_config_from_args(args=ARGS)
     "--no-csv" in args && (cfg.save_csv = false)
     "--show-plots" in args && (cfg.show_plots = true)
 
-    return abp_apply_env_overrides!(cfg)
+    abp_apply_env_overrides!(cfg)
+    # Explicit command-line selection takes precedence over the environment.
+    for arg in args
+        if startswith(arg, "--integrator=")
+            cfg.integrator = Symbol(lowercase(strip(split(arg, '='; limit=2)[2])))
+        end
+    end
+    return cfg
 end
 
 function abp_print_iteration_schedule(cfg::ABPNoiseSweepConfig)
@@ -117,6 +135,7 @@ function abp_print_config(cfg::ABPNoiseSweepConfig)
     println("  D_values = ", cfg.D_values)
     println("  move_weights [reflection, theta0, block, local] = ", cfg.move_weights)
     println("  trajectory_T = ", cfg.trajectory_T, " | dt = ", cfg.dt, " | v = ", cfg.v)
+    println("  integrator = ", cfg.integrator)
     println("  potential_active = ", cfg.potential_active)
     println("  n_iter = ", cfg.n_iter)
     println("  n_iter_steps_per_iter = ", cfg.n_iter_steps_per_iter,
@@ -124,7 +143,10 @@ function abp_print_config(cfg::ABPNoiseSweepConfig)
     println("  n_therm_muca = ", cfg.n_therm_muca)
     println("  D_scaling_reference = ", cfg.D_scaling_reference)
     println("  scale_n_iter_with_D = ", cfg.scale_n_iter_with_D)
-    println("  noise_proposal = additive Gaussian random-walk MH")
+    println("  noise_proposal = ", cfg.noise_proposal)
+    if cfg.noise_proposal === :pcn
+        println("  pCN beta (block/local) = ", cfg.block_pcn_beta, " / ", cfg.local_pcn_beta)
+    end
     println("  block_dxi = ", cfg.block_dxi)
     println("  local_dxi = ", cfg.local_dxi)
     println("  n_prod_obs_total = ", cfg.n_prod_obs_total)
@@ -135,6 +157,9 @@ function abp_print_config(cfg::ABPNoiseSweepConfig)
     println("  path_filter_x_min = ", cfg.path_filter_x_min)
     println("  n_path_theta_bins = ", cfg.n_path_theta_bins)
     println("  save_movie_paths = ", cfg.save_movie_paths)
+    println("  save_muca_movie_paths = ", cfg.save_muca_movie_paths,
+            " | stride = ", cfg.muca_movie_stride,
+            " | max trajectories = ", cfg.muca_movie_max_trajectories)
     if cfg.save_movie_paths
         println("  movie_chain_id = ", cfg.movie_chain_id)
         println("  movie_stride = ", cfg.movie_stride)

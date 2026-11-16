@@ -21,6 +21,9 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
     n_iter_effective = abp_n_iter_for_D(cfg, D)
 
     n_chains = Threads.nthreads()
+    if cfg.save_muca_movie_paths && cfg.muca_movie_max_trajectories > 0 && cfg.movie_chain_id > n_chains
+        error("movie_chain_id exceeds the number of MUCA chains ($n_chains).")
+    end
     backend = ThreadsBackend(n_chains)
 
     pmuca_algs = [
@@ -42,6 +45,7 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
             x0=cfg.x0_vec,
             θ0=:uniform,
             potential_active=cfg.potential_active,
+            integrator=cfg.integrator,
         )
         for i in 1:n_chains
     ]
@@ -54,6 +58,9 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         move_weights=cfg.move_weights,
         block_dxi=cfg.block_dxi,
         local_dxi=cfg.local_dxi,
+        noise_proposal=cfg.noise_proposal,
+        block_pcn_beta=cfg.block_pcn_beta,
+        local_pcn_beta=cfg.local_pcn_beta,
     )
 
     on_root(pmuca) do i
@@ -86,6 +93,22 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         round(Int, (cfg.n_iter_steps_per_iter * i_iter) / (n_iter_effective * n_chains)),
     )
 
+    # Only the selected chain writes this vector. Capture is observational:
+    # no random draws or modifications to trajectory/histogram state.
+    muca_movie_paths = Any[]
+    movie_acc = (movie_paths=muca_movie_paths,)
+    planned_sampling_steps = sum(n_sweeps_per_chain(i) for i in 1:n_iter_effective)
+    muca_movie_stride = abp_movie_effective_stride(
+        cfg.muca_movie_stride, planned_sampling_steps, cfg.muca_movie_max_trajectories,
+    )
+    completed_sampling_steps = 0
+    completed_mcmc_steps = 0
+    if cfg.save_muca_movie_paths
+        println("MUCA movie snapshots: chain=", cfg.movie_chain_id,
+                " | effective sampling stride=", muca_movie_stride,
+                " | max trajectories=", cfg.muca_movie_max_trajectories)
+    end
+
     println()
     println("============================================================")
     println("MUCA case: D=", D, " Dt=Dr")
@@ -93,9 +116,13 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
     println("D scaling reference=", cfg.D_scaling_reference,
             " | n_iter factor=", round(n_iter_factor; sigdigits=4),
             " | effective n_iter=", n_iter_effective)
-    println("proposal Δξ block=", round(cfg.block_dxi; sigdigits=4),
+    println("noise proposal=", cfg.noise_proposal,
+            " | proposal Δξ block=", round(cfg.block_dxi; sigdigits=4),
             " | proposal Δξ local=", round(cfg.local_dxi; sigdigits=4),
             " | move weights=", cfg.move_weights)
+    if cfg.noise_proposal === :pcn
+        println("pCN beta (block/local) = ", cfg.block_pcn_beta, " / ", cfg.local_pcn_beta)
+    end
     println("chains=", n_chains, " | bins=[", first(edges_bias), ", ", last(edges_bias), "] | dbias=", cfg.dbias)
         target_avg_roundtrips_per_chain = cfg.roundtrip_avg_target_fraction * n_chains
         println("early-stop target: average roundtrips per chain ≥ ", target_avg_roundtrips_per_chain,
@@ -109,7 +136,7 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         n_sweeps_i = n_sweeps_per_chain(i_iter)
 
         with_parallel(pmuca) do i, alg
-            sys = pmuca_sys[i]
+            local sys = pmuca_sys[i]
             rt  = pmuca_rts[i]
 
             for _ in 1:cfg.n_therm_muca
@@ -119,11 +146,31 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
             reset!(alg)
             reset!(rt)
 
-            for _ in 1:n_sweeps_i
+            for iteration_step in 1:n_sweeps_i
                 random_move!(sys, alg, pmuca_moves, pmuca_move_weights)
                 MonteCarloX.update!(rt, obs(sys))
+                sampling_step = completed_sampling_steps + iteration_step
+                if cfg.save_muca_movie_paths && i == cfg.movie_chain_id &&
+                   (sampling_step - 1) % muca_movie_stride == 0 &&
+                   cfg.movie_endpoint_x_min <= obs(sys) < cfg.movie_endpoint_x_max
+                    abp_maybe_save_movie_path!(
+                        movie_acc, sys;
+                        chain_id=i,
+                        mcmc_step=completed_mcmc_steps + cfg.n_therm_muca + iteration_step,
+                        xT_now=endpoint_x(sys), yT_now=endpoint_y(sys),
+                        ymean_now=mean_y(sys), yint_now=path_y_int(sys),
+                        bias_value_now=obs(sys), w_path=NaN,
+                        max_movie_paths=cfg.muca_movie_max_trajectories,
+                        movie_path_time_thin=cfg.movie_path_time_thin,
+                        phase=:muca, iteration=i_iter,
+                        iteration_step=iteration_step, sampling_step=sampling_step,
+                    )
+                end
             end
         end
+
+        completed_sampling_steps += n_sweeps_i
+        completed_mcmc_steps += cfg.n_therm_muca + n_sweeps_i
 
         merge_histograms!(pmuca)
 
@@ -200,6 +247,24 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         stop_iteration = length(iter_avg_roundtrips_per_chain)
     end
 
+    if cfg.save_muca_movie_paths && cfg.movie_chain_id <= n_chains
+        final_movie_sys = pmuca_sys[cfg.movie_chain_id]
+        if cfg.movie_endpoint_x_min <= obs(final_movie_sys) < cfg.movie_endpoint_x_max
+            abp_maybe_save_movie_path!(
+                movie_acc, final_movie_sys;
+                chain_id=cfg.movie_chain_id, mcmc_step=completed_mcmc_steps,
+                xT_now=endpoint_x(final_movie_sys), yT_now=endpoint_y(final_movie_sys),
+                ymean_now=mean_y(final_movie_sys), yint_now=path_y_int(final_movie_sys),
+                bias_value_now=obs(final_movie_sys), w_path=NaN,
+                max_movie_paths=cfg.muca_movie_max_trajectories,
+                movie_path_time_thin=cfg.movie_path_time_thin,
+                phase=:muca, iteration=stop_iteration,
+                iteration_step=n_sweeps_per_chain(stop_iteration),
+                sampling_step=completed_sampling_steps, replace_last=true,
+            )
+        end
+    end
+
     alg_final = Ref{Any}()
     on_root(pmuca) do i
         alg_final[] = deepcopy(algorithm(pmuca, i))
@@ -259,6 +324,8 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
         xT_min_extend = xT_min_extend,
         xT_max_extend = xT_max_extend,
         n_chains = n_chains,
+        movie_paths = muca_movie_paths,
+        movie_effective_stride = muca_movie_stride,
         n_muca_total = n_muca_total,
         t_muca = t_muca,
     )

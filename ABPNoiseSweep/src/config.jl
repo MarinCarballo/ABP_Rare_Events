@@ -6,6 +6,8 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Physical ABP trajectory integration time. 
     trajectory_T::Float64 = 40.0 #changed from 20.0 to 40.0 to allow more roundtrips at low D, which should help with convergence diagnostics and reduce noise in the results.
     dt::Float64 = 1e-2
+    # Numerical discretization only. Euler remains the historical default.
+    integrator::Symbol = :euler
     v::Float64 = 0.39
     x0_vec::Vector{Float64} = Float64[-1.0, 0.0]
     potential_active::Bool = true
@@ -40,6 +42,10 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # move_weights below.
     block_dxi::Float64 = 0.05
     local_dxi::Float64 = 0.8
+    # Optional Gaussian-prior-preserving pCN proposals; Euler is independent.
+    noise_proposal::Symbol = :random_walk
+    block_pcn_beta::Float64 = 0.05
+    local_pcn_beta::Float64 = 0.8
 
     # Move weights in this order:
     # [reflection_update, theta0_update, block_noise_update, local_noise_update]
@@ -89,6 +95,9 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     # Optional raw trajectory snapshots for movie diagnostics.
     # These are not used for probabilities; they are only for visualization.
     save_movie_paths::Bool = false
+    save_muca_movie_paths::Bool = false
+    muca_movie_stride::Int = 10_000
+    muca_movie_max_trajectories::Int = 5_000
     movie_chain_id::Int = 1
     movie_stride::Int = 10_000
     movie_path_time_thin::Int = 10
@@ -148,6 +157,7 @@ function abp_validate_config!(cfg::ABPNoiseSweepConfig)
     isempty(cfg.D_values) && error("D_values must not be empty.")
     any(D -> D <= 0.0, cfg.D_values) && error("All D values must be positive.")
     cfg.dt <= 0.0 && error("dt must be positive.")
+    cfg.integrator in (:euler, :crank_nicolson) || error("integrator must be :euler or :crank_nicolson.")
     cfg.trajectory_T <= 0.0 && error("trajectory_T must be positive.")
     cfg.n_iter < 1 && error("n_iter must be at least 1.")
     cfg.n_iter_steps_per_iter < 1 && error("n_iter_steps_per_iter must be positive.")
@@ -155,6 +165,9 @@ function abp_validate_config!(cfg::ABPNoiseSweepConfig)
     cfg.D_scaling_reference <= 0.0 && error("D_scaling_reference must be positive.")
     cfg.block_dxi <= 0.0 && error("block_dxi must be positive.")
     cfg.local_dxi <= 0.0 && error("local_dxi must be positive.")
+    cfg.noise_proposal in (:random_walk, :pcn) || error("noise_proposal must be :random_walk or :pcn.")
+    0.0 < cfg.block_pcn_beta <= 1.0 || error("block_pcn_beta must lie in (0, 1].")
+    0.0 < cfg.local_pcn_beta <= 1.0 || error("local_pcn_beta must lie in (0, 1].")
     length(cfg.move_weights) == 4 || error("move_weights must contain exactly four entries: [reflection, theta0, block, local].")
     any(w -> w < 0.0, cfg.move_weights) && error("move_weights must be nonnegative.")
     sum(cfg.move_weights) > 0.0 || error("At least one move weight must be positive.")
@@ -171,6 +184,8 @@ function abp_validate_config!(cfg::ABPNoiseSweepConfig)
     )
     cfg.movie_chain_id < 1 && error("movie_chain_id must be at least 1.")
     cfg.movie_stride < 1 && error("movie_stride must be at least 1.")
+    cfg.muca_movie_stride < 1 && error("muca_movie_stride must be at least 1.")
+    cfg.muca_movie_max_trajectories < 0 && error("muca_movie_max_trajectories must be non-negative.")
     cfg.movie_path_time_thin < 1 && error("movie_path_time_thin must be at least 1.")
     cfg.movie_max_trajectories < 0 && error("movie_max_trajectories must be non-negative.")
     cfg.movie_endpoint_x_min >= cfg.movie_endpoint_x_max && error("movie_endpoint_x_min must be smaller than movie_endpoint_x_max.")

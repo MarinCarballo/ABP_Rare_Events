@@ -10,6 +10,10 @@
 
 set -euo pipefail
 
+# Set ABP_INTEGRATOR=crank_nicolson to opt into the implicit update.
+: "${ABP_INTEGRATOR:=euler}"
+export ABP_INTEGRATOR
+
 PROJECT_DIR="/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep"
 cd "$PROJECT_DIR"
 

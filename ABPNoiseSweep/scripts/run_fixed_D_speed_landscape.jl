@@ -89,8 +89,8 @@ cfg = ABPNoiseSweepConfig(
     seed = 42,
 
     # Physical model: D is fixed; only V changes between array tasks.
-    trajectory_T = 40.0,
-    dt = 1e-2,
+    trajectory_T = env_float("ABP_TRAJECTORY_T", 40.0),
+    dt = env_float("ABP_DT", 1e-2),
     v = V,
     D_values = Float64[D],
     potential_active = true,
@@ -147,6 +147,29 @@ cfg = ABPNoiseSweepConfig(
     show_plots = false,
 )
 
+# Apply the same diagnostic/storage/integrator overrides as the generic runner.
+# This preserves the fixed-D physical setup above; no D override is applied.
+cfg.integrator = Symbol(lowercase(strip(get(ENV, "ABP_INTEGRATOR", "euler"))))
+cfg.noise_proposal = Symbol(lowercase(strip(get(ENV, "ABP_NOISE_PROPOSAL", "random_walk"))))
+cfg.block_pcn_beta = env_float("ABP_BLOCK_PCN_BETA", cfg.block_pcn_beta)
+cfg.local_pcn_beta = env_float("ABP_LOCAL_PCN_BETA", cfg.local_pcn_beta)
+cfg.saved_path_time_thin = env_int("ABP_SAVED_PATH_TIME_THIN", cfg.saved_path_time_thin)
+cfg.max_saved_paths_per_window = env_int("ABP_MAX_SAVED_PATHS_PER_WINDOW", cfg.max_saved_paths_per_window)
+cfg.save_movie_paths = env_bool("ABP_SAVE_MOVIE_PATHS", cfg.save_movie_paths)
+cfg.save_muca_movie_paths = env_bool("ABP_SAVE_MUCA_MOVIE_PATHS", cfg.save_muca_movie_paths)
+cfg.movie_chain_id = env_int("ABP_MOVIE_CHAIN_ID", cfg.movie_chain_id)
+cfg.movie_stride = env_int("ABP_MOVIE_STRIDE", cfg.movie_stride)
+cfg.movie_path_time_thin = env_int("ABP_MOVIE_PATH_TIME_THIN", cfg.movie_path_time_thin)
+cfg.movie_max_trajectories = env_int("ABP_MOVIE_MAX_TRAJECTORIES", cfg.movie_max_trajectories)
+cfg.muca_movie_stride = env_int("ABP_MUCA_MOVIE_STRIDE", cfg.muca_movie_stride)
+cfg.muca_movie_max_trajectories = env_int("ABP_MUCA_MOVIE_MAX_TRAJECTORIES", cfg.muca_movie_max_trajectories)
+cfg.movie_endpoint_x_min = env_float("ABP_MOVIE_ENDPOINT_X_MIN", cfg.movie_endpoint_x_min)
+cfg.movie_endpoint_x_max = env_float("ABP_MOVIE_ENDPOINT_X_MAX", cfg.movie_endpoint_x_max)
+for arg in ARGS
+    if startswith(arg, "--integrator=")
+        cfg.integrator = Symbol(lowercase(strip(split(arg, '='; limit=2)[2])))
+    end
+end
 abp_validate_config!(cfg)
 
 approx_muca_moves = round(
@@ -157,6 +180,8 @@ approx_muca_moves = round(
 println("============================================================")
 println("Fixed-noise ABP speed landscape: MUCA -> production")
 println("D = Dt = Dr = ", D, " | v = ", V)
+println("Integrator = ", cfg.integrator)
+println("Physical duration = ", cfg.trajectory_T, " | dt = ", cfg.dt)
 println("Julia threads = ", Threads.nthreads())
 println("MUCA iterations = ", N_MUCA_ITER)
 println("Approximate total MUCA sampling moves = ", approx_muca_moves)
@@ -170,6 +195,13 @@ println("Path-orientation theta bins = ", N_PATH_THETA_BINS)
 println("Active-work observation stride = ", ACTIVE_WORK_OBSERVATION_STRIDE)
 println("Output = ", OUTPUT_DIR)
 println("============================================================")
+
+# Inspect the complete cluster configuration without starting a simulation.
+if "--dry-run" in ARGS
+    ABPNoiseSweep.abp_print_config(cfg)
+    println("Dry run requested; no simulation was started.")
+    exit(0)
+end
 
 # D_values contains exactly one value.  The package therefore runs one MUCA
 # stage and then production immediately, using the newly learned weights.

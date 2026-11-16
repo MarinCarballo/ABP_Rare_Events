@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=abp_speed_D0p025
+#SBATCH --job-name=DRAFT_abp_speed_D0p025
 #SBATCH --partition=nariman
 #SBATCH --exclude=nariman[09-12]
 #SBATCH --time=7-00:00:00
@@ -7,7 +7,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=128
 #SBATCH --mem=96G
-#SBATCH --array=0-14
+#SBATCH --array=0-22
 #SBATCH --error=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/errors/abp_speed_D0p025_%A_%a.err
 #SBATCH --output=/home/nst/amarin/Desktop/ABP_Rare_Events/ABPNoiseSweep/errors/abp_speed_D0p025_%A_%a.out
 
@@ -19,8 +19,16 @@ cd "$PROJECT_DIR"
 mkdir -p "$PROJECT_DIR/errors" "$PROJECT_DIR/data"
 
 # One velocity per Slurm array task.  Noise is fixed at D=0.025 in the Julia
-# runner.  This gives 15 independent MUCA -> production simulations.
+# runner. This brackets the user-supplied critical speed near 0.32.
 V_VALUES=(
+    "0.280"
+    "0.285"
+    "0.290"
+    "0.295"
+    "0.300"
+    "0.305"
+    "0.310"
+    "0.315"
     "0.320"
     "0.325"
     "0.330"
@@ -50,6 +58,7 @@ V_TAG="${ABP_V//./p}"
 RUN_ROOT="${PROJECT_DIR}/data/abp_speed_D0p025_array_${SLURM_ARRAY_JOB_ID}"
 TASK_OUTPUT_DIR="${RUN_ROOT}/task_${ARRAY_INDEX}_v${V_TAG}"
 COMBINED_RUN_DIR="${RUN_ROOT}/combined"
+ABP_OUTPUT_DIR="$TASK_OUTPUT_DIR"
 
 mkdir -p "$TASK_OUTPUT_DIR" "$COMBINED_RUN_DIR/data"
 
@@ -77,11 +86,20 @@ JULIA_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
 
 : "${ABP_SAVE_CSV:=true}"
 
-export JULIA_NUM_THREADS ABP_V ABP_OUTPUT_DIR
-export ABP_N_ITER ABP_N_ITER_STEPS_PER_ITER ABP_N_THERM_MUCA
-export ABP_N_PROD_OBS_TOTAL ABP_N_PROD_CHAINS ABP_N_THERM_PROD
-export ABP_PATH_OBSERVATION_STRIDE ABP_PATH_TIME_STRIDE
-export ABP_PATH_FILTER_X_MIN ABP_SAVE_CSV
+# Optional discretization: sbatch --export=ALL,ABP_INTEGRATOR=crank_nicolson ...
+: "${ABP_INTEGRATOR:=euler}"
+export ABP_INTEGRATOR
+# pCN is a separate path-sampling move; it keeps Euler's physical update.
+: "${ABP_NOISE_PROPOSAL:=random_walk}"
+: "${ABP_BLOCK_PCN_BETA:=0.05}"
+: "${ABP_LOCAL_PCN_BETA:=0.8}"
+export ABP_NOISE_PROPOSAL ABP_BLOCK_PCN_BETA ABP_LOCAL_PCN_BETA
+
+# Storage-only settings: keep complete production examples for the notebook.
+: "${ABP_SAVED_PATH_TIME_THIN:=1}"
+: "${ABP_MAX_SAVED_PATHS_PER_WINDOW:=120}"
+export ABP_SAVED_PATH_TIME_THIN ABP_MAX_SAVED_PATHS_PER_WINDOW
+
 export JULIA_NUM_THREADS ABP_V ABP_OUTPUT_DIR
 export ABP_N_ITER ABP_N_ITER_STEPS_PER_ITER ABP_N_THERM_MUCA
 export ABP_N_PROD_OBS_TOTAL ABP_N_PROD_CHAINS ABP_N_THERM_PROD
@@ -95,6 +113,7 @@ export ABP_SAVE_CSV
 echo "============================================================"
 echo "Fixed-noise speed task: MUCA -> production"
 echo "D = 0.025 | v = ${ABP_V} | array task = ${ARRAY_INDEX}"
+echo "Integrator = ${ABP_INTEGRATOR}"
 echo "Threads = ${JULIA_NUM_THREADS} | production chains = ${ABP_N_PROD_CHAINS}"
 echo "MUCA iterations = ${ABP_N_ITER}"
 echo "MUCA final-iteration moves = ${ABP_N_ITER_STEPS_PER_ITER}"
@@ -103,7 +122,7 @@ echo "Task output = ${TASK_OUTPUT_DIR}"
 echo "============================================================"
 
 "$JULIA_CMD" --project=. --threads="$JULIA_NUM_THREADS" \
-    scripts/run_fixed_D_speed_landscape.jl
+    scripts/run_fixed_D_speed_landscape.jl "$@"
 
 # Collect plotting-ready results without filename collisions between speeds.
 shopt -s nullglob

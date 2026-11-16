@@ -1,5 +1,37 @@
 # JLD2 and CSV outputs for downstream plotting.
 
+function abp_write_movie_group!(file, group::AbstractString, paths)
+    file["$group/n_saved"] = length(paths)
+    for (j, path) in enumerate(paths)
+        base = "$group/$j"
+        for name in propertynames(path)
+            file["$base/$name"] = getproperty(path, name)
+        end
+        # Numeric component vectors are directly readable by h5py, independent
+        # of the JLD2 encoding used for the original Vector{SVector}.
+        file["$base/x"] = getindex.(path.xs, 1)
+        file["$base/y"] = getindex.(path.xs, 2)
+    end
+    return nothing
+end
+
+# The components share the existing trajectory weights and crossing-y bins.
+# Retain the cross moment: the variance of Wx + Wy includes 2*Cov(Wx, Wy).
+const ABP_WORK_COMPONENT_MOMENTS = (
+    ("sum_Wx", :active_work_x_sum),
+    ("sum_Wy", :active_work_y_sum),
+    ("sum_Wx2", :active_work_x_sum2),
+    ("sum_Wy2", :active_work_y_sum2),
+    ("sum_WxWy", :active_work_xy_sum),
+)
+
+function abp_write_work_component_moments!(file, base::AbstractString, acc, weighting::Symbol)
+    for (key, field) in ABP_WORK_COMPONENT_MOMENTS
+        file["$base/$key"] = getproperty(acc, Symbol(field, :_, weighting))
+    end
+    return nothing
+end
+
 function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
     abp_ensure_dir(cfg.output_dir)
     tag = abp_run_tag(D)
@@ -18,10 +50,17 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["metadata/Dr"] = Float64(D)
         file["metadata/v"] = cfg.v
         file["metadata/move_weights"] = cfg.move_weights
-        file["metadata/move_weights_order"] = ["reflection_update", "theta0_update", "block_random_walk_mh", "local_random_walk_mh"]
-        file["metadata/noise_proposal"] = "additive_gaussian_random_walk_mh"
+        file["metadata/move_weights_order"] = cfg.noise_proposal === :pcn ?
+            ["reflection_update", "theta0_update", "block_pcn", "local_pcn"] :
+            ["reflection_update", "theta0_update", "block_random_walk_mh", "local_random_walk_mh"]
+        file["metadata/noise_proposal"] = cfg.noise_proposal === :pcn ?
+            "pcn_gaussian_prior_preserving_mh" : "additive_gaussian_random_walk_mh"
+        file["metadata/noise_proposal_selection"] = string(cfg.noise_proposal)
+        file["metadata/block_pcn_beta"] = cfg.block_pcn_beta
+        file["metadata/local_pcn_beta"] = cfg.local_pcn_beta
         file["metadata/trajectory_T"] = cfg.trajectory_T
         file["metadata/dt"] = cfg.dt
+        file["metadata/integrator"] = string(cfg.integrator)
         file["metadata/x0"] = cfg.x0_vec
         file["metadata/potential_active"] = cfg.potential_active
         file["metadata/path_observation_stride"] = cfg.path_observation_stride
@@ -41,8 +80,28 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["metadata/movie_max_trajectories"] = cfg.movie_max_trajectories
         file["metadata/movie_endpoint_x_min"] = cfg.movie_endpoint_x_min
         file["metadata/movie_endpoint_x_max"] = cfg.movie_endpoint_x_max
+        file["metadata/save_muca_movie_paths"] = cfg.save_muca_movie_paths
+        file["metadata/muca_movie_stride"] = cfg.muca_movie_stride
+        file["metadata/muca_movie_max_trajectories"] = cfg.muca_movie_max_trajectories
+        file["metadata/muca_movie_effective_stride"] = muca.movie_effective_stride
+        selected_prod_chain = min(cfg.movie_chain_id, length(prod.n_steps_chain))
+        file["metadata/movie_effective_stride"] = abp_movie_effective_stride(
+            cfg.movie_stride, prod.n_steps_chain[selected_prod_chain], cfg.movie_max_trajectories,
+        )
+        file["metadata/movie_snapshot_selection"] =
+            "deterministic cadence across planned sampling steps, final state retained; no random draws"
+        file["metadata/movie_mcmc_step_definition"] =
+            "per-chain attempted moves; MUCA includes thermalization, production starts after thermalization"
+        file["metadata/muca_movie_reweighting_note"] =
+            "adaptive MUCA snapshots are diagnostics only; unbias_weight_shifted is NaN"
         file["metadata/active_work_definition"] =
             "W_a = v * integral e(theta) circle dr, midpoint Stratonovich rule, mobility=1"
+        file["metadata/active_work_component_definition"] =
+            "Wx = v sum cos((theta[k]+theta[k+1])/2) delta_x; Wy = v sum sin((theta[k]+theta[k+1])/2) delta_y; unwrapped theta, all physical steps from 0 to T, mobility=1"
+        file["metadata/active_work_component_moments"] =
+            "sum_Wx, sum_Wy, sum_Wx2, sum_Wy2, sum_WxWy use the same mass and crossing-y bins as total work; second/cross moments describe path spread, chain statistics support mean uncertainties"
+        file["metadata/active_work_time_interval"] =
+            "complete trajectory, 0 to (length(xs)-1)*dt; first crossing only labels the route"
         file["metadata/active_work_normalization"] = "W_a / (v^2 * trajectory_T)"
         file["metadata/active_work_endpoint_condition"] = "x(T) > 0.5"
         file["metadata/active_work_route_coordinate"] =
@@ -191,11 +250,13 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["active_work/biased/mass"] = acc.active_work_mass_biased
         file["active_work/biased/sum_W"] = acc.active_work_sum_biased
         file["active_work/biased/sum_W2"] = acc.active_work_sum2_biased
+        abp_write_work_component_moments!(file, "active_work/biased", acc, :biased)
         file["active_work/biased/sum_crossing_time"] = acc.crossing_time_sum_biased
         file["active_work/unbiased/mass"] = acc.active_work_mass_unbiased
         file["active_work/unbiased/mass2"] = acc.active_work_mass2_unbiased
         file["active_work/unbiased/sum_W"] = acc.active_work_sum_unbiased
         file["active_work/unbiased/sum_W2"] = acc.active_work_sum2_unbiased
+        abp_write_work_component_moments!(file, "active_work/unbiased", acc, :unbiased)
         file["active_work/unbiased/sum_crossing_time"] = acc.crossing_time_sum_unbiased
         file["active_work/diagnostics/n_sampled"] = acc.n_active_work_observations[1]
         file["active_work/diagnostics/n_no_crossing"] = acc.n_active_work_no_crossing[1]
@@ -243,6 +304,7 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
             file["$work_base/unbiased/mass2"] = chain_acc.active_work_mass2_unbiased
             file["$work_base/unbiased/sum_W"] = chain_acc.active_work_sum_unbiased
             file["$work_base/unbiased/sum_W2"] = chain_acc.active_work_sum2_unbiased
+            abp_write_work_component_moments!(file, "$work_base/unbiased", chain_acc, :unbiased)
             file["$work_base/unbiased/sum_crossing_time"] =
                 chain_acc.crossing_time_sum_unbiased
             file["$work_base/diagnostics/n_sampled"] =
@@ -272,21 +334,8 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["roundtrips/final_count"] = acc.rt_final_count[1]
 
         # Raw movie path snapshots, if requested.
-        file["movie_trajectories/n_saved"] = length(acc.movie_paths)
-        for (j, path) in enumerate(acc.movie_paths)
-            base = "movie_trajectories/$j"
-            file["$base/movie_id"] = j
-            file["$base/chain_id"] = path.chain_id
-            file["$base/mcmc_step"] = path.mcmc_step
-            file["$base/xs"] = path.xs
-            file["$base/thetas"] = path.thetas
-            file["$base/endpoint_x"] = path.endpoint_x
-            file["$base/endpoint_y"] = path.endpoint_y
-            file["$base/y_mean"] = path.y_mean
-            file["$base/y_int"] = path.y_int
-            file["$base/bias_value"] = path.bias_value
-            file["$base/unbias_weight_shifted"] = path.unbias_weight_shifted
-        end
+        abp_write_movie_group!(file, "movie_trajectories", acc.movie_paths)
+        abp_write_movie_group!(file, "muca_movie_trajectories", muca.movie_paths)
 
         # Conditional endpoint windows
         file["conditional_windows/order"] = window_keys
@@ -321,6 +370,12 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
             for (j, path) in enumerate(acc.saved_paths[iw])
                 file["saved_trajectories/$key/$j/xs"] = path.xs
                 file["saved_trajectories/$key/$j/thetas"] = path.thetas
+                file["saved_trajectories/$key/$j/thetas_unwrapped"] = path.thetas_unwrapped
+                file["saved_trajectories/$key/$j/physical_times"] = path.physical_times
+                file["saved_trajectories/$key/$j/x"] = getindex.(path.xs, 1)
+                file["saved_trajectories/$key/$j/y"] = getindex.(path.xs, 2)
+                file["saved_trajectories/$key/$j/chain_id"] = path.chain_id
+                file["saved_trajectories/$key/$j/mcmc_step"] = path.mcmc_step
                 file["saved_trajectories/$key/$j/theta0"] = path.theta0
                 file["saved_trajectories/$key/$j/endpoint_x"] = path.endpoint_x
                 file["saved_trajectories/$key/$j/endpoint_y"] = path.endpoint_y
@@ -370,6 +425,94 @@ end
 
 function abp_write_key_value_csv(path::AbstractString, pairs)
     return abp_write_csv(path, ["key", "value"], ((first(pair), last(pair)) for pair in pairs))
+end
+
+abp_has_work_components(file, base::AbstractString) =
+    all(moment -> haskey(file, "$base/$(first(moment))"), ABP_WORK_COMPONENT_MOMENTS)
+
+function abp_read_work_component_moments(file, base::AbstractString, n_bins::Int)
+    moments = (; (Symbol(key) => Float64.(vec(collect(file["$base/$key"])))
+                  for (key, _) in ABP_WORK_COMPONENT_MOMENTS)...)
+    all(a -> length(a) == n_bins, values(moments)) ||
+        error("Active-work component arrays do not match crossing-y bins at $base.")
+    return moments
+end
+
+"""Export new component moments separately; legacy files keep their total-work CSVs."""
+function abp_export_work_component_csvs(file, case_dir::AbstractString)
+    weightings = ("biased", "unbiased")
+    all(weighting -> abp_has_work_components(file, "active_work/$weighting"), weightings) ||
+        return String[]
+
+    edges = Float64.(collect(file["active_work/crossing_y_bins"]))
+    centers = abp_centers_from_edges(edges)
+    n_bins = length(centers)
+    scale = Float64(file["metadata/v"])^2 * Float64(file["metadata/trajectory_T"])
+    normalization = isfinite(scale) && scale > 0.0 ? scale : NaN
+    rows = NamedTuple[]
+    for weighting in weightings
+        base = "active_work/$weighting"
+        moments = abp_read_work_component_moments(file, base, n_bins)
+        masses = Float64.(vec(collect(file["$base/mass"])))
+        length(masses) == n_bins || error("Active-work masses do not match crossing-y bins at $base.")
+        for i in eachindex(centers)
+            mass = masses[i]
+            mean_x = mass > 0.0 ? moments.sum_Wx[i] / mass : NaN
+            mean_y = mass > 0.0 ? moments.sum_Wy[i] / mass : NaN
+            var_x = mass > 0.0 ? max(0.0, moments.sum_Wx2[i] / mass - mean_x^2) : NaN
+            var_y = mass > 0.0 ? max(0.0, moments.sum_Wy2[i] / mass - mean_y^2) : NaN
+            covariance = mass > 0.0 ? moments.sum_WxWy[i] / mass - mean_x * mean_y : NaN
+            push!(rows, (
+                weighting=weighting,
+                crossing_y_left=edges[i], crossing_y_right=edges[i+1],
+                crossing_y_center=centers[i], mass=mass,
+                sum_Wx=moments.sum_Wx[i], sum_Wy=moments.sum_Wy[i],
+                sum_Wx2=moments.sum_Wx2[i], sum_Wy2=moments.sum_Wy2[i],
+                sum_WxWy=moments.sum_WxWy[i],
+                mean_Wx=mean_x, mean_Wy=mean_y,
+                std_Wx=sqrt(var_x), std_Wy=sqrt(var_y), covariance_Wx_Wy=covariance,
+                mean_normalized_Wx=mean_x / normalization,
+                mean_normalized_Wy=mean_y / normalization,
+            ))
+        end
+    end
+    outs = [abp_write_csv(
+        joinpath(case_dir, "active_work_components_vs_crossing_y.csv"),
+        ["weighting", "crossing_y_left", "crossing_y_right", "crossing_y_center", "mass",
+         "sum_Wx", "sum_Wy", "sum_Wx2", "sum_Wy2", "sum_WxWy", "mean_Wx", "mean_Wy",
+         "std_Wx", "std_Wy", "covariance_Wx_Wy", "mean_normalized_Wx", "mean_normalized_Wy"],
+        rows,
+    )]
+
+    n_chains = haskey(file, "chain_statistics/n_chains") ? Int(file["chain_statistics/n_chains"]) : 0
+    n_chains > 0 || return outs
+    all(chain_id -> abp_has_work_components(file,
+        "chain_statistics/chains/$chain_id/active_work/unbiased"), 1:n_chains) || return outs
+    chain_rows = NamedTuple[]
+    for chain_id in 1:n_chains
+        base = "chain_statistics/chains/$chain_id/active_work/unbiased"
+        moments = abp_read_work_component_moments(file, base, n_bins)
+        masses = Float64.(vec(collect(file["$base/mass"])))
+        squared_masses = Float64.(vec(collect(file["$base/mass2"])))
+        length(masses) == length(squared_masses) == n_bins ||
+            error("Chain active-work masses do not match crossing-y bins at $base.")
+        for i in eachindex(centers)
+            push!(chain_rows, (
+                chain_id=chain_id,
+                crossing_y_left=edges[i], crossing_y_right=edges[i+1],
+                crossing_y_center=centers[i], mass=masses[i], mass2=squared_masses[i],
+                sum_Wx=moments.sum_Wx[i], sum_Wy=moments.sum_Wy[i],
+                sum_Wx2=moments.sum_Wx2[i], sum_Wy2=moments.sum_Wy2[i],
+                sum_WxWy=moments.sum_WxWy[i],
+            ))
+        end
+    end
+    push!(outs, abp_write_csv(
+        joinpath(case_dir, "chain_active_work_components_vs_crossing_y.csv"),
+        ["chain_id", "crossing_y_left", "crossing_y_right", "crossing_y_center", "mass", "mass2",
+         "sum_Wx", "sum_Wy", "sum_Wx2", "sum_Wy2", "sum_WxWy"], chain_rows,
+    ))
+    return outs
 end
 
 function abp_safe_pdf_from_mass(counts::AbstractVector, edges::AbstractVector)
@@ -449,7 +592,10 @@ function abp_average_endpoint_positive_trajectory_rows(saved_paths; dt::Real, sa
 
         push!(rows, (
             time_index = time_index,
-            time = (time_index - 1) * saved_path_time_thin * Float64(dt),
+            time = !isempty(saved_paths) && hasproperty(first(saved_paths), :physical_times) &&
+                   first(saved_paths).physical_times !== nothing ?
+                first(saved_paths).physical_times[time_index] :
+                (time_index - 1) * saved_path_time_thin * Float64(dt),
             biased_count = bcount,
             biased_mean_x = bmean_x,
             biased_mean_y = bmean_y,
@@ -464,6 +610,50 @@ function abp_average_endpoint_positive_trajectory_rows(saved_paths; dt::Real, sa
     end
 
     return rows
+end
+
+function abp_export_movie_csvs(file, case_dir, group, prefix, default_phase)
+    haskey(file, "$group/n_saved") || return String[]
+    n_movie = Int(file["$group/n_saved"])
+    n_movie > 0 || return String[]
+    dt = Float64(file["metadata/dt"])
+    thin = Int(file["metadata/movie_path_time_thin"])
+    summary_path = joinpath(case_dir, "$(prefix)_trajectory_summary.csv")
+    long_path = joinpath(case_dir, "$(prefix)_trajectories_long.csv")
+    summary_header = ["movie_id", "chain_id", "mcmc_step", "n_points", "endpoint_x", "endpoint_y", "y_mean", "y_int", "bias_value", "unbias_weight_shifted", "phase", "iteration", "iteration_step", "sampling_step"]
+    long_header = ["movie_id", "chain_id", "mcmc_step", "path_index", "physical_time", "x", "y", "theta", "cos_theta", "sin_theta", "endpoint_x", "endpoint_y", "y_mean", "y_int", "bias_value", "unbias_weight_shifted", "phase", "iteration", "iteration_step", "sampling_step"]
+    open(summary_path, "w") do summary_io
+        open(long_path, "w") do long_io
+            println(summary_io, join(summary_header, ","))
+            println(long_io, join(long_header, ","))
+            for movie_id in 1:n_movie
+                base = "$group/$movie_id"
+                xs = file["$base/xs"]
+                thetas = file["$base/thetas"]
+                times = haskey(file, "$base/physical_times") ?
+                    file["$base/physical_times"] : (0:length(xs)-1) .* (thin * dt)
+                chain_id = Int(file["$base/chain_id"])
+                mcmc_step = Int(file["$base/mcmc_step"])
+                phase = haskey(file, "$base/phase") ? String(file["$base/phase"]) : default_phase
+                iteration = haskey(file, "$base/iteration") ? Int(file["$base/iteration"]) : 0
+                iteration_step = haskey(file, "$base/iteration_step") ? Int(file["$base/iteration_step"]) : mcmc_step
+                sampling_step = haskey(file, "$base/sampling_step") ? Int(file["$base/sampling_step"]) : mcmc_step
+                # These six scalar diagnostics are identical along each path.
+                diagnostics = Tuple(Float64(file["$base/$name"]) for name in
+                    ("endpoint_x", "endpoint_y", "y_mean", "y_int", "bias_value", "unbias_weight_shifted"))
+                tail = (diagnostics..., phase, iteration, iteration_step, sampling_step)
+                summary_row = (movie_id, chain_id, mcmc_step, length(xs), tail...)
+                println(summary_io, join(abp_csv_field.(summary_row), ","))
+                for k in eachindex(xs)
+                    theta = Float64(thetas[k])
+                    row = (movie_id, chain_id, mcmc_step, k, times[k],
+                           xs[k][1], xs[k][2], theta, cos(theta), sin(theta), tail...)
+                    println(long_io, join(abp_csv_field.(row), ","))
+                end
+            end
+        end
+    end
+    return [summary_path, long_path]
 end
 
 function abp_export_case_data_csvs(file_path::AbstractString; output_dir::AbstractString=joinpath(dirname(file_path), "data"))
@@ -549,78 +739,12 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             end
         end
 
-        # Raw trajectory snapshots for movie diagnostics.
-        if haskey(file, "movie_trajectories/n_saved")
-            n_movie = Int(file["movie_trajectories/n_saved"])
-            if n_movie > 0
-                dt = Float64(file["metadata/dt"])
-                movie_time_thin = Int(file["metadata/movie_path_time_thin"])
-
-                summary_rows = NamedTuple[]
-                long_rows = NamedTuple[]
-
-                for movie_id in 1:n_movie
-                    base = "movie_trajectories/$movie_id"
-                    xs = file["$base/xs"]
-                    thetas = collect(file["$base/thetas"])
-                    chain_id = Int(file["$base/chain_id"])
-                    mcmc_step = Int(file["$base/mcmc_step"])
-                    endpoint_x = Float64(file["$base/endpoint_x"])
-                    endpoint_y = Float64(file["$base/endpoint_y"])
-                    y_mean = Float64(file["$base/y_mean"])
-                    y_int = Float64(file["$base/y_int"])
-                    bias_value = Float64(file["$base/bias_value"])
-                    unbias_weight_shifted = Float64(file["$base/unbias_weight_shifted"])
-
-                    push!(summary_rows, (
-                        movie_id = movie_id,
-                        chain_id = chain_id,
-                        mcmc_step = mcmc_step,
-                        n_points = length(xs),
-                        endpoint_x = endpoint_x,
-                        endpoint_y = endpoint_y,
-                        y_mean = y_mean,
-                        y_int = y_int,
-                        bias_value = bias_value,
-                        unbias_weight_shifted = unbias_weight_shifted,
-                    ))
-
-                    for (path_index, point) in enumerate(xs)
-                        theta = Float64(thetas[path_index])
-                        push!(long_rows, (
-                            movie_id = movie_id,
-                            chain_id = chain_id,
-                            mcmc_step = mcmc_step,
-                            path_index = path_index,
-                            physical_time = (path_index - 1) * movie_time_thin * dt,
-                            x = Float64(point[1]),
-                            y = Float64(point[2]),
-                            theta = theta,
-                            cos_theta = cos(theta),
-                            sin_theta = sin(theta),
-                            endpoint_x = endpoint_x,
-                            endpoint_y = endpoint_y,
-                            y_mean = y_mean,
-                            y_int = y_int,
-                            bias_value = bias_value,
-                            unbias_weight_shifted = unbias_weight_shifted,
-                        ))
-                    end
-                end
-
-                push!(outs, abp_write_csv(
-                    joinpath(case_dir, "movie_trajectory_summary.csv"),
-                    ["movie_id", "chain_id", "mcmc_step", "n_points", "endpoint_x", "endpoint_y", "y_mean", "y_int", "bias_value", "unbias_weight_shifted"],
-                    summary_rows,
-                ))
-
-                push!(outs, abp_write_csv(
-                    joinpath(case_dir, "movie_trajectories_long.csv"),
-                    ["movie_id", "chain_id", "mcmc_step", "path_index", "physical_time", "x", "y", "theta", "cos_theta", "sin_theta", "endpoint_x", "endpoint_y", "y_mean", "y_int", "bias_value", "unbias_weight_shifted"],
-                    long_rows,
-                ))
-            end
-        end
+        # Stream raw movie trajectories: memory scales with one snapshot, not
+        # with every physical-time point in a potentially long movie.
+        append!(outs, abp_export_movie_csvs(file, case_dir,
+            "movie_trajectories", "movie", "production"))
+        append!(outs, abp_export_movie_csvs(file, case_dir,
+            "muca_movie_trajectories", "muca_movie", "muca"))
 
         x_edges = collect(file["histograms/bins_x_T"])
         x_centers = abp_centers_from_edges(x_edges)
@@ -714,6 +838,8 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             end
         end
 
+        append!(outs, abp_export_work_component_csvs(file, case_dir))
+
         path_y_edges = collect(file["histograms/bins_path_y"])
         path_y_centers = abp_centers_from_edges(path_y_edges)
         path_x_edges = collect(file["histograms/bins_path_x"])
@@ -781,6 +907,8 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             if n_saved > 0
                 saved_paths = [(
                     xs = file["saved_trajectories/x_gt_0p5/$j/xs"],
+                    physical_times = haskey(file, "saved_trajectories/x_gt_0p5/$j/physical_times") ?
+                        file["saved_trajectories/x_gt_0p5/$j/physical_times"] : nothing,
                     thetas = haskey(file, "saved_trajectories/x_gt_0p5/$j/thetas") ?
                         file["saved_trajectories/x_gt_0p5/$j/thetas"] : Float64[],
                     theta0 = file["saved_trajectories/x_gt_0p5/$j/theta0"],
