@@ -8,9 +8,11 @@ chain statistics, active work, and optional trajectory snapshots.
 - [Physics, equations, algorithms, errors, and usage](docs/physics_and_usage.md)
 - [Brief change and audit report](REPORT.md)
 
-The potential, force, noise convention, and default Euler–Maruyama update are
-preserved. Crank–Nicolson is an explicit option. Its finite-step trajectories
-differ from Euler, so comparisons require a time-step convergence check.
+The default potential (`lambda=2.5`), force, noise convention, and Euler–Maruyama
+update are preserved. The new `lambda=8` submission makes the requested
+potential-parameter change. Crank–Nicolson is an explicit option. Its
+finite-step trajectories differ from Euler, so comparisons require a time-step
+convergence check.
 
 ## Install and check
 
@@ -52,6 +54,32 @@ The speed array covers `0.280:0.005:0.390`, including speeds below and above the
 user-specified critical speed `0.32`. The supplied cluster wrappers contain
 large research workloads; inspect their environment defaults before submission.
 Cluster paths and the Julia executable must match your installation.
+
+For the new two-potential comparison, deploy the updated `src/` and fixed-D
+runner together with these submission files, then run from the project root:
+
+```bash
+mkdir -p errors
+sbatch run/submit_production_work_theta_lambda2p5.sh
+sbatch run/submit_production_work_theta_lambda8.sh
+```
+
+Each array has 29 speeds: `0.200, 0.240, 0.260`, `0.280:0.005:0.390`, and
+`0.400, 0.450, 0.500`, at `D=0.025`, `T=40`, and `dt=0.01`. Both retain
+Euler, random-walk proposals, the existing workload, 128 CPUs, 96 GB, and a
+seven-day limit. They write separate lambda-tagged run directories. Load one
+lambda run at a time in notebooks, whose grouping currently uses `(D,v,T)`.
+The `0.32` critical-speed reference is supplied for lambda 2.5; lambda 8 may
+have a different threshold. No cluster execution or completion time has been
+verified, and no job was submitted.
+
+Configuration preflight accepts `bash <submission-file> --dry-run` with Slurm
+array variables set and exits before result collection; see the
+[full example](docs/physics_and_usage.md#9-entry-points-and-cluster-use).
+The scripts default to the cluster Julia path. Use
+`sbatch <submission-file> --integrator=crank_nicolson` for the optional update.
+Older backend code ignores the new lambda setting, so copying only the shell
+scripts would not produce the requested lambda 8 potential.
 
 ## Analyze
 

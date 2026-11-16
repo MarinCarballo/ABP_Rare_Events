@@ -11,6 +11,8 @@ Base.@kwdef mutable struct ABPNoiseSweepConfig
     v::Float64 = 0.39
     x0_vec::Vector{Float64} = Float64[-1.0, 0.0]
     potential_active::Bool = true
+    # Potential parameter; k=0.3 remains fixed. Historical lambda is 2.5.
+    potential_lambda::Float64 = 2.5
 
     # Noise sweep. D is used as Dt = Dr = D.
     D_values::Vector{Float64} = Float64[0.1, 0.01, 0.005]
@@ -154,6 +156,7 @@ function abp_iteration_schedule_rows(cfg::ABPNoiseSweepConfig)
 end
 
 function abp_validate_config!(cfg::ABPNoiseSweepConfig)
+    isfinite(cfg.potential_lambda) && cfg.potential_lambda > 0.0 || error("potential_lambda must be finite and positive.")
     isempty(cfg.D_values) && error("D_values must not be empty.")
     any(D -> D <= 0.0, cfg.D_values) && error("All D values must be positive.")
     cfg.dt <= 0.0 && error("dt must be positive.")

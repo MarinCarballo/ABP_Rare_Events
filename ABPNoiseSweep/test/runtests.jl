@@ -15,6 +15,7 @@ using ABPNoiseSweep
 end
 
 include("model_integrator_tests.jl")
+include("potential_lambda_tests.jl")
 include("calculation_audit_tests.jl")
 include("active_work_components_tests.jl")
 include("active_work_components_io_tests.jl")

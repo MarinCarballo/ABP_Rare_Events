@@ -5,7 +5,7 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
     bias_name = "endpoint_x"
     bias_label = "x(T)"
 
-    abp = ABP(Dt=Float64(D), v=cfg.v, Dr=Float64(D))
+    abp = ABP(Dt=Float64(D), v=cfg.v, Dr=Float64(D), potential_lambda=cfg.potential_lambda)
     bins_bias = cfg.bias_min:cfg.dbias:cfg.bias_max
     edges_bias = collect(bins_bias)
     centers_bias = abp_centers_from_edges(edges_bias)
@@ -113,6 +113,7 @@ function abp_run_muca_one_case(cfg::ABPNoiseSweepConfig, D::Real)
     println("============================================================")
     println("MUCA case: D=", D, " Dt=Dr")
     println("trajectory_T=", cfg.trajectory_T, " | tail_temperature=", tail_temperature, " | slope=", -1/tail_temperature)
+    println("potential lambda=", cfg.potential_lambda, " | k=0.3")
     println("D scaling reference=", cfg.D_scaling_reference,
             " | n_iter factor=", round(n_iter_factor; sigdigits=4),
             " | effective n_iter=", n_iter_effective)

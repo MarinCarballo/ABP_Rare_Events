@@ -94,6 +94,7 @@ cfg = ABPNoiseSweepConfig(
     v = V,
     D_values = Float64[D],
     potential_active = true,
+    potential_lambda = env_float("ABP_POTENTIAL_LAMBDA", 2.5),
 
     # MUCA on x(T).  No D-dependent scaling because D is fixed.
     bias_min = -1.8,
@@ -168,6 +169,8 @@ cfg.movie_endpoint_x_max = env_float("ABP_MOVIE_ENDPOINT_X_MAX", cfg.movie_endpo
 for arg in ARGS
     if startswith(arg, "--integrator=")
         cfg.integrator = Symbol(lowercase(strip(split(arg, '='; limit=2)[2])))
+    elseif startswith(arg, "--potential-lambda=")
+        cfg.potential_lambda = parse(Float64, split(arg, '='; limit=2)[2])
     end
 end
 abp_validate_config!(cfg)
@@ -180,6 +183,7 @@ approx_muca_moves = round(
 println("============================================================")
 println("Fixed-noise ABP speed landscape: MUCA -> production")
 println("D = Dt = Dr = ", D, " | v = ", V)
+println("Potential lambda = ", cfg.potential_lambda, " | k = 0.3")
 println("Integrator = ", cfg.integrator)
 println("Physical duration = ", cfg.trajectory_T, " | dt = ", cfg.dt)
 println("Julia threads = ", Threads.nthreads())

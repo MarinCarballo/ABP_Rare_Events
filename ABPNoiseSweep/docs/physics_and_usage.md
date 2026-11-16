@@ -2,8 +2,9 @@
 
 This document describes the implemented model and numerical/statistical
 conventions. The source code is the authority for results already generated.
-The physical model and default integration rule are preserved. Optional
-snapshots do not enter probability estimates.
+The default lambda 2.5 physical model and integration rule are preserved.
+The requested lambda 8 comparison is an explicit potential-parameter change.
+Optional snapshots do not enter probability estimates.
 
 ## 1. Model and potential
 
@@ -22,7 +23,8 @@ false removes the force. Positions have no reflecting boundaries. The
 finite bias interval restricts accepted endpoints, not every intermediate
 position. Internal angles remain unwrapped.
 
-`src/model.jl` defines, with λ = 2.5 and κ = 0.3,
+`src/model.jl` defines the potential below, with configurable λ (default 2.5)
+and fixed κ = 0.3:
 
 \[
 g(x)=(x^2-1)^2,\quad f_0(y)=\tfrac12\lambda y^2,\quad
@@ -43,10 +45,18 @@ f_m'(y)=\frac{y[\lambda f_b^2+\kappa f_0^2]}{(f_0+f_b)^2},
 \partial_y U=g(x)[\kappa y-f_m'(y)]+f_m'(y).
 \]
 
+`potential_lambda` selects λ; `ABP_POTENTIAL_LAMBDA` overrides it in the
+generic and fixed-D runners. The selected value is used by the potential,
+gradient, Hessian, and optional Crank–Nicolson solver, and is saved as
+`metadata/potential_lambda`. Keeping λ=2.5 preserves the original force.
+Selecting λ=8 changes the physical potential as requested; it is not a
+sampling or display setting.
+
 The wells include `(−1,0)` and `(1,0)`. Paths start at `x0_vec` (normally
 `[−1,0]`) with θ₀ uniform on `[0,2π)`. The supplied critical speed
-`v_c ≈ 0.32` is a user-provided reference for choosing the speed grid;
-this work does not derive or redefine it.
+`v_c ≈ 0.32` is a user-provided lambda 2.5 reference for choosing the speed
+grid. The lambda 8 critical speed may differ; neither its value nor the
+transition order is established by these code changes.
 
 ## 2. Physical time and integration
 
@@ -448,6 +458,58 @@ are under `data/abp_speed_D0p025_array_JOBID/combined/`. Directly launching
 the fixed-D Julia runner requires `ABP_V`. Cluster wrappers retain large
 research workloads: inspect defaults and cluster paths before submission.
 
+For the new lambda comparison, submit the two dedicated arrays from the
+project root:
+
+```bash
+mkdir -p errors
+sbatch run/submit_production_work_theta_lambda2p5.sh
+sbatch run/submit_production_work_theta_lambda8.sh
+```
+
+Both arrays have 29 tasks (`0–28`) with the same speeds:
+`0.200, 0.240, 0.260`, the fine grid `0.280:0.005:0.390`, then
+`0.400, 0.450, 0.500`. Relative to the supplied 0.32 reference, the endpoints
+are 37.5% below and 56.25% above. Each fixes `D=0.025`, `T=40`, `dt=0.01`,
+Euler integration, and random-walk proposals, with the existing long-run
+budgets, 128 CPUs, 96 GB, and a seven-day Slurm limit. The lambda choice,
+job/log tags, and output namespace distinguish the two submissions. The
+previous submission scripts remain available with their existing grids.
+
+Deploy the updated `src/` and `scripts/run_fixed_D_speed_landscape.jl`
+together with these shell files: an older runner/backend ignores the new
+lambda variable and would retain 2.5 even for the lambda 8 submission.
+The wrappers fix their designated lambda rather than inheriting it from a
+previous shell environment. They accept `--dry-run` and the optional
+`--integrator=crank_nicolson` argument; unsupported arguments fail clearly.
+For example:
+
+```bash
+sbatch run/submit_production_work_theta_lambda8.sh --integrator=crank_nicolson
+```
+
+For a Bash configuration preflight on a machine with Julia on `PATH`, use:
+
+```bash
+for script in run/submit_production_work_theta_lambda2p5.sh run/submit_production_work_theta_lambda8.sh; do
+  ABP_PROJECT_DIR="$PWD" JULIA_CMD=julia SLURM_ARRAY_JOB_ID=preflight \
+  SLURM_ARRAY_TASK_ID=0 SLURM_CPUS_PER_TASK=1 ABP_N_PROD_CHAINS=1 \
+  bash "$script" --dry-run
+done
+```
+
+This prints one task's configuration per lambda and exits before simulation
+and result collection; it can create the output directories. Normal
+submissions default to the configured cluster project and Julia executable.
+Cluster execution, runtime, and completion within seven days have not been
+verified; no job was submitted by this maintenance work.
+
+The separate result roots are
+`data/abp_work_theta_lambda2p5_D0p025_array_JOBID/combined/` and
+`data/abp_work_theta_lambda8_D0p025_array_JOBID/combined/`. Current notebooks
+group by `(D,v,T)`, so set `RUN_ROOTS` to **one lambda at a time** to avoid
+combining different potentials under the same group.
+
 For the optional integration rule or complete stored example paths:
 
 ```bash
@@ -463,6 +525,7 @@ runner has dedicated workload defaults. Do not assume they are identical.
 | Environment setting | Meaning |
 | --- | --- |
 | `ABP_D_VALUES` | Generic sweep's comma-separated noise values |
+| `ABP_POTENTIAL_LAMBDA` | Potential λ, default 2.5; fixed to 2.5 or 8 by the dedicated lambda submission files |
 | `ABP_TRAJECTORY_T`, `ABP_DT`, `ABP_INTEGRATOR` | Physical duration, time step, and integration choice (both runners) |
 | `ABP_N_ITER`, `ABP_N_ITER_STEPS_PER_ITER`, `ABP_N_THERM_MUCA` | Learning schedule and per-chain thermalization |
 | `ABP_SCALE_N_ITER_WITH_D`, `ABP_D_SCALING_REFERENCE` | Optional iteration-count scaling |

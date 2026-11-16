@@ -1,8 +1,9 @@
 # Changes and audit report
 
-The potential, forces, diffusion/noise conventions, observables, and default
-Euler integration and random-walk proposals are preserved. The requested speed
-grid and optional numerical/sampling methods are explicit choices.
+The default lambda 2.5 potential, forces, diffusion/noise conventions,
+observables, Euler integration, and random-walk proposals are preserved.
+The new lambda 8 comparison makes the requested physical-parameter change;
+speed grids and optional numerical/sampling methods are explicit choices.
 
 | Request | Completed work |
 | --- | --- |
@@ -12,7 +13,7 @@ grid and optional numerical/sampling methods are explicit choices.
 | Full production trajectories | Added x-y and x(t), y(t), theta(t) panels for multiple saved paths. Storage can keep every integration point; snapshots retain the physical endpoint and explicit time coordinates. |
 | Crank–Nicolson option | Added two separate options: `ABP_INTEGRATOR=crank_nicolson` for physical-time integration, and `ABP_NOISE_PROPOSAL=pcn` for Gaussian-prior-preserving noise proposals. Euler/random-walk remain defaults. |
 | Cleanup and allocations | Shared snapshot/export helpers, streamed movie CSV rows, reused noise buffers and path-window lists, and replaced suffix slices with in-place copies. Seeded legacy transitions and random draws are regression checked. |
-| Speeds below 0.32 | Main speed/work-theta arrays now cover **0.280:0.005:0.390** (23 tasks); the low-speed array covers **0.280:0.005:0.325**. The supplied critical speed was used as a reference, not recalculated. |
+| Speeds below 0.32 | The paired lambda submissions cover **0.200 to 0.500** (29 tasks), retaining **0.280:0.005:0.390** near the supplied critical speed. Legacy submission grids remain available. |
 | Theta histograms | Verified modulo-2pi binning, path filtering, endpoint conditioning, whole-path reweighting, and density normalization. No histogram definitions changed. |
 
 Important findings:
@@ -49,10 +50,11 @@ Fresh installation exposed an incompatible upstream MonteCarloX 0.3 API.
 fixed-speed wrapper’s missing output-directory assignment and a stray Markdown
 fence that prevented `run_combined.sh` from parsing.
 
-Validation: **1,977 Julia checks passed**, including seeded transition equality,
+Validation: **2,316 Julia checks passed**, including seeded transition equality,
 CN/pCN checks, work/theta calculations, snapshot independence, and threaded tiny
-MUCA-to-production exports. Notebook syntax/statistics/rendering and cluster
-shell syntax were also checked. No long run or cluster job was submitted.
+MUCA-to-production exports. Twelve local launcher tests check task selection,
+settings, dry runs, and result collection. Notebook syntax/statistics/rendering
+and shell syntax were also checked. No long run or cluster job was submitted.
 New MUCA movies require newly recorded snapshots; old thinned trajectories
 cannot recover missing integration points. CN solves the same SDE with a
 different finite-step approximation and needs time-step convergence checks.
@@ -73,6 +75,18 @@ displacements in `W=v*(delta_x*cos(theta_peak)+delta_y*sin(theta_peak))`;
 errors condition on the supplied modal angles and omit their uncertainty.
 These fits are postprocessing; the simulation physics and measured work are
 unchanged.
+
+Added separate lambda 2.5 and 8 submission files, each with 29 speeds from
+0.200 to 0.500 and the existing fine grid around 0.32. Both keep the same
+noise, duration, time step, sampling method, workload, and resources; outputs
+and logs have distinct lambda tags. Updated backend/runner code is required
+to apply `ABP_POTENTIAL_LAMBDA` consistently to the potential and its
+derivatives; lambda 2.5 force and Euler results remain bitwise identical in
+the regression checks. Four actual runner dry runs verified both lambda
+values at speeds 0.200 and 0.500. The supplied 0.32 threshold applies as a lambda 2.5 reference;
+the lambda 8 threshold is unverified. Dry runs exit before collection. No
+cluster job was submitted or runtime certified. Submit commands are in the
+[README](README.md).
 
 Start with the [README](README.md); full controls and limitations are in the
 [detailed documentation](docs/physics_and_usage.md).

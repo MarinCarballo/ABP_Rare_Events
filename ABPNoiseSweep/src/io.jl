@@ -63,6 +63,8 @@ function abp_save_case_jld2(cfg::ABPNoiseSweepConfig, D::Real, muca, prod)
         file["metadata/integrator"] = string(cfg.integrator)
         file["metadata/x0"] = cfg.x0_vec
         file["metadata/potential_active"] = cfg.potential_active
+        file["metadata/potential_lambda"] = cfg.potential_lambda
+        file["metadata/potential_k"] = 0.3
         file["metadata/path_observation_stride"] = cfg.path_observation_stride
         file["metadata/path_time_stride"] = cfg.path_time_stride
         file["metadata/n_path_theta_bins"] = cfg.n_path_theta_bins
@@ -973,6 +975,8 @@ function abp_export_case_data_csvs(file_path::AbstractString; output_dir::Abstra
             "dt" => file["metadata/dt"],
             "v" => file["metadata/v"],
             "potential_active" => file["metadata/potential_active"],
+            "potential_lambda" => (haskey(file, "metadata/potential_lambda") ? file["metadata/potential_lambda"] : missing),
+            "potential_k" => (haskey(file, "metadata/potential_k") ? file["metadata/potential_k"] : missing),
             "n_iter" => file["metadata/n_iter"],
             "n_muca_chains" => file["metadata/n_muca_chains"],
             "n_prod_obs_total" => file["metadata/n_prod_obs_total"],

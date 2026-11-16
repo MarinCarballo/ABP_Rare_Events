@@ -32,6 +32,7 @@ function abp_apply_env_overrides!(cfg::ABPNoiseSweepConfig)
     haskey(ENV, "ABP_TRAJECTORY_T") && (cfg.trajectory_T = parse(Float64, ENV["ABP_TRAJECTORY_T"]))
     haskey(ENV, "ABP_DT") && (cfg.dt = parse(Float64, ENV["ABP_DT"]))
     haskey(ENV, "ABP_V") && (cfg.v = parse(Float64, ENV["ABP_V"]))
+    haskey(ENV, "ABP_POTENTIAL_LAMBDA") && (cfg.potential_lambda = parse(Float64, ENV["ABP_POTENTIAL_LAMBDA"]))
     haskey(ENV, "ABP_INTEGRATOR") && (cfg.integrator = Symbol(lowercase(strip(ENV["ABP_INTEGRATOR"]))))
     haskey(ENV, "ABP_SAVED_PATH_TIME_THIN") && (cfg.saved_path_time_thin = parse(Int, ENV["ABP_SAVED_PATH_TIME_THIN"]))
     haskey(ENV, "ABP_MAX_SAVED_PATHS_PER_WINDOW") && (cfg.max_saved_paths_per_window = parse(Int, ENV["ABP_MAX_SAVED_PATHS_PER_WINDOW"]))
@@ -109,6 +110,8 @@ function abp_config_from_args(args=ARGS)
     for arg in args
         if startswith(arg, "--integrator=")
             cfg.integrator = Symbol(lowercase(strip(split(arg, '='; limit=2)[2])))
+        elseif startswith(arg, "--potential-lambda=")
+            cfg.potential_lambda = parse(Float64, split(arg, '='; limit=2)[2])
         end
     end
     return cfg
@@ -137,6 +140,7 @@ function abp_print_config(cfg::ABPNoiseSweepConfig)
     println("  trajectory_T = ", cfg.trajectory_T, " | dt = ", cfg.dt, " | v = ", cfg.v)
     println("  integrator = ", cfg.integrator)
     println("  potential_active = ", cfg.potential_active)
+    println("  potential_lambda = ", cfg.potential_lambda, " | potential_k = 0.3")
     println("  n_iter = ", cfg.n_iter)
     println("  n_iter_steps_per_iter = ", cfg.n_iter_steps_per_iter,
             " final-iteration sampling moves across chains")

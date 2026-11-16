@@ -11,6 +11,9 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
     bins_bias = muca.bins_bias
     edges_bias = muca.edges_bias
     learned_logw_values = vec(Float64.(logweight(muca.alg).values))
+    cfg.potential_lambda == muca.abp.potential_lambda || error(
+        "Production potential_lambda must match the potential used to learn MUCA weights."
+    )
     finite_logw = isfinite.(learned_logw_values)
     @assert any(finite_logw) "All learned MUCA logweights are non-finite."
     logw_shift = minimum(learned_logw_values[finite_logw])
@@ -87,6 +90,7 @@ function abp_run_production_one_case(cfg::ABPNoiseSweepConfig, D::Real, muca)
 
     println()
         println("Production case: D=", D,
+            " | potential lambda=", cfg.potential_lambda,
             " | chains=", n_prod_chains,
             " | total samples=", cfg.n_prod_obs_total,
             " | noise proposal=", cfg.noise_proposal,

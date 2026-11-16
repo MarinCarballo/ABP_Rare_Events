@@ -4,9 +4,13 @@ struct ABP
     Dt::Float64
     v::Float64
     Dr::Float64
+    potential_lambda::Float64
 
-    function ABP(; Dt::Float64=0.01, v::Float64=0.36, Dr::Float64=0.01)
-        new(Dt, v, Dr)
+    function ABP(; Dt::Float64=0.01, v::Float64=0.36, Dr::Float64=0.01,
+                 potential_lambda::Real=2.5)
+        lambda_ = Float64(potential_lambda)
+        isfinite(lambda_) && lambda_ > 0.0 || error("potential_lambda must be finite and positive.")
+        new(Dt, v, Dr, lambda_)
     end
 end
 
@@ -17,6 +21,7 @@ mutable struct ABPTrajectory #mutable because we will update the trajectory in p
     v   :: Float64
     Dt  :: Float64
     Dr  :: Float64
+    potential_lambda :: Float64
     σ_T :: Float64
     σ_R :: Float64
 
@@ -62,7 +67,7 @@ mutable struct ABPTrajectory #mutable because we will update the trajectory in p
         tmp_θs = copy(θs) # temporary storage for orientations during integration
 
         tmp_ξs = similar(ξs) # chain-local scratch space for block proposals
-        sys = new(rng, dt, T, abp.v, abp.Dt, abp.Dr, σ_T, σ_R, ξs, xs, θs,
+        sys = new(rng, dt, T, abp.v, abp.Dt, abp.Dr, abp.potential_lambda, σ_T, σ_R, ξs, xs, θs,
                   tmp_xs, tmp_θs, tmp_ξs, integrator)
 
         integrate!(sys; potential_active=potential_active) # integrate the trajectory to fill in the positions and orientations
@@ -84,7 +89,7 @@ function potential(sys::ABPTrajectory, i::Int)
     x = sys.xs[i][1]
     y = sys.xs[i][2]
 
-    lambda_ = 2.5
+    lambda_ = sys.potential_lambda
     k = 0.3
     
     f_0   = 0.5 * lambda_ * y^2
@@ -97,13 +102,13 @@ function potential(sys::ABPTrajectory, i::Int)
 end
 
 function gradient(sys::ABPTrajectory, i::Int)
-    return gradient(sys.xs[i])
+    return gradient(sys.xs[i], sys.potential_lambda)
 end
 
-function gradient(position::SVector{2, Float64})
+function gradient(position::SVector{2, Float64}, potential_lambda::Float64=2.5)
     x, y = position
 
-    lambda_ = 2.5
+    lambda_ = potential_lambda
     k = 0.3
 
     gxy   = (x - 1.0)^2 * (x + 1.0)^2
@@ -128,9 +133,9 @@ function gradient(position::SVector{2, Float64})
 end
 
 # Hessian of the same potential, used only by the optional implicit solver.
-function potential_hessian(position::SVector{2, Float64})
+function potential_hessian(position::SVector{2, Float64}, potential_lambda::Float64=2.5)
     x, y = position
-    lambda_ = 2.5
+    lambda_ = potential_lambda
     k = 0.3
     f_0 = 0.5 * lambda_ * y^2
     f_bar = 1.0 + 0.5 * k * y^2
@@ -148,26 +153,27 @@ function potential_hessian(position::SVector{2, Float64})
 end
 
 """
-    crank_nicolson_position(x, rhs, half_dt)
+    crank_nicolson_position(x, rhs, half_dt, potential_lambda=2.5)
 
 Solve `x_new + half_dt * gradient(x_new) = rhs` using damped Newton
 iterations. Failure stops the run: treating numerical failures as rejected
 Monte Carlo moves would silently condition the sampled noise distribution.
 """
-function crank_nicolson_position(x::SVector{2, Float64}, rhs::SVector{2, Float64}, half_dt::Float64)
+function crank_nicolson_position(x::SVector{2, Float64}, rhs::SVector{2, Float64},
+                                half_dt::Float64, potential_lambda::Float64=2.5)
     tolerance = 1e-12 * (1 + norm(rhs, Inf))
     identity = one(SMatrix{2, 2, Float64, 4})
     for _ in 1:40
-        residual = x + half_dt * gradient(x) - rhs
+        residual = x + half_dt * gradient(x, potential_lambda) - rhs
         residual_norm = norm(residual, Inf)
         residual_norm <= tolerance && return x
-        jacobian = identity + half_dt * potential_hessian(x)
+        jacobian = identity + half_dt * potential_hessian(x, potential_lambda)
         correction = jacobian \ residual
         step = 1.0
         accepted = false
         for _ in 1:20
             candidate = x - step * correction
-            candidate_residual = candidate + half_dt * gradient(candidate) - rhs
+            candidate_residual = candidate + half_dt * gradient(candidate, potential_lambda) - rhs
             if norm(candidate_residual, Inf) < residual_norm
                 x = candidate
                 accepted = true
@@ -192,8 +198,8 @@ function integrate_crank_nicolson!(sys::ABPTrajectory, r::AbstractUnitRange{Int}
         )
         rhs = x + propulsion + sys.σ_T * SVector(ξ[1], ξ[2])
         if potential_active
-            rhs -= half_dt * gradient(x)
-            x = crank_nicolson_position(x, rhs, half_dt)
+            rhs -= half_dt * gradient(x, sys.potential_lambda)
+            x = crank_nicolson_position(x, rhs, half_dt, sys.potential_lambda)
         else
             x = rhs
         end
